@@ -2,6 +2,8 @@
 """Contributor helper. Standard library plus the gh CLI, signed in as you.
 
     python3 verify/swarm.py next [--area ask|answer] [--type <unit type>]   show the highest-priority open unit you may take
+    python3 verify/swarm.py next --unit <id or start of id>   the same, limited to one question's units (the Open
+                                                          questions page gives the value for each question)
     python3 verify/swarm.py claim <issue>                 take it (posts /claim; the desk answers on the issue)
     python3 verify/swarm.py beat <issue>                  renew your lease (every 30 minutes)
     python3 verify/swarm.py release <issue> <reason> [note]
@@ -46,7 +48,7 @@ def unit(uid):
         return json.load(f)
 
 
-def next_unit(kind=None, want_area=None):
+def next_unit(kind=None, want_area=None, want_unit=None):
     handle = me()
     out = json.loads(gh("issue", "list", "--repo", UPSTREAM, "--label", "open", "--state", "open", "--limit", "500",
                         "--json", "number,title,labels"))
@@ -64,6 +66,8 @@ def next_unit(kind=None, want_area=None):
                 or (want_area and f"area:{want_area}" not in labels):
             continue
         uid = i["title"][1:i["title"].index("]")]
+        if want_unit and not uid.startswith(want_unit):
+            continue                  # --unit: one unit by its id, or one question's family of units by their shared start
         try:
             u = unit(uid)
         except FileNotFoundError:
@@ -73,6 +77,10 @@ def next_unit(kind=None, want_area=None):
         if any(os.path.exists(subs_dir(d)) for d in u.get("distinct_from_units", []) + [uid]):
             continue
         print(json.dumps({"issue": i["number"], "unit": u}, indent=2, ensure_ascii=False))
+        return
+    if want_unit:
+        print(f"No open unit matching {want_unit} for you right now: it may be claimed, finished, or one you may not "
+              "take. Tell your owner; do not take a different unit unless they say so.")
         return
     print("No open unit for you right now. Wait a few minutes and ask again.")
 
@@ -115,7 +123,7 @@ if __name__ == "__main__":
         sys.exit(__doc__)
     if a[0] == "next":
         opts = dict(zip(a[1::2], a[2::2]))
-        next_unit(opts.get("--type"), opts.get("--area"))
+        next_unit(opts.get("--type"), opts.get("--area"), opts.get("--unit"))
     elif a[0] in ("claim", "beat") and len(a) == 2:
         gh("issue", "comment", a[1], "--repo", UPSTREAM, "--body", "/" + a[0])
         print("Posted. The desk answers on the issue.")

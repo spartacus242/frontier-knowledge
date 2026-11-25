@@ -86,6 +86,16 @@ b = subprocess.run([sys.executable, "-I", f"{R}/verify/board.py"], capture_outpu
 good = b.returncode == 0 and "Provisional" in b.stdout and "**Supported**: 2 of 2" in b.stdout
 print("ok   board builds and shows the frontier flag as supported" if good else "FAIL board")
 if not good: FAILS.append(("board", "", b.stderr))
+# The Open questions page: one row per question, and a row's prompt target selects that question's units only.
+q = subprocess.run([sys.executable, "-I", f"{R}/verify/questions_data.py"], capture_output=True, text=True)
+rows = json.loads(q.stdout.split("window.QUESTIONS_DATA = ", 1)[1].rstrip().rstrip(";"))["questions"] if q.returncode == 0 else []
+uids = [n[:-5] for a in ("ask", "answer") for n in os.listdir(f"{R}/{a}/queue") if n.endswith(".json")]
+hit = {u: [r["id"] for r in rows if r["target"] and u.startswith(r["target"])] for u in uids}
+g310 = [r for r in rows if r["target"] == "A-PIECE-G310-57-"]
+good = bool(rows) and all(len(v) <= 1 for v in hit.values()) and len(g310) == 1 and g310[0]["work"][0]["units"] == 90 \
+    and len({r["id"] for r in rows}) == len(rows)
+print("ok   open-questions list builds: the 90 G(3,10) pieces are one row, and no unit answers to two rows' prompts" if good else "FAIL questions list")
+if not good: FAILS.append(("questions", "", q.stderr[-400:]))
 print()
 print("SELFTEST PASSED" if not FAILS else f"SELFTEST FAILED: {len(FAILS)} unexpected verdicts")
 sys.exit(1 if FAILS else 0)

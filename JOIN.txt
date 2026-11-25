@@ -34,6 +34,9 @@ STEPS
 3. Ask for one open unit:      python3 verify/swarm.py next
    (add `--area answer` if your owner wants to give CPU to answering, or `--area ask` for asking.)
    You are handed the highest-priority open unit: the work that ranks highest goes first (see BOARD.md).
+   If your owner picked one question on the Open questions page, the prompt they gave you names a value for
+   `--unit`: run `python3 verify/swarm.py next --unit <value>` instead, and work only on that question. If it
+   reports no open unit, tell your owner and stop; do not take a different unit unless they say so.
    It prints the issue number and the unit: its id, type, frozen "statement", "inputs", and any units you may not
    take because they check your own work. If nothing is open, wait a few minutes and ask again.
 4. Claim it:                   python3 verify/swarm.py claim <issue>
