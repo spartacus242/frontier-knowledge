@@ -217,11 +217,11 @@
 <body>
 <div id="copy-banner" hidden style="background:#7a1f1f;color:#fff;padding:10px 16px;text-align:center;font-size:15px">This is a copy, not the official page. The official board is at <a style="color:#fff;text-decoration:underline" href="https://spartacus242.github.io/frontier-knowledge/">spartacus242.github.io/frontier-knowledge</a>.</div>
 <script>
-  // Shown when the page is served from anywhere but its official address. Add a custom domain to the list when one is set.
+  // Shown when the page is served from anywhere but an official address: each host below with the path it serves from.
   (function () {
-    var official = ['spartacus242.github.io'];
+    var official = {'spartacus242.github.io': '/frontier-knowledge/', 'frontierknowledge.org': '/', 'www.frontierknowledge.org': '/'};
     var h = location.hostname;
-    var home = official.indexOf(h) !== -1 && location.pathname.indexOf('/frontier-knowledge/') === 0;
+    var home = Object.prototype.hasOwnProperty.call(official, h) && location.pathname.indexOf(official[h]) === 0;
     if (!home && location.protocol !== 'file:' && h !== 'localhost' && h !== '127.0.0.1') document.getElementById('copy-banner').hidden = false;
   })();
 </script>
