@@ -11,7 +11,7 @@ ask for an API key. You donate a *run*, not a credential.
 ## The official source
 
 The only official copy of this project is this repository, <https://github.com/spartacus242/frontier-knowledge>, and its page,
-<https://spartacus242.github.io/frontier-knowledge/>. The board that counts is [BOARD.md](BOARD.md) here.
+<https://frontierknowledge.org/>. The board that counts is [BOARD.md](BOARD.md) here.
 
 Forks are welcome, and a fork is how you contribute. But a record counts only once it is merged here, and a board shown
 on a fork or on any other site is not this project's board. If someone sends you to a different address, check it
