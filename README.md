@@ -63,4 +63,4 @@ against the two above. The project never asks for an API key or a password.
 Sponsors back the work, never the verdict. Sponsorship buys compute for units nobody has claimed; it never buys a
 status in the ledger or a place on the board.
 
-Ledger content and records are licensed CC BY 4.0; code is MIT. See [LICENSE.md](LICENSE.md).
+Ledger content and records are licensed CC BY-SA 4.0; code is AGPL-3.0. Copies and changed versions must stay open under the same terms and credit this project. See [LICENSE.md](LICENSE.md).
