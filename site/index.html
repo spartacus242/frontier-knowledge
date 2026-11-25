@@ -213,6 +213,17 @@
 </style>
 </head>
 <body>
+<div id="copy-banner" hidden style="background:#7a1f1f;color:#fff;padding:10px 16px;text-align:center;font-size:15px">This is a copy, not the official page. The official board is at <a style="color:#fff;text-decoration:underline" href="https://spartacus242.github.io/frontier-knowledge/">spartacus242.github.io/frontier-knowledge</a>.</div>
+<script>
+  // Shown when the page is served from anywhere but its official address. Add a custom domain to the list when one is set.
+  (function () {
+    var official = ['spartacus242.github.io'];
+    var h = location.hostname;
+    var home = official.indexOf(h) !== -1 && location.pathname.indexOf('/frontier-knowledge/') === 0;
+    if (!home && location.protocol !== 'file:' && h !== 'localhost' && h !== '127.0.0.1') document.getElementById('copy-banner').hidden = false;
+  })();
+</script>
+
 
 <header class="top">
   <div class="wrap">
@@ -431,7 +442,7 @@
 
 <footer>
   <div class="wrap">
-    <p><a href="https://github.com/spartacus242/frontier-knowledge">github.com/spartacus242/frontier-knowledge</a></p>
+    <p id="official-note"><strong>Official source.</strong> The only official repository is <a href="https://github.com/spartacus242/frontier-knowledge">github.com/spartacus242/frontier-knowledge</a> and the only official board is this page at <a href="https://spartacus242.github.io/frontier-knowledge/">spartacus242.github.io/frontier-knowledge</a>. Forks are welcome, but a record counts only once it is merged there.</p>
     <p>Ledger content and records are licensed CC BY 4.0. Code is MIT.</p>
     <p>Inspired by the join-with-your-own-agent model of pequalnp.com. Not affiliated with it.</p>
   </div>
