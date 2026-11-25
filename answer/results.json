@@ -2,33 +2,40 @@
   {
     "claim": "G(3,9) = 49. Brown, Landman and Robertson's 2007 table (arXiv:0706.4420) prints 48.",
     "inside": "Confirmed: 3 of 3 skeptics, three independent exhaustive searches; witness answer/witness/G_s9_48elements.txt",
-    "unit": "A-REP-G39-49"
+    "unit": "A-REP-G39-49",
+    "importance": 3
   },
   {
     "claim": "21 new terms of OEIS A304884 (the largest subset of Z_n with no three terms in arithmetic progression), for n = 80 to 100. The published terms stop at n = 79.",
-    "inside": "Confirmed: 3 of 3 skeptics with their own programs, and two search programs agree; one set per n in research/problems/cyclic-3ap/claims/2026-11-25-1/terms.csv. Not yet submitted to OEIS, and 'new' rests on not finding the values published"
+    "inside": "Confirmed: 3 of 3 skeptics with their own programs, and two search programs agree; one set per n in research/problems/cyclic-3ap/claims/2026-11-25-1/terms.csv. Not yet submitted to OEIS, and 'new' rests on not finding the values published",
+    "importance": 4
   },
   {
     "claim": "M(3,7) = 51. The same table prints 48.",
     "inside": "Lead: two programs agree, but the skeptic gate went 0 of 3 because searches ran out of time; witness answer/witness/M_s7_50blocks.txt",
-    "unit": "A-REP-M37-51"
+    "unit": "A-REP-M37-51",
+    "importance": 3
   },
   {
     "claim": "w*(3;5) = 76. The table prints only 'at least 75'; the lower bound is classical, the upper bound is new.",
     "inside": "Lead: two skeptics on different models reproduced the full search; two gates each went 1 of 3 after restarts killed the other searches",
-    "unit": "A-REP-W35-76"
+    "unit": "A-REP-W35-76",
+    "importance": 2
   },
   {
     "claim": "G(3,10) = 57. The table leaves this entry as '?'.",
     "inside": "Lower bound only: a 56-element set (answer/witness/G_s10_56elements.txt); the proof that no 57-element set exists is about 90 CPU-hours and is split into pieces",
-    "piece_family": "A-PIECE-G310-57-"
+    "piece_family": "A-PIECE-G310-57-",
+    "importance": 2
   },
   {
     "claim": "M(3,4) = 19, M(3,5) = 31, M(3,6) = 38 and G(3,6) = 23. The table prints 18, 29, 37 and 22.",
-    "inside": "Lead: 2 of 3 skeptics signed off; the third could not rule out an existing correction in the 2014 Landman-Robertson book (see unit V-LR-BOOK-2014)"
+    "inside": "Lead: 2 of 3 skeptics signed off; the third could not rule out an existing correction in the 2014 Landman-Robertson book (see unit V-LR-BOOK-2014)",
+    "importance": 3
   },
   {
     "claim": "M(3,8) >= 58 and w*(3;6) >= 83. The table leaves both as '?'.",
-    "inside": "Lower bounds with machine-checked witnesses (answer/witness/M_s8_57blocks.txt, answer/witness/wstar_r6_n82.txt); exact values unknown"
+    "inside": "Lower bounds with machine-checked witnesses (answer/witness/M_s8_57blocks.txt, answer/witness/wstar_r6_n82.txt); exact values unknown",
+    "importance": 2
   }
 ]

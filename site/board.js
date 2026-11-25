@@ -73,6 +73,39 @@
     }
   })();
 
+  // ---- results tracker: one counter per rung of the verification ladder, then every claim ranked ----
+  (function () {
+    var K = D.tracker, sec = $('results');
+    if (!K || !sec) return;
+    var IMP = { 1: 'Well-known problem', 2: 'Open in the literature', 3: 'Correction', 4: 'Extension' };
+    var SHORT = ['Leads, not confirmed', 'Confirmed inside the project', 'Reproduced outside', 'Reviewed by experts', 'Accepted'];
+    K.rungs.slice().reverse().forEach(function (g) {
+      $('rung-tiles').appendChild(el('div', { 'class': 'stat' + (g.n ? '' : ' zero') }, [el('b', { text: String(g.n) }), el('span', { text: SHORT[g.rung] })]));
+    });
+    var rows = D.results.slice().sort(function (a, b) {
+      return (b.rung - a.rung) || (a.importance - b.importance) || (b.have / (b.want || 1) - a.have / (a.want || 1));
+    });
+    rows.forEach(function (r, i) {
+      var gone = r.rung < 0, name = gone ? 'Withdrawn' : K.rungs[r.rung].name;
+      var steps = el('span', { 'class': 'rungs', role: 'img', 'aria-label': gone ? 'Withdrawn' : 'Rung ' + r.rung + ' of 4: ' + name },
+        [1, 2, 3, 4].map(function (k) { return el('i', k <= r.rung ? { 'class': 'on' } : {}); }));
+      var outside = r.kind === 'reproductions' ? r.have + ' of ' + r.want + ' outside reproductions'
+        : r.kind === 'pieces' ? r.have + ' of ' + r.want + ' pieces settled' : 'no outside check open yet';
+      var novelty = r.novelty_confirmed ? 'novelty confirmed outside' : 'not found published; novelty not confirmed outside';
+      sec.querySelector('#tracker').appendChild(el('div', { 'class': 'trk' + (gone ? ' gone' : '') }, [
+        el('span', { 'class': 'rank', text: String(i + 1) }),
+        el('div', { 'class': 'body' }, [
+          el('p', { 'class': 't', text: r.claim.split('. ')[0].replace(/\.$/, '') }),
+          el('p', { 'class': 'm' }, [steps, el('strong', { text: name }),
+            el('span', { 'class': 'badge', text: IMP[r.importance] || IMP[4] }),
+            r.frontier ? el('span', { 'class': 'badge frontier', text: 'potentially frontier-expanding' }) : null]),
+          el('p', { 'class': 'd', text: (r.note ? r.note + '. ' : '') + outside + '; ' + novelty + '.' })
+        ])
+      ]));
+    });
+    sec.hidden = false;
+  })();
+
   // ---- outside checks ----
   (function () {
     var box = $('checks'), shown = 0;

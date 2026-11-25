@@ -11,6 +11,9 @@ Optional keys this script passes through when a unit or a result has them, so ot
 change here:
 - a queue unit's "field" (otherwise the field is worked out from the unit, see unit_field)
 - a result's or a unit's "frontier" (true marks it as potentially frontier-expanding) and "field"
+- a result's "importance" (1 well-known problem, 2 open in the literature, 3 correction of a published value,
+  4 extension of a published record), and the ladder keys rung() reads: "literature_checked", "reviewed",
+  "accepted", "withdrawn", "novelty_confirmed"
 - answer/open-problems.json, if it exists: a list of {"field", "title", ...} shown per field
 """
 import datetime
@@ -86,8 +89,41 @@ def results(units):
                        have=sum(1 for p in pieces if p["records"] >= p["want"]),
                        refuted=any(p["found"] for p in pieces))
         row["inside_confirmed"] = row["inside"].lower().startswith("confirmed")
+        row.update(rung=rung(r, row), importance=r.get("importance") if r.get("importance") in (1, 2, 3, 4) else 4,
+                   novelty_confirmed=bool(r.get("novelty_confirmed")),
+                   note=str(r.get("accepted") or r.get("reviewed") or r.get("withdrawn") or ""))
         out.append(row)
     return out
+
+
+RUNGS = ("Lead, not confirmed", "Confirmed inside the project", "Reproduced outside",
+         "Reviewed by experts", "Accepted")
+
+
+def rung(r, row):
+    """Where a claim stands on the verification ladder (ANNOUNCEMENTS.md): 0 lead, 1 confirmed inside the project,
+    2 reproduced outside, 3 reviewed by experts, 4 accepted; -1 withdrawn. Rungs 0 to 2 are computed from the
+    records. Rungs 3 and 4 need a maintainer to write who reviewed it ("reviewed") or where it was published
+    ("accepted") into answer/results.json, and rung 2 also needs "literature_checked": true. A refuting outside
+    record, or a "withdrawn" reason, overrides everything."""
+    if row["refuted"] or r.get("withdrawn"):
+        return -1
+    if r.get("accepted"):
+        return 4
+    if r.get("reviewed"):
+        return 3
+    inside = row["inside"].lower().startswith("confirmed")
+    outside = row["want"] > 0 and row["have"] >= row["want"]
+    if outside and r.get("literature_checked") and (inside or row["kind"] == "pieces"):
+        return 2
+    return 1 if inside else 0
+
+
+def tracker(rows):
+    """The counter: one number per rung, never a single 'solved' total."""
+    counts = [sum(1 for x in rows if x["rung"] == k) for k in range(5)]
+    return {"rungs": [{"rung": k, "name": RUNGS[k], "n": counts[k]} for k in range(5)],
+            "withdrawn": sum(1 for x in rows if x["rung"] < 0), "total": len(rows)}
 
 
 def main():
@@ -137,13 +173,15 @@ def main():
         d["surviving"] += key in ("Validated", "Provisional")
 
     problems_path = os.path.join(U.ROOT, "answer", "open-problems.json")
+    res = results(units)
     data = {
         "generated": datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%d %H:%M UTC"),
         "units": {"total": len(units), "done": sum(t["done"] for t in by_type.values()),
                   "by_type": sorted(by_type.values(), key=lambda t: (t["area"], t["type"]))},
         "records": {"total": total_records, "by_day": [{"date": d, "n": n} for d, n in sorted(days.items())]},
         "contributors": board,
-        "results": results(units),
+        "results": res,
+        "tracker": tracker(res),
         "open_by_field": sorted(open_by_field.values(), key=lambda o: (-(o["ask"] + o["answer"]), o["field"])),
         "ledger": {"totals": totals, "by_field": [by_field[f] for f in FIELDS if sum(
             v for k, v in by_field[f].items() if k != "field")], "by_day": [timeline[d] for d in sorted(timeline)]},
