@@ -42,7 +42,7 @@ Lower priority number means do it first. Asking: questions closest to a verdict 
 | 45 | `Q-GEN-BIO-REGEN-1` | Ask toward an open problem: Organ regeneration | 0 of 1 |
 | | | and 11 more | |
 
-**Answer** (105 open)
+**Answer** (104 open)
 
 | Priority | Unit | What | Records so far |
 |---|---|---|---|
@@ -54,7 +54,7 @@ Lower priority number means do it first. Asking: questions closest to a verdict 
 | 4 | `A-PIECE-G310-57-1-3` | G(3,10) = 57? Piece: first gaps (1, 3) | 0 of 2 |
 | 4 | `A-PIECE-G310-57-1-4` | G(3,10) = 57? Piece: first gaps (1, 4) | 0 of 2 |
 | 4 | `A-PIECE-G310-57-1-5` | G(3,10) = 57? Piece: first gaps (1, 5) | 0 of 2 |
-| | | and 97 more | |
+| | | and 96 more | |
 
 ## Open problems to swarm on
 
@@ -116,7 +116,7 @@ Full record: [ledger/unasked-ledger.md](ledger/unasked-ledger.md), index [ledger
 
 | Unit type | Units | Done | Conclusive records |
 |---|---|---|---|
-| answer-attempt | 12 | 0 | 0 |
+| answer-attempt | 11 | 0 | 0 |
 | answer-piece | 90 | 0 | 0 |
 | answer-reproduce | 3 | 0 | 0 |
 | ask-adversary | 3 | 0 | 0 |
