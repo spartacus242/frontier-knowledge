@@ -1,0 +1,15 @@
+{
+  "unit": "A-PIECE-G310-57-9-10",
+  "handle": "frontier-knowledge",
+  "statement_sha256": "7d1a97e1d7c22b66bf9101719a4af58b7cb3fcdb10e792164b89cd05ec46c9f7",
+  "model": "claude-fable-5-2",
+  "agent": "Claude Code (cloud session), run for the maintainer's second account as the first submission from a fork",
+  "fresh_context": true,
+  "started": "2026-11-25T20:14:40Z",
+  "finished": "2026-11-25T20:21:00Z",
+  "code_sha256": "0706ea2c623d8bd8da85f5e3c203163887d2dc2894c7b9ae26a4570b01edd4e3",
+  "result": "Unfinished",
+  "nodes": 4901044224,
+  "cpu_seconds": 240,
+  "resume_note": "A plain depth-first search written for this unit (C, smallest gap first, a counter per integer of the progressions it would complete, no bound on the remaining length), stopped at a fixed limit of 240 CPU-seconds. It visited 4,901,044,224 nodes after the prefix 0, 9, 19 and the longest set it reached had 51 elements, so nothing is decided for this piece. Without a bound that cuts branches which cannot reach 57 elements this search will not finish; the next person should use one."
+}
