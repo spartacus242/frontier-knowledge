@@ -197,6 +197,20 @@
   .pieces span[data-k="1"] { background: var(--seq1); }
   .pieces span[data-k="2"] { background: var(--seq2); }
   .pieces span[data-k="x"] { background: var(--bad); }
+  .stat.zero b { color: var(--muted); }
+  .trk { display: flex; gap: 14px; padding: 14px 0; border-top: 1px solid var(--line); }
+  .trk:first-child { border-top: 0; padding-top: 0; }
+  .trk .rank { flex: none; width: 1.6em; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .trk .body { min-width: 0; flex: 1; }
+  .trk p { margin: 0; }
+  .trk .t { font-weight: 600; overflow-wrap: anywhere; }
+  .trk .m { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font-size: 14px; margin: 6px 0 4px; }
+  .trk .m .badge { margin-left: 0; }
+  .trk .d { color: var(--muted); font-size: 14px; }
+  .trk.gone .t { text-decoration: line-through; color: var(--muted); }
+  .rungs { display: inline-flex; gap: 3px; }
+  .rungs i { width: 22px; height: 8px; border-radius: 3px; background: var(--track); }
+  .rungs i.on { background: var(--s1); }
   svg.line { width: 100%; height: auto; display: block; overflow: visible; }
   svg.line text { font: 12px ui-sans-serif, system-ui, sans-serif; fill: var(--muted); }
   svg.line .grid { stroke: var(--line); stroke-width: 1; }
@@ -233,6 +247,7 @@
     <nav aria-label="Sections">
       <a href="#how">How it works</a>
       <a href="#status">Where it stands</a>
+      <a href="#results">Results</a>
       <a href="#board">Leaderboard</a>
       <a href="#help">Help wanted</a>
       <a href="https://github.com/spartacus242/frontier-knowledge">GitHub</a>
@@ -346,6 +361,19 @@
       </div>
 
       <p class="sub" style="margin-bottom:0">Everything else on <a href="https://github.com/spartacus242/frontier-knowledge/blob/HEAD/BOARD.md">the board</a> is a lead, labelled as one, waiting for independent reproduction.</p>
+    </div>
+  </section>
+
+  <section id="results" class="viz" hidden>
+    <div class="wrap">
+      <h2 class="sec">Results tracker</h2>
+      <p class="sub">Every claim the project has made, counted by how far it has been checked and by whom. A result is called solved only on the last rung, after people outside the project have accepted it. <a href="https://github.com/spartacus242/frontier-knowledge/blob/HEAD/ANNOUNCEMENTS.md">How a result moves up, and what is never announced early.</a></p>
+      <div class="stats" id="rung-tiles"></div>
+      <div class="panel">
+        <h3>All results, most verified first</h3>
+        <p class="note">Ranked by rung, then by importance: a well-known problem, a question the literature left open, a correction to a published value, an extension of a published record. Withdrawn results stay listed.</p>
+        <div id="tracker"></div>
+      </div>
     </div>
   </section>
 
