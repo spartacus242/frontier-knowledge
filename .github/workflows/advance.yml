@@ -5,7 +5,7 @@ on:
   push:
     paths: ["ask/**", "answer/**", "problems/**", "ledger/INDEX.md", "ledger/routed-open-problems.md", "MAINTAINERS"]
   schedule:
-    - cron: "17 * * * *"
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
 permissions:
   contents: write
