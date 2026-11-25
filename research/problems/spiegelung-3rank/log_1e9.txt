@@ -1,0 +1,3 @@
+positive done: 46874881 fields, 15 s
+negative done: 439563300 fields, 89 s
+violations: 0

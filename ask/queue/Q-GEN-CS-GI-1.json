@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-CS-GI-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: Graph isomorphism in polynomial time",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-CS-GI: Can it be decided in polynomial time whether two finite graphs are isomorphic? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-CS-GI saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Computer science",
+    "problem": "OP-CS-GI",
+    "problem_source": {
+      "id": "arxiv:1512.03547",
+      "first_author": "Babai",
+      "year": 2015,
+      "title": "Graph Isomorphism in Quasipolynomial Time"
+    }
+  },
+  "statement_sha256": "86a998934f016c434c3ab161d6fad64dd06af4ca7e530c3cc06aab95a6ad5d6b"
+}

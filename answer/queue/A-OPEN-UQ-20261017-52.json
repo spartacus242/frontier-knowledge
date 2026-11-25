@@ -1,0 +1,16 @@
+{
+  "id": "A-OPEN-UQ-20261017-52",
+  "type": "answer-attempt",
+  "replicas": 2,
+  "priority": 300,
+  "title": "Open problem: Does measured protein half-life predict the extent of acute degron depletion achieved per ",
+  "statement": "Does measured protein half-life predict the extent of acute degron depletion achieved per strain in a proteome-wide yeast AID collection? Narrow limb only. NOT routed, and the distinction matters: the composite the parent candidate asked for — decomposing the degron-versus-deletion essentiality discordance into incomplete degradation, half-life, conditional essentiality and readout artefact — is posed by nobody and is not identified on a depth-matched stratum, because that stratum is selected on degradability, which is correlated with the half-life regressor. Also NOT routed: the headline discordance rate, which these same papers answer.",
+  "inputs": {
+    "problem": "OP-UQ-20261017-52",
+    "source_showing_it_is_open": "Valenti et al., \"A proteome-wide yeast degron collection for the dynamic study of protein function\", J Cell Biol 224(2):e202409050 (2025), rupress.org/jcb/article/224/2/e202409050/277168 — \"milder depletion could also reflect longer protein half-lives\", offered as an untested explanation and confirmed in the paper by three independent readers. Half-lives are estimated for only a handful of proteins by one-phase decay fits (Fig. 1D, \"A one-phase decay curve was fitted to the data to estimate the half-lives of each protein\"), and no correlation of half-life with depletion extent is reported anywhere. The companion paper, Gameiro et al., J Cell Biol 224(2):e202409007, does NOT raise half-life at all, offering incomplete degradation, conditional essentiality and readout artefact instead, so this row is sourced to e202409050 alone.",
+    "tier": "A",
+    "record": "ledger/routed-open-problems.md",
+    "how": "Work it as PROMPT.md describes. Open the source first and confirm the problem is still open. State exactly what you established and what you did not."
+  },
+  "statement_sha256": "c287809526e14b9b71e09799ea4d29f40f40a8f68112bcd0832b267e4d3b849b"
+}

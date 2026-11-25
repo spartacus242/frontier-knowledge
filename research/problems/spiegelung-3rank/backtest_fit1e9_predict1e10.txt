@@ -1,0 +1,57 @@
+X_max = 10000000000; fit bins in (1e+06, 1e+09], prediction bins above
+aggregate: 30 fit bins, 10 new bins
+  M2: c = -0.09200, -0.05431; fit chi2/dof 13.1/28; T = 1.86, p = 0.9973 HELD; with variances halved T = 3.72, p = 0.9592 HELD
+      bin at 1.122e+09: observed 0.294764, predicted 0.294745, binomial se 0.000051
+      bin at 1.413e+09: observed 0.294817, predicted 0.294856, binomial se 0.000046
+      bin at 1.778e+09: observed 0.294992, predicted 0.294963, binomial se 0.000041
+      bin at 2.239e+09: observed 0.295063, predicted 0.295066, binomial se 0.000036
+      bin at 2.818e+09: observed 0.295147, predicted 0.295165, binomial se 0.000032
+      bin at 3.548e+09: observed 0.295252, predicted 0.295260, binomial se 0.000029
+      bin at 4.467e+09: observed 0.295346, predicted 0.295351, binomial se 0.000026
+      bin at 5.623e+09: observed 0.295441, predicted 0.295439, binomial se 0.000023
+      bin at 7.079e+09: observed 0.295512, predicted 0.295523, binomial se 0.000020
+      bin at 8.913e+09: observed 0.295601, predicted 0.295605, binomial se 0.000018
+      M2 still HELD for p_conj shifted by delta in [-0.00056, +0.00052]
+  M1: c = -0.09424; fit chi2/dof 13.9/29; T = 2.70, p = 0.9877 HELD; with variances halved T = 5.39, p = 0.8634 HELD
+r=0: 30 fit bins, 10 new bins
+  M2: c = -0.13958, -0.08386; fit chi2/dof 15.2/28; T = 5.14, p = 0.8817 HELD; with variances halved T = 10.28, p = 0.4164 HELD
+      bin at 1.122e+09: observed 0.328956, predicted 0.328923, binomial se 0.000057
+      bin at 1.413e+09: observed 0.329022, predicted 0.329092, binomial se 0.000051
+      bin at 1.778e+09: observed 0.329306, predicted 0.329254, binomial se 0.000046
+      bin at 2.239e+09: observed 0.329397, predicted 0.329410, binomial se 0.000041
+      bin at 2.818e+09: observed 0.329525, predicted 0.329560, binomial se 0.000036
+      bin at 3.548e+09: observed 0.329681, predicted 0.329704, binomial se 0.000032
+      bin at 4.467e+09: observed 0.329826, predicted 0.329843, binomial se 0.000029
+      bin at 5.623e+09: observed 0.329977, predicted 0.329976, binomial se 0.000026
+      bin at 7.079e+09: observed 0.330080, predicted 0.330104, binomial se 0.000023
+      bin at 8.913e+09: observed 0.330222, predicted 0.330227, binomial se 0.000020
+      M2 still HELD for p_conj shifted by delta in [-0.00059, +0.00052]
+  M1: c = -0.14305; fit chi2/dof 16.7/29; T = 6.14, p = 0.8034 HELD; with variances halved T = 12.28, p = 0.2668 HELD
+r=1: 30 fit bins, 10 new bins
+  M2: c = -0.22086, -0.24586; fit chi2/dof 13.6/28; T = 8.63, p = 0.5674 HELD; with variances halved T = 17.26, p = 0.0687 HELD
+      bin at 1.122e+09: observed 0.103920, predicted 0.104023, binomial se 0.000089
+      bin at 1.413e+09: observed 0.104404, predicted 0.104298, binomial se 0.000079
+      bin at 1.778e+09: observed 0.104452, predicted 0.104563, binomial se 0.000071
+      bin at 2.239e+09: observed 0.104856, predicted 0.104817, binomial se 0.000063
+      bin at 2.818e+09: observed 0.105107, predicted 0.105061, binomial se 0.000056
+      bin at 3.548e+09: observed 0.105352, predicted 0.105295, binomial se 0.000050
+      bin at 4.467e+09: observed 0.105557, predicted 0.105520, binomial se 0.000045
+      bin at 5.623e+09: observed 0.105736, predicted 0.105735, binomial se 0.000040
+      bin at 7.079e+09: observed 0.105978, predicted 0.105943, binomial se 0.000035
+      bin at 8.913e+09: observed 0.106135, predicted 0.106142, binomial se 0.000032
+      M2 still HELD for p_conj shifted by delta in [-0.00073, +0.00082]
+  M1: c = -0.23101; fit chi2/dof 18.8/29; T = 22.91, p = 0.0111 HELD; with variances halved T = 45.81, p = 0.0000 FAILED
+r=2: 30 fit bins, 10 new bins
+  M2: c = -0.33015, -0.19208; fit chi2/dof 15.1/28; T = 3.97, p = 0.9485 HELD; with variances halved T = 7.95, p = 0.6340 HELD
+      bin at 1.122e+09: observed 0.026601, predicted 0.026610, binomial se 0.000439
+      bin at 1.413e+09: observed 0.027391, predicted 0.027010, binomial se 0.000392
+      bin at 1.778e+09: observed 0.027601, predicted 0.027393, binomial se 0.000350
+      bin at 2.239e+09: observed 0.028247, predicted 0.027762, binomial se 0.000312
+      bin at 2.818e+09: observed 0.028382, predicted 0.028117, binomial se 0.000279
+      bin at 3.548e+09: observed 0.028950, predicted 0.028457, binomial se 0.000249
+      bin at 4.467e+09: observed 0.028893, predicted 0.028785, binomial se 0.000222
+      bin at 5.623e+09: observed 0.029384, predicted 0.029100, binomial se 0.000198
+      bin at 7.079e+09: observed 0.029705, predicted 0.029403, binomial se 0.000176
+      bin at 8.913e+09: observed 0.029830, predicted 0.029694, binomial se 0.000157
+      M2 still HELD for p_conj shifted by delta in [-0.00375, +0.00463]
+  M1: c = -0.33822; fit chi2/dof 15.2/29; T = 7.38, p = 0.6896 HELD; with variances halved T = 14.75, p = 0.1414 HELD

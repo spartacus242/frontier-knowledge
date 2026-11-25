@@ -1,0 +1,14 @@
+{
+  "id": "Q-ADV-UQ-20261030-07",
+  "type": "ask-adversary",
+  "replicas": 2,
+  "title": "Attack: a cross-model adversary for ledger entry UQ-20261030-07",
+  "statement": "Across human one-to-many transmission clusters of an acute respiratory virus, what is the donor-level intraclass correlation of log10 transmission bottleneck size N_b - do the several recipients infected by one donor show correlated founding-population sizes, and what fraction of between-event variance in bottleneck width sits at the donor level?",
+  "inputs": {
+    "ledger_entry": "UQ-20261030-07",
+    "record": "ledger/unasked-ledger.md",
+    "read_only": "the entry's fields from 'Question (canonical)' through the significance argument. Do NOT read its earlier adversary logs or verification notes before you finish: this unit exists to get an attack that was not anchored on them.",
+    "why": "Provisional after three adversaries from one model family; a second family's attack is the cheapest independent check left."
+  },
+  "statement_sha256": "be05b0e255d9caa89d51ab8d2d3f176ebbbd3de1b67b61f3950f386d11d082a3"
+}

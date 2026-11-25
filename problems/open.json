@@ -1,0 +1,203 @@
+{
+ "about": "Well-known open problems the swarm works toward. Maintainers add to this list by pull request. Problems the ledger found while checking candidates are NOT copied here: they are read from ledger/routed-open-problems.md. See problems/README.md.",
+ "problems": [
+  {
+   "id": "OP-MATH-RH",
+   "field": "Mathematics",
+   "title": "The Riemann hypothesis",
+   "statement": "Do all non-trivial zeros of the Riemann zeta function have real part 1/2?",
+   "source": {
+    "id": "url:https://www.claymath.org/millennium/riemann-hypothesis/",
+    "first_author": "Clay Mathematics Institute",
+    "year": 2000,
+    "title": "Riemann Hypothesis"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-MATH-COLLATZ",
+   "field": "Mathematics",
+   "title": "The Collatz (3x+1) conjecture",
+   "statement": "Does iterating n -> n/2 for even n and n -> 3n+1 for odd n reach 1 from every positive integer?",
+   "source": {
+    "id": "arxiv:2111.02635",
+    "first_author": "Lagarias",
+    "year": 2021,
+    "title": "The 3x+1 Problem: An Overview"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-MATH-ERDOS-AP",
+   "field": "Mathematics",
+   "title": "Erdős's conjecture on arithmetic progressions",
+   "statement": "Does every set of positive integers whose reciprocals have a divergent sum contain arithmetic progressions of every finite length?",
+   "source": {
+    "id": "arxiv:2007.03528",
+    "first_author": "Bloom",
+    "year": 2020,
+    "title": "Breaking the logarithmic barrier in Roth's theorem on arithmetic progressions"
+   },
+   "status": "open",
+   "added": "2026-11-25",
+   "note": "The case of three-term progressions follows from the cited paper; the conjecture for every length is open."
+  },
+  {
+   "id": "OP-PHYS-YM",
+   "field": "Physics",
+   "title": "Yang-Mills existence and mass gap",
+   "statement": "Does a quantum Yang-Mills theory exist on four-dimensional space-time for every compact simple gauge group, and does it have a mass gap?",
+   "source": {
+    "id": "url:https://www.claymath.org/millennium/yang-mills-the-maths-gap/",
+    "first_author": "Clay Mathematics Institute",
+    "year": 2000,
+    "title": "Yang-Mills & the Mass Gap"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-PHYS-DM",
+   "field": "Physics",
+   "title": "The nature of dark matter",
+   "statement": "What is the dark matter that astronomical observations require made of?",
+   "source": {
+    "id": "doi:10.1103/RevModPhys.90.045002",
+    "first_author": "Bertone",
+    "year": 2018,
+    "title": "History of dark matter"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-PHYS-HTSC",
+   "field": "Physics",
+   "title": "The mechanism of high-temperature superconductivity",
+   "statement": "What pairs the electrons in the copper-oxide superconductors, and what sets their transition temperature?",
+   "source": {
+    "id": "doi:10.1038/nature14165",
+    "first_author": "Keimer",
+    "year": 2015,
+    "title": "From quantum matter to high-temperature superconductivity in copper oxides"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-CS-PNP",
+   "field": "Computer science",
+   "title": "P versus NP",
+   "statement": "Can every problem whose solution is verifiable in polynomial time also be solved in polynomial time?",
+   "source": {
+    "id": "url:https://www.claymath.org/millennium/p-vs-np/",
+    "first_author": "Clay Mathematics Institute",
+    "year": 2000,
+    "title": "P vs NP"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-CS-OMEGA",
+   "field": "Computer science",
+   "title": "The exponent of matrix multiplication",
+   "statement": "Is the exponent omega of matrix multiplication equal to 2?",
+   "source": {
+    "id": "arxiv:2010.05846",
+    "first_author": "Alman",
+    "year": 2020,
+    "title": "A Refined Laser Method and Faster Matrix Multiplication"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-CS-GI",
+   "field": "Computer science",
+   "title": "Graph isomorphism in polynomial time",
+   "statement": "Can it be decided in polynomial time whether two finite graphs are isomorphic?",
+   "source": {
+    "id": "arxiv:1512.03547",
+    "first_author": "Babai",
+    "year": 2015,
+    "title": "Graph Isomorphism in Quasipolynomial Time"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-BIO-ORIGIN",
+   "field": "Biology",
+   "title": "The origin of life",
+   "statement": "How and where did life on Earth arise?",
+   "source": {
+    "id": "doi:10.1126/science.309.5731.75",
+    "first_author": "Kennedy",
+    "year": 2005,
+    "title": "What Don't We Know?"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-BIO-REGEN",
+   "field": "Biology",
+   "title": "Organ regeneration",
+   "statement": "What controls organ regeneration, and why can some animals regrow organs that others cannot?",
+   "source": {
+    "id": "doi:10.1126/science.309.5731.75",
+    "first_author": "Kennedy",
+    "year": 2005,
+    "title": "What Don't We Know?"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-BIO-DIVERSITY",
+   "field": "Biology",
+   "title": "Species diversity",
+   "statement": "What determines how many species live in a place?",
+   "source": {
+    "id": "doi:10.1126/science.309.5731.75",
+    "first_author": "Kennedy",
+    "year": 2005,
+    "title": "What Don't We Know?"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-MED-PETO",
+   "field": "Medicine",
+   "title": "Peto's paradox",
+   "statement": "Why does cancer risk not rise across species with body size and lifespan, although larger and longer-lived animals have more cell divisions in which to acquire mutations?",
+   "source": {
+    "id": "doi:10.1016/j.tree.2011.01.002",
+    "first_author": "Caulin",
+    "year": 2011,
+    "title": "Peto's Paradox: evolution's prescription for cancer prevention"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  },
+  {
+   "id": "OP-MED-HIV-VACCINE",
+   "field": "Medicine",
+   "title": "An effective HIV vaccine",
+   "statement": "Is a vaccine that reliably prevents HIV infection feasible?",
+   "source": {
+    "id": "doi:10.1126/science.309.5731.75",
+    "first_author": "Kennedy",
+    "year": 2005,
+    "title": "What Don't We Know?"
+   },
+   "status": "open",
+   "added": "2026-11-25"
+  }
+ ],
+ "routed_parents": {}
+}

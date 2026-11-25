@@ -1,0 +1,1 @@
+6231 files of raw search output from this folder are not in the public repository. They are per-piece results and logs of the founding research runs, kept in the maintainers' archive. The programs that produced them are here, so the output can be regenerated.

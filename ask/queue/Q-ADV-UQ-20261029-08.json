@@ -1,0 +1,14 @@
+{
+  "id": "Q-ADV-UQ-20261029-08",
+  "type": "ask-adversary",
+  "replicas": 2,
+  "title": "Attack: a cross-model adversary for ledger entry UQ-20261029-08",
+  "statement": "For a managed-runtime program traced to exact object death times on a single declared clock (bytes allocated), does the death hazard of a heap object depend only on its age, or do the identifiable curvatures of the death-time (period) and allocation-epoch (cohort) axes differ from zero?",
+  "inputs": {
+    "ledger_entry": "UQ-20261029-08",
+    "record": "ledger/unasked-ledger.md",
+    "read_only": "the entry's fields from 'Question (canonical)' through the significance argument. Do NOT read its earlier adversary logs or verification notes before you finish: this unit exists to get an attack that was not anchored on them.",
+    "why": "Provisional after three adversaries from one model family; a second family's attack is the cheapest independent check left."
+  },
+  "statement_sha256": "f2f9a6f1cee58256fd8bd1c3faa962c967dcb117585674f626844d70b48e913c"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "A-OPEN-UQ-20261016-29",
+  "type": "answer-attempt",
+  "replicas": 2,
+  "priority": 300,
+  "title": "Open problem: Over a plasmid repository's sequenced catalogue, how many distinct citing publications are",
+  "statement": "Over a plasmid repository's sequenced catalogue, how many distinct citing publications are attached to plasmids whose repository sequence departs from the depositor-supplied map, by discrepancy class (ORF-altering / regulatory / backbone / selection marker / silent)? Settle the denominator first: what fraction of papers citing a repository plasmid describe the construct by map, sequence or element composition rather than by catalogue number alone — the exposure estimand is undefined until that number exists. Check the premise before modelling: neither cited source establishes that a repository holds a depositor map joinable to its own full-construct sequencing at catalogue scale. Do NOT re-run the catalogue-scale classification (McGuffie & Barrick 2024: 51,384 fully sequenced Addgene plasmids, 171,828 part mismatches against canonical sequences) or the map-versus-material rates (Bai et al. 2024, bioRxiv 10.1101/2024.06.17.596931, a vendor preprint whose true map-versus-material arm is 49 Addgene AAV plasmids).",
+  "inputs": {
+    "problem": "OP-UQ-20261016-29",
+    "source_showing_it_is_open": "McGuffie MJ, Barrick JE, *PLOS ONE* 19(5):e0304164, 2024 — the Discussion defers the publication join explicitly: \"It may be possible to trace more of our variants of interest to existing publications\", \"this will require analyzing hundreds or thousands of publications\", \"Such efforts will take years of expert curation and laboratory experiments by a community of scientists\"; the Results record a failed instance — \"none of the five publications associated with the plasmids containing this derivative mention its provenance\". Bai et al. 2024 never mentions citing publications, so it is not part of this routing ground.",
+    "tier": "A for the class-by-exposure table on public data, gated on the denominator; the direction-of-error arm (which construct the published work actually used) is C, needing repository and depositor cooperation, and is not routed",
+    "record": "ledger/routed-open-problems.md",
+    "how": "Work it as PROMPT.md describes. Open the source first and confirm the problem is still open. State exactly what you established and what you did not."
+  },
+  "statement_sha256": "c60668d08849262304b300149c60f2fcc43240cfc8939f7c0c7e26d985f5dc02"
+}

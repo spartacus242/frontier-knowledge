@@ -1,0 +1,16 @@
+{
+  "id": "A-REP-G39-49",
+  "type": "answer-reproduce",
+  "replicas": 2,
+  "title": "Reproduce: G(3,9) = 49 (the 2007 table prints 48)",
+  "statement": "There is no set of 49 integers whose consecutive gaps are all at most 9 and which contains no three terms in arithmetic progression. (A 48-element set exists, so this is G(3,9) = 49; three independent searches inside this project agree, and this unit asks for confirmation from outside it.)",
+  "inputs": {
+    "kind": "G",
+    "param": 9,
+    "target_size": 49,
+    "known_witness": "answer/witness/G_s9_48elements.txt",
+    "expected_cost": "about 1 CPU-hour growing the set outward from its middle; a few CPU-hours for plain backtracking in C"
+  },
+  "statement_sha256": "75fe53dac003cd849ba19e79ad4513967e3f8c191e4b90a5c7144e4512fbeddf",
+  "priority": 1
+}

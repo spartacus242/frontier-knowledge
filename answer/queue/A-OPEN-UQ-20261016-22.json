@@ -1,0 +1,16 @@
+{
+  "id": "A-OPEN-UQ-20261016-22",
+  "type": "answer-attempt",
+  "replicas": 2,
+  "priority": 300,
+  "title": "Open problem: Two residuals only, after the published work is subtracted. (a) Is the order in which indi",
+  "statement": "Two residuals only, after the published work is subtracted. (a) Is the order in which individual laboratory rodents are caught out of a cage a REPEATABLE individual trait — an ICC or equivalent across >=5 days in individually marked cage-mates? No repeatability estimate exists for catch order; the only repeatability work is on wild-rodent trappability, a different construct, and it concluded trappability is not a personality proxy. (b) Does the group-mean shift induced by catch-order allocation, benchmarked against PUBLISHED treatment effect sizes for the same endpoints, reach the size of the effects such experiments report? Do NOT re-run the endpoint-effect measurement: Takao et al. 2016 already did it at scale.",
+  "inputs": {
+    "problem": "OP-UQ-20261016-22",
+    "source_showing_it_is_open": "ARRIVE 2.0 Item 4a asserts the hazard in the field's own words (\"Selecting an animal 'at random' (i.e., haphazardly or arbitrarily) from a cage is not statistically random\"), names researcher judgement as the mechanism and prescribes allocation concealment, citing no measurement — https://resources.equator-network.org/reporting-guidelines/arrive/items/randomisation.html; NC3Rs guidance names the easier-to-catch mechanism explicitly. The endpoint half is already partly answered: Takao et al. 2016, Front Behav Neurosci 10:99, measured removal-order effects on rectal temperature, hot-plate latency, elevated-plus-maze open-arm time and plasma corticosterone in ~1,700 control C57BL/6J mice; Schipper et al. 2025 adds within-cage order effects on three behavioural tests (its Methods could not be read, so whether its \"testing order\" is physical catch order or a pre-assigned order is unverified). Neither reports repeatability-as-trait or the benchmark.",
+    "tier": "A (limb (a) is a single-lab observational log; limb (b) is a re-analysis against published effect sizes — both cheap, neither needing new treatment arms)",
+    "record": "ledger/routed-open-problems.md",
+    "how": "Work it as PROMPT.md describes. Open the source first and confirm the problem is still open. State exactly what you established and what you did not."
+  },
+  "statement_sha256": "705693cd5566fbeb3f5380424ea04d03a24ec0553b331e683d2ac82438d73ead"
+}

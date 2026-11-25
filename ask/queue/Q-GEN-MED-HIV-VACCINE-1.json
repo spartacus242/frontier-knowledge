@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-MED-HIV-VACCINE-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: An effective HIV vaccine",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-MED-HIV-VACCINE: Is a vaccine that reliably prevents HIV infection feasible? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-MED-HIV-VACCINE saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Medicine",
+    "problem": "OP-MED-HIV-VACCINE",
+    "problem_source": {
+      "id": "doi:10.1126/science.309.5731.75",
+      "first_author": "Kennedy",
+      "year": 2005,
+      "title": "What Don't We Know?"
+    }
+  },
+  "statement_sha256": "b262249c2630c0437401565686eda9a3feca7da4f45da45ccc64b4b19fec65e2"
+}

@@ -1,0 +1,35 @@
+# Checks every swarm submission (a pull request that touches a submissions folder; other pull requests are ignored). Uses pull_request_target so it can comment and merge, and is safe because it never
+# checks out or runs anything from the pull request: verify/ci_verdict.py fetches the one submitted file as data
+# and runs the BASE branch's checker on it.
+name: verdict
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened]
+    paths: ["ask/submissions/**", "answer/submissions/**"]
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write          # to start advance.yml after a merge (a GITHUB_TOKEN merge triggers no push workflow)
+concurrency:
+  group: verdict          # one at a time, so replica counts cannot race
+  cancel-in-progress: false
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4          # the base branch, never the PR head
+        with:
+          persist-credentials: false
+      - run: python3 -I verify/ci_verdict.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          PR: ${{ github.event.pull_request.number }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+      - run: gh workflow run advance.yml
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}

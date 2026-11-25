@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-CS-PNP-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: P versus NP",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-CS-PNP: Can every problem whose solution is verifiable in polynomial time also be solved in polynomial time? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-CS-PNP saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Computer science",
+    "problem": "OP-CS-PNP",
+    "problem_source": {
+      "id": "url:https://www.claymath.org/millennium/p-vs-np/",
+      "first_author": "Clay Mathematics Institute",
+      "year": 2000,
+      "title": "P vs NP"
+    }
+  },
+  "statement_sha256": "fe7ad8e9598a56b74cb95f90cd634a5e41ab4358e0d6c369d907ec2e4b0a8e7e"
+}

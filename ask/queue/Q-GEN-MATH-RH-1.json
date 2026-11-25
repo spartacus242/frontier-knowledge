@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-MATH-RH-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: The Riemann hypothesis",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-MATH-RH: Do all non-trivial zeros of the Riemann zeta function have real part 1/2? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-MATH-RH saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Mathematics",
+    "problem": "OP-MATH-RH",
+    "problem_source": {
+      "id": "url:https://www.claymath.org/millennium/riemann-hypothesis/",
+      "first_author": "Clay Mathematics Institute",
+      "year": 2000,
+      "title": "Riemann Hypothesis"
+    }
+  },
+  "statement_sha256": "149f924a28d895a8fa95b1a8678a439efc4e41ff07ffa21eaa64aeaafbf41d9b"
+}

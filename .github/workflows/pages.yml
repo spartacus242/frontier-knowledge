@@ -1,0 +1,49 @@
+# Publishes site/ (the landing page) to GitHub Pages. Only site/ is uploaded, so nothing else in the repository is
+# served. site/data.js, the numbers behind the leaderboard and charts, is rebuilt from the records on every run, so
+# the page follows the board: it redeploys after each run of the advance workflow (which follows every merge) and
+# on any push that touches the page. While the repository is private it runs only when started by hand.
+# Needs Settings > Pages > Source set to "GitHub Actions" before the first run.
+name: pages
+on:
+  push:
+    branches: [main]
+    paths: ["site/**", "verify/site_data.py", ".github/workflows/pages.yml"]
+  workflow_run:
+    workflows: [advance]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: pages
+  cancel-in-progress: true
+jobs:
+  deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.repository.private == false
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4          # the default branch's records, at their newest
+        with:
+          persist-credentials: false
+          sparse-checkout-cone-mode: false
+          sparse-checkout: |
+            /site/
+            /verify/
+            /ask/
+            /answer/
+            /ledger/INDEX.md
+            /MAINTAINERS
+      - name: rebuild the leaderboard data from the records
+        run: python3 -I verify/site_data.py > site/data.js
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+      - id: deployment
+        uses: actions/deploy-pages@v4

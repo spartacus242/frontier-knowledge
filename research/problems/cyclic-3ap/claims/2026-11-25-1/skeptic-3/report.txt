@@ -1,0 +1,90 @@
+SKEPTIC REVIEW: claim packet 2026-11-25-1 (a(80..100) of OEIS A304884)
+(report.md was refused by the harness, so this file is report.txt as the brief instructs)
+
+Inputs: only /tmp/work/pk3/{claim.md,terms.csv} and my own code in /tmp/work/sr3.
+Compute: one core at a time, under 50 MB of memory. All background processes I started have stopped.
+
+1. REPRODUCED? YES, for every n in 80..100.
+
+(i) Witnesses. check_witness.py checks every pair (x,y) with z = 2y-x mod n and rejects any triple that is not all equal. All 21 sets
+have the stated size, distinct elements in 0..n-1, and no nontrivial 3AP. Output: ALL OK.
+
+(ii) Exhaustive search. cyc.c is my own C code; "cyc n K" decides whether a 3AP-free K-subset of Z_n exists.
+  - DFS over sets 0 = s0 < ... < s_{K-1}. By translation, 0 is in S and the wrap gap n - s_max is the largest cyclic gap.
+  - A 128-bit forbidden mask marks, for each new q and each earlier x: 2q-x, 2x-q and every solution of 2m = x+q (mod n), which is
+    one solution for odd n and two for even n. For even n it also marks q+n/2 (the degenerate progression x, x+n/2, x+n).
+  - Pruning: the free slots must be at least as many as the elements still needed, and any arc of length L holds at most r3(L)
+    elements (an integer 3AP inside an arc is a 3AP mod n).
+  - r3 = A003002 was computed by my own r3.c for L <= 90, and all 88 values match OEIS A003002. For L = 91..100 I used the safe bound
+    r3(L) <= r3(L-1)+1.
+  - Variant cyc_nogap.c is the same code with the largest-gap normalisation removed, so it searches a larger space and is about 12x
+    slower. It checks that the gap argument is sound. It is not an independently written program.
+Validation on published data (A304884 b-file n = 1..79, fetched 2026-11-25):
+  - validate.py with cyc computes a(n) from scratch by raising K until the search fails. All 77 n = 3..79 match the b-file, with an
+    exhaustive NONE at a(n)+1 (validate_final.txt, 10.5 s).
+  - With cyc_nogap, n = 3..70 all match with NONE at a(n)+1 (validate_nogap.txt).
+Results for n = 80..100 (res/<n>.txt and res_nogap/<n>.txt). For every n the search FOUND a set of size a(n) and returned NONE at
+a(n)+1. Columns: n, a(n), cyc seconds at a(n)+1, cyc_nogap seconds at a(n)+1.
+  80 15 0.9 9 | 81 16 2.4 29 | 82 16 0.9 9 | 83 16 2.6 28 | 84 16 1.9 19 | 85 17 2.5 26 | 86 16 2.4 23
+  87 16 8.2 101 | 88 16 3.8 40 | 89 16 11.5 129 | 90 16 6.9 76 | 91 17 9.9 122 | 92 16 9.6 106
+  93 17 22.1 264 | 94 16 14.8 156 | 95 17 25.4 297 | 96 17 16.9 199 | 97 17 40.8 530 | 98 16 34.2 396
+  99 17 89.8 1262 | 100 17 34.1 401
+Totals: cyc 343 s, cyc_nogap 4223 s, both single-core. BOTH searches FINISHED for EVERY n in 80..100, and all values equal claim (a).
+
+(iii) Definition. The packet's definition (x+z=2y, not all equal, degenerate progressions included) is the same as the OEIS one
+("nontrivial" means not of the form x,x,x) and the Halbeisen one (non-constant a, a+d, a+2d with 1 <= d < n; "we do not require all
+elements of the sequence to be different", from the ems.press PDF). My code implements it and reproduces the b-file for n = 3..79,
+including the even-n dips such as a(36) = 8. A341584 (distinct-element version) agrees with A304884 on all odd n <= 79, which I
+checked. Minor: the packet's list of values in the paper leaves out n = 3 and n = 6, which the paper also states. This does not
+affect the claim.
+
+2. NOVEL? YES, as far as could be checked; some sources could not be opened.
+Queries and fetches:
+ 1. WebFetch oeis.org/A304884: data stop at 79.
+ 2. WebFetch oeis.org/A304884/b304884.txt: n = 1..79.
+ 3. WebFetch oeis.org/A003002/b003002.txt.
+ 4. WebFetch oeis.org/A341584 and /internal: b-file n = 0..80; no odd n beyond 79.
+ 5. WebFetch oeis.org/A396816: unrelated.
+ 6. WebFetch oeis.org/A320577: unrelated.
+ 7. WebSearch "A304884 largest subset cyclic group no 3-term arithmetic progression"
+ 8. WebSearch "Halbeisen "Avoiding arithmetic progressions in cyclic groups""
+ 9. WebSearch (extended) "maximum size 3-AP-free subset Z_n computed values table cyclic group arxiv"
+ 10. WebSearch ""A304884" OEIS"
+ 11. WebSearch ""cyclic group" "arithmetic progression" largest subset Z_n values n=80 OR n=100 computation 3-AP-free Z/nZ"
+ 12. WebSearch "mathoverflow largest 3-AP-free subset of Z/nZ cyclic values"
+ 13. WebSearch "math.stackexchange largest subset of Z_n without three term arithmetic progression"
+ 14. WebSearch (extended) ""Halbeisen" "arithmetic progressions" cyclic groups alpha(n,3) cited by"
+ 15. WebSearch (extended) "arxiv "progression-free" "Z_n" OR "Z/nZ" exact values small n exhaustive search "three-term" cyclic 2024 2025 2026"
+ 16. WebSearch ""Giovanni Resta" OR "Scheinerman" 3-term arithmetic progression cyclic group subset sequence"
+ 17. WebSearch "site:arxiv.org largest subset of Z_N with no nontrivial three-term arithmetic progression exact computation table"
+ 18. WebSearch "site:mathoverflow.net 3-term arithmetic progression free subset cyclic group Z_n maximum size"
+ 19. WebSearch "site:math.stackexchange.com arithmetic progression modulo n largest subset no three term"
+ 20. WebSearch "maximum number of vertices regular n-gon no three form isosceles triangle values table"
+ 21. WebSearch ""A341584" isosceles regular polygon vertices sequence"
+ 22. WebFetch of the Halbeisen paper (ems.press): values only up to n = 36.
+ 23. WebFetch Wikipedia "Salem–Spencer set" and "Cap set": no values for Z_n.
+ 24. WebFetch arXiv 2606.30186 and arXiv 2401.06283: about minimum complete sets; no A304884 values.
+ 25. WebFetch the Hegarty–Martinsson paper (EJC 22(4)): does not cite Halbeisen; no values.
+ 26. WebFetch blogs.dickinson.edu "On Maximum Apex Counts": unrelated.
+Could not open:
+ - oeis.org through curl (proxy 403).
+ - OEIS full-text and term search (robots), so I could not search the OEIS for the claimed terms.
+ - Google Scholar (robots), so I have no cited-by list for the Halbeisen paper.
+ - arXiv search and the export API (robots); arXiv was covered only through web search.
+ - MSE question 4012158 linked from A341584 (site blocked). This is the most plausible place for unpublished odd-n values, since
+   A341584 equals A304884 for odd n.
+Effect on novelty: the canonical sources stop at n = 79 (the OEIS entry and b-file, the A341584 b-file which stops at 80, and the
+original paper), and no search turned up anything beyond 79. The gaps mean I cannot exclude an obscure posting, but I found no
+evidence of earlier publication.
+
+3. HONEST? YES.
+ - The frozen target is a(80..90) with witnesses, exhaustive upper bounds and two agreeing programs. The claim delivers 80..100, a
+   superset. The goal was not narrowed or weakened, and the definition is unchanged.
+ - Every value claimed in (a) is reproduced, the witnesses in (b) are valid, and the upper bounds in (c) were reproduced
+   independently for all 21 n.
+ - The claim of "two independently written programs" cannot be audited from terms.csv alone, but my independent reproduction makes
+   that point moot for the numbers.
+ - The compute note is plausible (my program took 6 min for all 21 bounds). The novelty wording in (d) is modest and accurate.
+ - Nothing beyond n = 100 is claimed.
+
+VERDICT: SIGN-OFF (see verdict.txt)

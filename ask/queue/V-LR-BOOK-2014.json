@@ -1,0 +1,12 @@
+{
+  "id": "V-LR-BOOK-2014",
+  "type": "ask-verify",
+  "replicas": 2,
+  "title": "Library unit: does the 2014 Landman-Robertson book already correct the 2007 table?",
+  "statement": "In B. M. Landman and A. Robertson, Ramsey Theory on the Integers, 2nd edition, American Mathematical Society, 2014: does the book give values or bounds for G(3,s) (s = 6..10), M(3,s) (s = 4..8) or w*(3;5), and if so, which, and do any of them differ from Table 1 of arXiv:0706.4420?",
+  "inputs": {
+    "why": "The only open objection on this project's corrections to the 2007 table is that nobody could read this book from a machine. It needs a person with a library or the book.",
+    "claim_in_record": "The project's results G(3,9) = 49, M(3,7) = 51, M(3,4) = 19, M(3,5) = 31, M(3,6) = 38, G(3,6) = 23 and w*(3;5) = 76 are not already in this book."
+  },
+  "statement_sha256": "3d61c1bbb1a17eb40bece8898abf4fcb99ed8afaddfec0db3b3def3582e0f9b2"
+}

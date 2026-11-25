@@ -1,0 +1,16 @@
+{
+  "id": "A-REP-M37-51",
+  "type": "answer-reproduce",
+  "replicas": 3,
+  "title": "Reproduce: M(3,7) = 51 (a 2007 table prints 48)",
+  "statement": "There is no choice of one integer from each of the 51 blocks [7i, 7i+6], i = 0..50, such that no three chosen integers form an arithmetic progression. (A valid choice from 50 blocks exists, so this statement is equivalent to M(3,7) = 51, where Brown, Landman and Robertson, arXiv:0706.4420, Table 1, print 48.)",
+  "inputs": {
+    "kind": "M",
+    "param": 7,
+    "target_size": 51,
+    "known_witness": "answer/witness/M_s7_50blocks.txt",
+    "expected_cost": "under 2 CPU-hours with a most-constrained-block-first backtracking search using the mirror symmetry; about 32 CPU-hours for plain backtracking"
+  },
+  "statement_sha256": "ab1146534cd88f214842b7ec666ee6d3df316e488330e490546a2b6cae67d578",
+  "priority": 2
+}

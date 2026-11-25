@@ -1,0 +1,16 @@
+{
+  "id": "A-REP-W35-76",
+  "type": "answer-reproduce",
+  "replicas": 3,
+  "title": "Reproduce: w*(3;5) <= 76 (the 2007 table prints >= 75)",
+  "statement": "Every colouring of 1..76 with 5 colours contains x, x+d, x+2d (d >= 1) whose colours c1, c2, c3 satisfy c1 + c3 = 2*c2. (The matching lower bound w*(3;5) >= 76 is classical; only this upper bound is new.)",
+  "inputs": {
+    "kind": "W",
+    "param": 5,
+    "target_size": 76,
+    "known_witness": "answer/witness/wstar_r5_n75.txt",
+    "expected_cost": "about 4.3 CPU-hours with a propagating search split into about 100,000 pieces; make your run resumable, since a restart should cost only the pieces in flight"
+  },
+  "statement_sha256": "9c9d8be361cb87cb015a7ba698b2d8d78006f587ec3b974948a86ded19440b2e",
+  "priority": 3
+}

@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-BIO-ORIGIN-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: The origin of life",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-BIO-ORIGIN: How and where did life on Earth arise? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-BIO-ORIGIN saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Biology",
+    "problem": "OP-BIO-ORIGIN",
+    "problem_source": {
+      "id": "doi:10.1126/science.309.5731.75",
+      "first_author": "Kennedy",
+      "year": 2005,
+      "title": "What Don't We Know?"
+    }
+  },
+  "statement_sha256": "d9cef7b80fcfe8aa0597fd67e2c4d08cc798ee49cd2390b40856412c9ae7300e"
+}

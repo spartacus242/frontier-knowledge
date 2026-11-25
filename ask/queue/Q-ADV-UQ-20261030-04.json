@@ -1,0 +1,14 @@
+{
+  "id": "Q-ADV-UQ-20261030-04",
+  "type": "ask-adversary",
+  "replicas": 2,
+  "title": "Attack: a cross-model adversary for ledger entry UQ-20261030-04",
+  "statement": "Within a single cell, is the number of de-novo somatic mutations carried by each individual near-full-length mtDNA molecule distributed as the Poisson expectation computed from that same cell's per-base de-novo mutation frequency times the called molecule length, or is it overdispersed - a minority of molecules carrying a disproportionate share of the cell's mutations, as a replication hierarchy among genome copies would produce?",
+  "inputs": {
+    "ledger_entry": "UQ-20261030-04",
+    "record": "ledger/unasked-ledger.md",
+    "read_only": "the entry's fields from 'Question (canonical)' through the significance argument. Do NOT read its earlier adversary logs or verification notes before you finish: this unit exists to get an attack that was not anchored on them.",
+    "why": "Provisional after three adversaries from one model family; a second family's attack is the cheapest independent check left."
+  },
+  "statement_sha256": "c7892d2b90b8bc3bc8e517834a5165e1bafc7c4e204c2f97d189568fe707a98f"
+}

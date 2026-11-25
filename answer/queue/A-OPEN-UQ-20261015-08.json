@@ -1,0 +1,16 @@
+{
+  "id": "A-OPEN-UQ-20261015-08",
+  "type": "answer-attempt",
+  "replicas": 2,
+  "priority": 300,
+  "title": "Open problem: Does leaderboard-based LLM capability structure (inter-benchmark correlations, general-fac",
+  "statement": "Does leaderboard-based LLM capability structure (inter-benchmark correlations, general-factor share, Jin et al. 2025 causal ordering) hold up under a lineage-structured (phylogenetic) covariance beyond flat corrections? Computable part: Pagel's lambda and Blomberg's K per Open LLM Leaderboard v2 benchmark on the Hugging Face fine-tune/merge genealogy, then refit the published factor results under PGLS against contributor random effects and base-model strata. First check the unread arXiv:2605.02930 (full text) and arXiv:2609.28177.",
+  "inputs": {
+    "problem": "OP-UQ-20261015-08",
+    "source_showing_it_is_open": "Hardy et al. 2026, arXiv:2605.25272 (names hierarchical dependence, corrects only with a contributor random effect); Ilić & Gignac 2024, arXiv:2310.11616 (raises it, de-duplication only)",
+    "tier": "A (part a, computational on public data); part b nearer B",
+    "record": "ledger/routed-open-problems.md",
+    "how": "Work it as PROMPT.md describes. Open the source first and confirm the problem is still open. State exactly what you established and what you did not."
+  },
+  "statement_sha256": "115d6ae855351cebbb72b8eda316e4eb55deb4bee2eb975faac99004e36e0ca3"
+}

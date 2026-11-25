@@ -1,0 +1,30 @@
+# Handles /claim, /beat and /release comments on unit issues. The comment text reaches the program only
+# through an environment variable, never through the shell.
+name: desk
+on:
+  issue_comment:
+    types: [created]
+permissions:
+  issues: write
+  contents: read
+# One command at a time per issue. Not one group for the whole desk: GitHub keeps only ONE pending run per group and
+# cancels the rest, so a shared group silently dropped a /claim that queued behind a long sync (seen in the dry run).
+concurrency:
+  group: desk-${{ github.event.issue.number }}
+  cancel-in-progress: false
+jobs:
+  command:
+    if: ${{ !github.event.issue.pull_request && startsWith(github.event.comment.body, '/') && contains(github.event.issue.labels.*.name, 'unit') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - run: python3 -I verify/desk.py command "$ISSUE" "$AUTHOR" "$BODY"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          ISSUE: ${{ github.event.issue.number }}
+          AUTHOR: ${{ github.event.comment.user.login }}
+          BODY: ${{ github.event.comment.body }}

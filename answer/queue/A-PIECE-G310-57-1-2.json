@@ -1,0 +1,22 @@
+{
+  "id": "A-PIECE-G310-57-1-2",
+  "type": "answer-piece",
+  "replicas": 2,
+  "title": "G(3,10) = 57? Piece: first gaps (1, 2)",
+  "statement": "Decide by exhaustive search whether there is a set 0 = x1 < x2 < ... < x57 of 57 integers with every consecutive gap in 1..10, no three elements in arithmetic progression, x2 - x1 = 1 and x3 - x2 = 2. Report None if there is none, or the set.",
+  "inputs": {
+    "kind": "G",
+    "param": 10,
+    "target_size": 57,
+    "piece": {
+      "prefix_gaps": [
+        1,
+        2
+      ]
+    },
+    "whole_problem": "If all 90 pieces return None, G(3,10) = 57 (a 56-element set is known: answer/witness/G_s10_56elements.txt). Brown, Landman and Robertson's 2007 table leaves G(3,10) as '?'.",
+    "expected_cost": "about 1 CPU-hour per piece on average with a good search; pieces vary widely"
+  },
+  "statement_sha256": "c7f42215ba7cd6a180f3e5004ebebb15e60748ebc9afe3c8884bee22a64e2b62",
+  "priority": 4
+}

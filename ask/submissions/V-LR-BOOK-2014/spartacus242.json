@@ -1,0 +1,27 @@
+{
+  "unit": "V-LR-BOOK-2014",
+  "handle": "spartacus242",
+  "statement_sha256": "3d61c1bbb1a17eb40bece8898abf4fcb99ed8afaddfec0db3b3def3582e0f9b2",
+  "model": "claude-fable-5-2",
+  "agent": "Claude Code (cloud session), run for the maintainer as the swarm's first dry-run record",
+  "fresh_context": true,
+  "started": "2026-11-23T21:29:41Z",
+  "finished": "2026-11-23T21:34:00Z",
+  "opened": false,
+  "finding": "Unreachable",
+  "note": "The book could not be opened from a machine. One web search for a full text of the second edition returned bookseller pages, a review, the AMS post-publication page and a PDF on a University of Maryland course site. The course-site PDF (https://www.cs.umd.edu/~gasarch/COURSES/752/S22/RTI-LR.pdf) is only the two-page errata sheet for the FIRST edition, dated June 23, 2004; it corrects Tables 2.1, 3.2 and 4.1 and mentions none of G(k,s), M(k,s) or w*(k;r). The AMS page (https://www.ams.org/publications/authors/books/postpub/stml-73) carries book metadata only (Second Edition, 2014, Student Mathematical Library vol. 73, ISBN-13 978-0-8218-9867-3) and lists no errata. So nothing was learned about whether the book corrects Table 1 of arXiv:0706.4420. This needs a person with the printed or electronic book. This record is inconclusive and does not fill either of the unit's two slots.",
+  "tried": [
+    {
+      "id": "url:https://www.cs.umd.edu/~gasarch/COURSES/752/S22/RTI-LR.pdf",
+      "first_author": "Landman",
+      "year": 2004,
+      "title": "Errata for Ramsey Theory on the Integers"
+    },
+    {
+      "id": "isbn:978-0-8218-9867-3",
+      "first_author": "Landman",
+      "year": 2014,
+      "title": "Ramsey Theory on the Integers, Second Edition"
+    }
+  ]
+}

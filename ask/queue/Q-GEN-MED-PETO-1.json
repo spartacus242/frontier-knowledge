@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-MED-PETO-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: Peto's paradox",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-MED-PETO: Why does cancer risk not rise across species with body size and lifespan, although larger and longer-lived animals have more cell divisions in which to acquire mutations? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-MED-PETO saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Medicine",
+    "problem": "OP-MED-PETO",
+    "problem_source": {
+      "id": "doi:10.1016/j.tree.2011.01.002",
+      "first_author": "Caulin",
+      "year": 2011,
+      "title": "Peto's Paradox: evolution's prescription for cancer prevention"
+    }
+  },
+  "statement_sha256": "714e090e4d6416a6d59762ed12f884ca40b34fbf4fcda77c1a6604a2e1378606"
+}

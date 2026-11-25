@@ -1,0 +1,1 @@
+SIGN-OFF: all 21 witnesses valid; my independent exhaustive search (validated on OEIS n=3..79) proves no a(n)+1 set for every n=80..100; definition matches; no published terms beyond 79 found (search limits noted in report).

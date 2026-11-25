@@ -1,0 +1,16 @@
+{
+  "id": "A-OPEN-UQ-20261015-02",
+  "type": "answer-attempt",
+  "replicas": 2,
+  "priority": 300,
+  "title": "Open problem: Does the palindromic gap pdg(2;3,t) = w(2;3,t) − q(t) attain 0 infinitely often? Computabl",
+  "statement": "Does the palindromic gap pdg(2;3,t) = w(2;3,t) − q(t) attain 0 infinitely often? Computable part: extend pdw(2;3,t) (OEIS A198685) past t = 20 and compare with w(2;3,t).",
+  "inputs": {
+    "problem": "OP-UQ-20261015-02",
+    "source_showing_it_is_open": "Ahmed, Kullmann & Snevily, arXiv:1102.5433 §5.4 open problem 2",
+    "tier": "A (computational part)",
+    "record": "ledger/routed-open-problems.md",
+    "how": "Work it as PROMPT.md describes. Open the source first and confirm the problem is still open. State exactly what you established and what you did not."
+  },
+  "statement_sha256": "6db77d5229e040a53ae2e551518f414ee6fe193306e94fd42f680fba6cdcc792"
+}

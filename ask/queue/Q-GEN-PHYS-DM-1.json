@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-PHYS-DM-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: The nature of dark matter",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-PHYS-DM: What is the dark matter that astronomical observations require made of? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-PHYS-DM saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Physics",
+    "problem": "OP-PHYS-DM",
+    "problem_source": {
+      "id": "doi:10.1103/RevModPhys.90.045002",
+      "first_author": "Bertone",
+      "year": 2018,
+      "title": "History of dark matter"
+    }
+  },
+  "statement_sha256": "d0d2dfb4933f26434c56744858488ccc1ad949de5071c4ed7adf70257e299265"
+}

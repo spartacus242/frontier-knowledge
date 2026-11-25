@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-BIO-REGEN-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: Organ regeneration",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-BIO-REGEN: What controls organ regeneration, and why can some animals regrow organs that others cannot? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-BIO-REGEN saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Biology",
+    "problem": "OP-BIO-REGEN",
+    "problem_source": {
+      "id": "doi:10.1126/science.309.5731.75",
+      "first_author": "Kennedy",
+      "year": 2005,
+      "title": "What Don't We Know?"
+    }
+  },
+  "statement_sha256": "93efacd7509bfec9ca71b2b1721e849669fc74a947f46fe769cff308703df500"
+}

@@ -1,0 +1,7 @@
+real forms counted 121007025
+complex forms counted 305350917 maxorbit 12
+anomalies 0, r>3: 0
+
+real	9m26.226s
+user	9m18.795s
+sys	0m1.063s

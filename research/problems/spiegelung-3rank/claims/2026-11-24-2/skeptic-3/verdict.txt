@@ -1,0 +1,1 @@
+REJECT Table (all 76 rows) and test (b) reproduced exactly by an independent method, but frozen condition (c)/claim (d) "no published test of this law to a comparable range" is contradicted by Belabas, Math. Comp. 73 (2004) Sec. 5.2, which tests Dutarte's law for r=4 up to ~1.6e13 and is not cited; novelty is therefore not a clear yes.

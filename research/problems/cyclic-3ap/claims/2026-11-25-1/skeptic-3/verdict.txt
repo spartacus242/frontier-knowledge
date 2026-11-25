@@ -1,0 +1,1 @@
+SIGN-OFF: all 21 witnesses valid; own exhaustive search (validated on published a(3..79) incl. impossibility of a(n)+1) confirms a(80..100) exactly as claimed for every n 80..100; definition matches OEIS/Halbeisen; no publication beyond n=79 found (OEIS search, Scholar, arXiv search, MSE thread unreachable).

@@ -1,0 +1,19 @@
+window +1 (0, 8000000000]: 383864350 fields, 0 overflow hits, 83 s
+window +1 (8000000000, 16000000000]: 388540474 fields, 0 overflow hits, 88 s
+window +1 (16000000000, 24000000000]: 389945552 fields, 0 overflow hits, 107 s
+window +1 (24000000000, 31622776602]: 372345077 fields, 0 overflow hits, 101 s
+window -1 (0, 8000000000]: 1178757928 fields, 475 overflow hits, 155 s
+window -1 (8000000000, 16000000000]: 1186853398 fields, 650 overflow hits, 171 s
+window -1 (16000000000, 24000000000]: 1189282597 fields, 625 overflow hits, 169 s
+window -1 (24000000000, 32000000000]: 1190746286 fields, 625 overflow hits, 173 s
+window -1 (32000000000, 40000000000]: 1191780827 fields, 775 overflow hits, 177 s
+window -1 (40000000000, 48000000000]: 1192579087 fields, 775 overflow hits, 179 s
+window -1 (48000000000, 56000000000]: 1193220246 fields, 700 overflow hits, 181 s
+window -1 (56000000000, 64000000000]: 1193762020 fields, 1000 overflow hits, 189 s
+window -1 (64000000000, 72000000000]: 1194200547 fields, 900 overflow hits, 193 s
+window -1 (72000000000, 80000000000]: 1194608160 fields, 925 overflow hits, 198 s
+window -1 (80000000000, 88000000000]: 1194965935 fields, 1025 overflow hits, 197 s
+window -1 (88000000000, 94868329806]: 1026170859 fields, 775 overflow hits, 175 s
+ALLDONE
+bad counts: 0  Scholz violations: 0  overflow hits: 9250
+imaginary rank histogram to 3X: 16309497798 11999082317 526145650 1788321 370

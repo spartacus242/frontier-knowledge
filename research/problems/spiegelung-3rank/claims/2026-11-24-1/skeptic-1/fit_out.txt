@@ -1,0 +1,100 @@
+sum P_real(r) = 0.999999999999999 P(r=0..3)= [0.8401891168919225, 0.15753545941723546, 0.0022721460492870498, 3.2771337249332455e-06]
+aggregate conjectured constant = 0.297651172917
+== pre-set test, bins (1e6,1e9], exponent -1/6 ==
+ agg  p_inf=0.297772 +- 0.000139  c=-0.0973+-0.0036 target=0.29765117 z=+0.87 chi2=13.1/28 CONSISTENT
+ r=0  p_inf=0.333524 +- 0.000155  c=-0.1479+-0.0040 target=0.33333333 z=+1.23 chi2=15.2/28 CONSISTENT
+ r=1  p_inf=0.111633 +- 0.000240  c=-0.2443+-0.0062 target=0.11111111 z=+2.18 chi2=14.1/28 CONSISTENT
+ r=2  p_inf=0.036982 +- 0.001111  c=-0.3368+-0.0285 target=0.03703704 z=-0.05 chi2=15.2/28 CONSISTENT
+at 1e9: total 303963559 e=1 89388474 raw agg 0.294076 ['0.327904', '0.102383', '0.024415'] [258536250, 44945361, 481756, 192]
+== sensitivity: exponent ==
+expo=-0.083 agg  p_inf=0.302108 +- 0.000299  c=-0.0414+-0.0015 target=0.29765117 z=+14.91 chi2=18.2/28 INCONSISTENT
+expo=-0.083 r=0  p_inf=0.340120 +- 0.000333  c=-0.0629+-0.0017 target=0.33333333 z=+20.38 chi2=24.3/28 INCONSISTENT
+expo=-0.083 r=1  p_inf=0.122503 +- 0.000516  c=-0.1038+-0.0027 target=0.11111111 z=+22.07 chi2=27.8/28 INCONSISTENT
+expo=-0.083 r=2  p_inf=0.052002 +- 0.002404  c=-0.1433+-0.0123 target=0.03703704 z=+6.23 chi2=18.9/28 INCONSISTENT
+expo=-0.125 agg  p_inf=0.299224 +- 0.000192  c=-0.0600+-0.0022 target=0.29765117 z=+8.19 chi2=14.6/28 INCONSISTENT
+expo=-0.125 r=0  p_inf=0.335731 +- 0.000214  c=-0.0912+-0.0025 target=0.33333333 z=+11.21 chi2=17.7/28 INCONSISTENT
+expo=-0.125 r=1  p_inf=0.115271 +- 0.000332  c=-0.1506+-0.0038 target=0.11111111 z=+12.54 chi2=18.7/28 INCONSISTENT
+expo=-0.125 r=2  p_inf=0.042011 +- 0.001540  c=-0.2078+-0.0177 target=0.03703704 z=+3.23 chi2=16.9/28 INCONSISTENT
+expo=-0.167 agg  p_inf=0.297772 +- 0.000139  c=-0.0973+-0.0036 target=0.29765117 z=+0.87 chi2=13.1/28 CONSISTENT
+expo=-0.167 r=0  p_inf=0.333524 +- 0.000155  c=-0.1479+-0.0040 target=0.33333333 z=+1.23 chi2=15.2/28 CONSISTENT
+expo=-0.167 r=1  p_inf=0.111633 +- 0.000240  c=-0.2443+-0.0062 target=0.11111111 z=+2.18 chi2=14.1/28 CONSISTENT
+expo=-0.167 r=2  p_inf=0.036982 +- 0.001111  c=-0.3368+-0.0285 target=0.03703704 z=-0.05 chi2=15.2/28 CONSISTENT
+expo=-0.200 agg  p_inf=0.297042 +- 0.000112  c=-0.1496+-0.0055 target=0.29765117 z=-5.42 chi2=13.7/28 INCONSISTENT
+expo=-0.200 r=0  p_inf=0.332412 +- 0.000125  c=-0.2272+-0.0062 target=0.33333333 z=-7.35 chi2=16.4/28 INCONSISTENT
+expo=-0.200 r=1  p_inf=0.109801 +- 0.000194  c=-0.3756+-0.0096 target=0.11111111 z=-6.74 chi2=13.9/28 INCONSISTENT
+expo=-0.200 r=2  p_inf=0.034449 +- 0.000898  c=-0.5174+-0.0437 target=0.03703704 z=-2.88 chi2=14.2/28 CONSISTENT
+expo=-0.250 agg  p_inf=0.296305 +- 0.000086  c=-0.2972+-0.0110 target=0.29765117 z=-15.57 chi2=17.7/28 INCONSISTENT
+expo=-0.250 r=0  p_inf=0.331292 +- 0.000096  c=-0.4513+-0.0123 target=0.33333333 z=-21.21 chi2=24.2/28 INCONSISTENT
+expo=-0.250 r=1  p_inf=0.107953 +- 0.000149  c=-0.7465+-0.0190 target=0.11111111 z=-21.16 chi2=20.5/28 INCONSISTENT
+expo=-0.250 r=2  p_inf=0.031895 +- 0.000689  c=-1.0269+-0.0864 target=0.03703704 z=-7.46 chi2=13.2/28 INCONSISTENT
+expo=-0.333 agg  p_inf=0.295559 +- 0.000061  c=-0.9903+-0.0371 target=0.29765117 z=-34.20 chi2=33.9/28 INCONSISTENT
+expo=-0.333 r=0  p_inf=0.330157 +- 0.000068  c=-1.5028+-0.0413 target=0.33333333 z=-46.60 chi2=54.8/28 INCONSISTENT
+expo=-0.333 r=1  p_inf=0.106081 +- 0.000106  c=-2.4893+-0.0641 target=0.11111111 z=-47.60 chi2=51.3/28 INCONSISTENT
+expo=-0.333 r=2  p_inf=0.029307 +- 0.000488  c=-3.4141+-0.2873 target=0.03703704 z=-15.84 chi2=13.2/28 INCONSISTENT
+expo=-0.500 agg  p_inf=0.294806 +- 0.000039  c=-11.7449+-0.4637 target=0.29765117 z=-73.55 chi2=103.2/28 VOID
+expo=-0.500 r=0  p_inf=0.329012 +- 0.000043  c=-17.7942+-0.5150 target=0.33333333 z=-100.18 chi2=184.7/28 VOID
+expo=-0.500 r=1  p_inf=0.104192 +- 0.000067  c=-29.5741+-0.7991 target=0.11111111 z=-103.54 chi2=190.6/28 VOID
+expo=-0.500 r=2  p_inf=0.026708 +- 0.000313  c=-40.3912+-3.4875 target=0.03703704 z=-32.96 chi2=20.3/28 INCONSISTENT
+== sensitivity: start of fit range ==
+kmin=40 agg  p_inf=0.297804 +- 0.000131  c=-0.0982+-0.0034 target=0.29765117 z=+1.17 chi2=24.2/48 CONSISTENT
+kmin=40 r=0  p_inf=0.333585 +- 0.000146  c=-0.1495+-0.0038 target=0.33333333 z=+1.73 chi2=29.7/48 CONSISTENT
+kmin=40 r=1  p_inf=0.111694 +- 0.000226  c=-0.2459+-0.0058 target=0.11111111 z=+2.58 chi2=42.4/48 CONSISTENT
+kmin=40 r=2  p_inf=0.036991 +- 0.001094  c=-0.3371+-0.0281 target=0.03703704 z=-0.04 chi2=15.3/43 CONSISTENT
+kmin=50 agg  p_inf=0.297779 +- 0.000133  c=-0.0975+-0.0034 target=0.29765117 z=+0.96 chi2=15.7/38 CONSISTENT
+kmin=50 r=0  p_inf=0.333549 +- 0.000148  c=-0.1486+-0.0038 target=0.33333333 z=+1.46 chi2=19.0/38 CONSISTENT
+kmin=50 r=1  p_inf=0.111663 +- 0.000229  c=-0.2451+-0.0059 target=0.11111111 z=+2.41 chi2=26.5/38 CONSISTENT
+kmin=50 r=2  p_inf=0.036992 +- 0.001094  c=-0.3371+-0.0281 target=0.03703704 z=-0.04 chi2=15.3/38 CONSISTENT
+kmin=60 agg  p_inf=0.297772 +- 0.000139  c=-0.0973+-0.0036 target=0.29765117 z=+0.87 chi2=13.1/28 CONSISTENT
+kmin=60 r=0  p_inf=0.333524 +- 0.000155  c=-0.1479+-0.0040 target=0.33333333 z=+1.23 chi2=15.2/28 CONSISTENT
+kmin=60 r=1  p_inf=0.111633 +- 0.000240  c=-0.2443+-0.0062 target=0.11111111 z=+2.18 chi2=14.1/28 CONSISTENT
+kmin=60 r=2  p_inf=0.036982 +- 0.001111  c=-0.3368+-0.0285 target=0.03703704 z=-0.05 chi2=15.2/28 CONSISTENT
+kmin=65 agg  p_inf=0.297773 +- 0.000147  c=-0.0973+-0.0038 target=0.29765117 z=+0.83 chi2=11.0/23 CONSISTENT
+kmin=65 r=0  p_inf=0.333532 +- 0.000163  c=-0.1481+-0.0043 target=0.33333333 z=+1.22 chi2=13.5/23 CONSISTENT
+kmin=65 r=1  p_inf=0.111571 +- 0.000253  c=-0.2426+-0.0066 target=0.11111111 z=+1.82 chi2=9.5/23 CONSISTENT
+kmin=65 r=2  p_inf=0.036382 +- 0.001202  c=-0.3206+-0.0311 target=0.03703704 z=-0.55 chi2=12.0/23 CONSISTENT
+kmin=70 agg  p_inf=0.297754 +- 0.000162  c=-0.0968+-0.0043 target=0.29765117 z=+0.64 chi2=6.8/18 CONSISTENT
+kmin=70 r=0  p_inf=0.333501 +- 0.000180  c=-0.1472+-0.0047 target=0.33333333 z=+0.93 chi2=8.8/18 CONSISTENT
+kmin=70 r=1  p_inf=0.111551 +- 0.000280  c=-0.2421+-0.0073 target=0.11111111 z=+1.57 chi2=7.5/18 CONSISTENT
+kmin=70 r=2  p_inf=0.035808 +- 0.001350  c=-0.3048+-0.0354 target=0.03703704 z=-0.91 chi2=8.7/18 CONSISTENT
+kmin=75 agg  p_inf=0.297696 +- 0.000194  c=-0.0952+-0.0052 target=0.29765117 z=+0.23 chi2=6.3/13 CONSISTENT
+kmin=75 r=0  p_inf=0.333416 +- 0.000216  c=-0.1449+-0.0058 target=0.33333333 z=+0.38 chi2=8.1/13 CONSISTENT
+kmin=75 r=1  p_inf=0.111646 +- 0.000335  c=-0.2447+-0.0090 target=0.11111111 z=+1.60 chi2=6.9/13 CONSISTENT
+kmin=75 r=2  p_inf=0.035097 +- 0.001642  c=-0.2851+-0.0439 target=0.03703704 z=-1.18 chi2=7.7/13 CONSISTENT
+kmin=80 agg  p_inf=0.297710 +- 0.000274  c=-0.0956+-0.0076 target=0.29765117 z=+0.22 chi2=4.7/8 CONSISTENT
+kmin=80 r=0  p_inf=0.333454 +- 0.000306  c=-0.1459+-0.0084 target=0.33333333 z=+0.39 chi2=6.1/8 CONSISTENT
+kmin=80 r=1  p_inf=0.111430 +- 0.000474  c=-0.2386+-0.0131 target=0.11111111 z=+0.67 chi2=5.7/8 CONSISTENT
+kmin=80 r=2  p_inf=0.035434 +- 0.002321  c=-0.2945+-0.0641 target=0.03703704 z=-0.69 chi2=6.1/8 CONSISTENT
+== sensitivity: end of fit range (X_max) ==
+kmax=70 agg  p_inf=0.296498 +- 0.002725  c=-0.0819+-0.0350 target=0.29765117 z=-0.42 chi2=6.0/8 CONSISTENT
+kmax=70 r=0  p_inf=0.331176 +- 0.003019  c=-0.1191+-0.0387 target=0.33333333 z=-0.71 chi2=5.7/8 CONSISTENT
+kmax=70 r=1  p_inf=0.115929 +- 0.004695  c=-0.3014+-0.0602 target=0.11111111 z=+1.03 chi2=5.5/8 CONSISTENT
+kmax=70 r=2  p_inf=0.038364 +- 0.018544  c=-0.3852+-0.2376 target=0.03703704 z=+0.07 chi2=4.2/8 CONSISTENT
+kmax=75 agg  p_inf=0.297400 +- 0.001086  c=-0.0928+-0.0163 target=0.29765117 z=-0.23 chi2=6.3/13 CONSISTENT
+kmax=75 r=0  p_inf=0.332996 +- 0.001205  c=-0.1415+-0.0181 target=0.33333333 z=-0.28 chi2=6.3/13 CONSISTENT
+kmax=75 r=1  p_inf=0.113056 +- 0.001868  c=-0.2648+-0.0281 target=0.11111111 z=+1.04 chi2=6.5/13 CONSISTENT
+kmax=75 r=2  p_inf=0.043488 +- 0.008091  c=-0.4471+-0.1199 target=0.03703704 z=+0.80 chi2=4.8/13 CONSISTENT
+kmax=80 agg  p_inf=0.297763 +- 0.000510  c=-0.0974+-0.0091 target=0.29765117 z=+0.22 chi2=8.3/18 CONSISTENT
+kmax=80 r=0  p_inf=0.333544 +- 0.000567  c=-0.1484+-0.0101 target=0.33333333 z=+0.37 chi2=9.0/18 CONSISTENT
+kmax=80 r=1  p_inf=0.111860 +- 0.000880  c=-0.2487+-0.0157 target=0.11111111 z=+0.85 chi2=8.1/18 CONSISTENT
+kmax=80 r=2  p_inf=0.042194 +- 0.003889  c=-0.4263+-0.0684 target=0.03703704 z=+1.33 chi2=6.9/18 CONSISTENT
+kmax=85 agg  p_inf=0.297932 +- 0.000260  c=-0.1003+-0.0056 target=0.29765117 z=+1.08 chi2=11.4/23 CONSISTENT
+kmax=85 r=0  p_inf=0.333730 +- 0.000290  c=-0.1517+-0.0062 target=0.33333333 z=+1.37 chi2=12.7/23 CONSISTENT
+kmax=85 r=1  p_inf=0.111728 +- 0.000449  c=-0.2465+-0.0097 target=0.11111111 z=+1.37 chi2=12.6/23 CONSISTENT
+kmax=85 r=2  p_inf=0.038116 +- 0.002026  c=-0.3595+-0.0430 target=0.03703704 z=+0.53 chi2=8.9/23 CONSISTENT
+kmax=90 agg  p_inf=0.297772 +- 0.000139  c=-0.0973+-0.0036 target=0.29765117 z=+0.87 chi2=13.1/28 CONSISTENT
+kmax=90 r=0  p_inf=0.333524 +- 0.000155  c=-0.1479+-0.0040 target=0.33333333 z=+1.23 chi2=15.2/28 CONSISTENT
+kmax=90 r=1  p_inf=0.111633 +- 0.000240  c=-0.2443+-0.0062 target=0.11111111 z=+2.18 chi2=14.1/28 CONSISTENT
+kmax=90 r=2  p_inf=0.036982 +- 0.001111  c=-0.3368+-0.0285 target=0.03703704 z=-0.05 chi2=15.2/28 CONSISTENT
+== free exponent scan: chi2 and p_inf vs exponent (r=1, agg) ==
+expo=-0.08 agg:p=0.30247 z=+15.4 chi=18.5 r=0:p=0.34067 z=+21.1 chi=25.0 r=1:p=0.12341 z=+22.8 chi=28.7 r=2:p=0.05325 z=+6.5 chi=19.1
+expo=-0.10 agg:p=0.30067 z=+12.3 chi=16.5 r=0:p=0.33793 z=+16.8 chi=21.2 r=1:p=0.11889 z=+18.4 chi=23.6 r=2:p=0.04701 z=+5.1 chi=18.1
+expo=-0.12 agg:p=0.29946 z=+9.0 chi=14.9 r=0:p=0.33610 z=+12.4 chi=18.3 r=1:p=0.11588 z=+13.7 chi=19.6 r=2:p=0.04285 z=+3.6 chi=17.1
+expo=-0.14 agg:p=0.29860 z=+5.6 chi=13.8 r=0:p=0.33479 z=+7.7 chi=16.3 r=1:p=0.11371 z=+8.9 chi=16.5 r=2:p=0.03986 z=+2.1 chi=16.3
+expo=-0.16 agg:p=0.29795 z=+2.1 chi=13.2 r=0:p=0.33380 z=+2.9 chi=15.3 r=1:p=0.11209 z=+3.9 chi=14.5 r=2:p=0.03761 z=+0.5 chi=15.5
+expo=-0.18 agg:p=0.29745 z=-1.6 chi=13.1 r=0:p=0.33303 z=-2.1 chi=15.3 r=1:p=0.11082 z=-1.3 chi=13.6 r=2:p=0.03586 z=-1.2 chi=14.8
+expo=-0.20 agg:p=0.29704 z=-5.4 chi=13.7 r=0:p=0.33241 z=-7.4 chi=16.4 r=1:p=0.10980 z=-6.7 chi=13.9 r=2:p=0.03445 z=-2.9 chi=14.2
+expo=-0.22 agg:p=0.29671 z=-9.4 chi=14.8 r=0:p=0.33190 z=-12.8 chi=18.6 r=1:p=0.10896 z=-12.4 chi=15.6 r=2:p=0.03329 z=-4.7 chi=13.7
+expo=-0.24 agg:p=0.29643 z=-13.5 chi=16.6 r=0:p=0.33148 z=-18.3 chi=22.0 r=1:p=0.10826 z=-18.2 chi=18.5 r=2:p=0.03232 z=-6.5 chi=13.3
+expo=-0.26 agg:p=0.29619 z=-17.7 chi=19.0 r=0:p=0.33112 z=-24.1 chi=26.6 r=1:p=0.10767 z=-24.2 chi=22.9 r=2:p=0.03150 z=-8.4 chi=13.1
+expo=-0.28 agg:p=0.29599 z=-22.1 chi=22.1 r=0:p=0.33081 z=-30.1 chi=32.6 r=1:p=0.10715 z=-30.4 chi=28.6 r=2:p=0.03079 z=-10.4 chi=12.9
+expo=-0.30 agg:p=0.29581 z=-26.5 chi=26.0 r=0:p=0.33054 z=-36.1 chi=39.8 r=1:p=0.10671 z=-36.7 chi=35.9 r=2:p=0.03017 z=-12.4 chi=12.9

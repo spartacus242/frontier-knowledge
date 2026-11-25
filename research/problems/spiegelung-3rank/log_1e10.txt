@@ -1,0 +1,4 @@
+positive done: 480807956 fields, 235 s
+negative done: 4447841545 fields, 1069 s
+bad counts: 0  Scholz violations: 0  overflow hits: 2275
+imaginary rank histogram to 3X: 5168049914 3786756780 163579355 520285 91

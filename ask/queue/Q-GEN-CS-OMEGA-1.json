@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-CS-OMEGA-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: The exponent of matrix multiplication",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-CS-OMEGA: Is the exponent omega of matrix multiplication equal to 2? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-CS-OMEGA saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Computer science",
+    "problem": "OP-CS-OMEGA",
+    "problem_source": {
+      "id": "arxiv:2010.05846",
+      "first_author": "Alman",
+      "year": 2020,
+      "title": "A Refined Laser Method and Faster Matrix Multiplication"
+    }
+  },
+  "statement_sha256": "940801879c263b12bd4a1ef92d6e46114d12904a83924aecd4f349fde01654fc"
+}

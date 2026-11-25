@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-PHYS-YM-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: Yang-Mills existence and mass gap",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-PHYS-YM: Does a quantum Yang-Mills theory exist on four-dimensional space-time for every compact simple gauge group, and does it have a mass gap? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-PHYS-YM saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Physics",
+    "problem": "OP-PHYS-YM",
+    "problem_source": {
+      "id": "url:https://www.claymath.org/millennium/yang-mills-the-maths-gap/",
+      "first_author": "Clay Mathematics Institute",
+      "year": 2000,
+      "title": "Yang-Mills & the Mass Gap"
+    }
+  },
+  "statement_sha256": "5106d62de05efcd5271f0b3f7e2cc5d2572c62d299218e45f378310eab9bffd6"
+}

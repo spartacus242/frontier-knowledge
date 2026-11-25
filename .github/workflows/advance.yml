@@ -1,0 +1,37 @@
+# After records merge: open the units they unlock, rebuild BOARD.md, sync issues, expire stale leases.
+# Hourly while the repository is private (Actions minutes are metered there); tighten to */15 once it is public.
+name: advance
+on:
+  push:
+    paths: ["ask/**", "answer/**", "problems/**", "ledger/INDEX.md", "ledger/routed-open-problems.md", "MAINTAINERS"]
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write
+  issues: write
+concurrency:
+  group: advance          # its own group, so it never cancels a pending /claim; a dropped advance run is harmless
+  cancel-in-progress: false
+jobs:
+  advance:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - name: open unlocked units and rebuild the board
+        run: |
+          python3 -I verify/units.py advance
+          python3 -I verify/board.py > BOARD.md
+          git config user.name "unasked-desk[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ask/queue answer/queue BOARD.md
+          git diff --cached --quiet || { git commit -m "desk: open unlocked units, rebuild the board"; git pull --rebase -q; git push; }
+      - name: sync issues and expire leases
+        run: |
+          python3 -I verify/desk.py sync
+          python3 -I verify/desk.py expire
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}

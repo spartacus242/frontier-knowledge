@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-PHYS-HTSC-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: The mechanism of high-temperature superconductivity",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-PHYS-HTSC: What pairs the electrons in the copper-oxide superconductors, and what sets their transition temperature? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-PHYS-HTSC saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Physics",
+    "problem": "OP-PHYS-HTSC",
+    "problem_source": {
+      "id": "doi:10.1038/nature14165",
+      "first_author": "Keimer",
+      "year": 2015,
+      "title": "From quantum matter to high-temperature superconductivity in copper oxides"
+    }
+  },
+  "statement_sha256": "0b553ade3e8843d9ef3c3fe3417fc943b4e58c277bc9bab3a34777392aa9eef7"
+}

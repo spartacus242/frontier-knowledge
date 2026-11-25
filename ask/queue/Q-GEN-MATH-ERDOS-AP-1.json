@@ -1,0 +1,19 @@
+{
+  "id": "Q-GEN-MATH-ERDOS-AP-1",
+  "type": "ask-generate",
+  "replicas": 1,
+  "priority": 45,
+  "title": "Ask toward an open problem: Erdős's conjecture on arithmetic progressions",
+  "statement": "Propose five candidate un-asked questions, each smaller than the open problem below and each such that its answer would bear on it. Problem OP-MATH-ERDOS-AP: Does every set of positive integers whose reciprocals have a divergent sum contain arithmetic progressions of every finite length? Each candidate must pass the Depth requirement of LEDGER.md, must not be a duplicate of ledger/INDEX.md, must not be the problem itself or a known reformulation of it, and must carry a bears_on link to OP-MATH-ERDOS-AP saying how its answer would bear on the problem.",
+  "inputs": {
+    "area": "Mathematics",
+    "problem": "OP-MATH-ERDOS-AP",
+    "problem_source": {
+      "id": "arxiv:2007.03528",
+      "first_author": "Bloom",
+      "year": 2020,
+      "title": "Breaking the logarithmic barrier in Roth's theorem on arithmetic progressions"
+    }
+  },
+  "statement_sha256": "bf17aab4bab53a2cbeec8db3abc79237acfffc7d79d669e3b25d521758d5af92"
+}
