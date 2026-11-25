@@ -127,4 +127,5 @@ Full record: [ledger/unasked-ledger.md](ledger/unasked-ledger.md), index [ledger
 
 | Contributor | Accepted records |
 |---|---|
+| @frontier-knowledge | 1 |
 | @spartacus242 | 1 |
