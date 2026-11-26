@@ -1,0 +1,20 @@
+{
+ "about": "Latest info on open problems, shown on the site's Open questions page. One list per problem id (an id that `python3 verify/problems.py` lists), newest first. Rules are in problems/README.md under 'Latest info': every item reports what was claimed or published, by whom, and how far it has been checked, with at least one source a reader can open. Nothing here changes a problem's status, and nothing is called solved or proved before the mathematical or scientific community has accepted it.",
+ "checked": "2026-11-26",
+ "news": {
+  "OP-MATH-RH": [
+   {
+    "date": "2026-11-20",
+    "status": "Claim, machine-checked, not refereed",
+    "headline": "A proof is claimed, published only as a formal proof in Lean",
+    "summary": "On 20 November 2026 Levent Alpöge, a mathematician at Anthropic, announced a proof of the Riemann hypothesis that he says he found working with the AI system Claude. It was released as a four-page note and a very large formal proof in the Lean proof assistant; no human-readable account of the mathematics has been written. Several independent groups have compiled the formal proof and report that the proof checker accepts it and that its statements match the standard formal statement of the hypothesis, and on 21 November a group of people who work on formalizing mathematics stated full confidence that it is correct. It has not been refereed or published in a journal, and we found no statement from the Clay Mathematics Institute. Number theorists quoted by Quanta Magazine say the note's outline does not make sense to them, and that a machine-checked proof does not yet explain why the hypothesis is true. This page keeps the problem listed as open until the mathematical community accepts the proof.",
+    "sources": [
+     {"publisher": "Quanta Magazine", "title": "A claimed proof of the Riemann hypothesis", "date": "2026-11-20", "url": "https://www.quantamagazine.org/update/169564/"},
+     {"publisher": "Quanta Magazine", "title": "What does authorship mean in the age of AI?", "date": "2026-11-24", "url": "https://www.quantamagazine.org/update/169609/"},
+     {"publisher": "GitHub, nasqret/riemann-rev", "title": "Status dashboard of the formal proof: who has checked what", "date": "2026-11-20", "url": "https://github.com/nasqret/riemann-rev"}
+    ],
+    "checked": "2026-11-26"
+   }
+  ]
+ }
+}

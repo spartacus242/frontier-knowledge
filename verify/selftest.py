@@ -96,6 +96,21 @@ good = bool(rows) and all(len(v) <= 1 for v in hit.values()) and len(g310) == 1 
     and len({r["id"] for r in rows}) == len(rows)
 print("ok   open-questions list builds: the 90 G(3,10) pieces are one row, and no unit answers to two rows' prompts" if good else "FAIL questions list")
 if not good: FAILS.append(("questions", "", q.stderr[-400:]))
+# Latest info: an item that calls a problem solved before the field accepts it must stop the build.
+sys.path.insert(0, f"{R}/verify"); import problems as PN
+np_ = f"{R}/problems/news.json"; keep = open(np_).read() if os.path.exists(np_) else None
+item = {"date": "2026-01-02", "checked": "2026-01-03", "status": "Claim, not checked", "headline": "A proof is claimed by someone",
+        "summary": "x" * 90, "sources": [{"publisher": "P", "title": "T", "url": "https://example.org/a"}]}
+def news_ok(**ch):
+    json.dump({"news": {"OP-MATH-RH": [dict(item, **ch)]}}, open(np_, "w"))
+    try: PN.load_news(R); return True
+    except ValueError: return False
+good = news_ok() and not news_ok(summary="The Riemann hypothesis has been proved. " + "x" * 90) and not news_ok(status="Solved") \
+    and not news_ok(sources=[]) and news_ok(status="Accepted by the field", summary="The conjecture has been proved. " + "x" * 90)
+if keep is None: os.remove(np_)
+else: open(np_, "w").write(keep)
+print("ok   latest info: a claim worded as solved, an unknown status or a missing source is refused" if good else "FAIL news rules")
+if not good: FAILS.append(("news", "", ""))
 print()
 print("SELFTEST PASSED" if not FAILS else f"SELFTEST FAILED: {len(FAILS)} unexpected verdicts")
 sys.exit(1 if FAILS else 0)

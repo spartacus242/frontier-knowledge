@@ -115,6 +115,14 @@
   }
   .prompt code { flex: 1; min-width: 0; font: 13.5px/1.5 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; }
   .prompt .btn { flex: none; align-self: flex-start; }
+  .news { margin: 0 0 12px; padding: 12px 14px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); }
+  .news .nh { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; margin: 0 0 6px; font-size: 13px; color: var(--muted); }
+  .news .nh b { color: var(--ink); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .news h3 { font-size: 16px; margin: 0 0 4px; line-height: 1.35; }
+  .news p { margin: 0 0 6px; font-size: 15px; color: var(--muted); overflow-wrap: anywhere; }
+  .news p:last-child { margin-bottom: 0; }
+  .news .src { font-size: 13px; }
+  .news + .news { margin-top: -4px; }
   .hint { font-size: 13px; color: var(--muted); margin: 8px 0 0; }
   details.legend-box { border: 0; max-width: 46em; margin: 0 0 22px; }
   details.legend-box summary { cursor: pointer; font-size: 15px; color: var(--accent); padding: 4px 0; }
@@ -170,6 +178,8 @@
         <dd>A question someone posed in print that we found still unanswered. Some have a part an agent can attack from public sources. Others need data or a laboratory.</dd>
         <dt>New question</dt>
         <dd>A question we could not find asked anywhere, which has survived the attacks made on it so far. Provisional means exactly that: survived so far. It is not a discovery.</dd>
+        <dt>Latest info</dt>
+        <dd>News about a problem from outside this project, such as a claimed proof. Each item says how far the claim has been checked and links its sources. A problem stays on this list until the people who work on it accept that it is settled.</dd>
         <dt>Claimed result to check</dt>
         <dd>Something the project believes it has shown and wants reproduced by people outside it. The label says how far each has been checked.</dd>
       </dl>
@@ -182,6 +192,7 @@
       <div class="row2">
         <input type="search" id="search" placeholder="Search questions" aria-label="Search questions">
         <label><input type="checkbox" id="open-only"> Only questions with work open now</label>
+        <label><input type="checkbox" id="news-only"> Only questions with latest info</label>
       </div>
     </div>
   </div>
@@ -210,7 +221,7 @@
                ['ask', 'Ask a new question', '']];
   var KIND = {}, ORDER = {};
   KINDS.forEach(function (k, i) { KIND[k[0]] = k[1]; ORDER[k[0]] = i; });
-  var state = { field: '', kind: '', q: '', open: false };
+  var state = { field: '', kind: '', q: '', open: false, news: false };
 
   function el(tag, attrs, kids) {
     var n = document.createElement(tag), k;
@@ -263,11 +274,31 @@
   }
 
   var rows = D.questions.slice().sort(function (a, b) {
-    return (!!b.target - !!a.target) || (ORDER[a.kind] - ORDER[b.kind]);
+    return (!!b.news - !!a.news) || (!!b.target - !!a.target) || (ORDER[a.kind] - ORDER[b.kind]);
   });
   rows.forEach(function (x) {
-    x.hay = (x.title + ' ' + x.text + ' ' + x.id + ' ' + (x.domain || '') + ' ' + (x.source || '')).toLowerCase();
+    x.hay = ((x.news || []).map(function (n) { return n.headline + ' ' + n.summary; }).join(' ') + ' ' + x.title + ' ' + x.text + ' ' + x.id + ' ' + (x.domain || '') + ' ' + (x.source || '')).toLowerCase();
   });
+
+  function day(d) {
+    var m = /^(\d{4})-(\d\d)-(\d\d)$/.exec(d || '');
+    return m ? Number(m[3]) + ' ' + ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][m[2] - 1] + ' ' + m[1] : d;
+  }
+  function newsBox(n) {
+    var settled = n.status === 'Accepted by the field';
+    var src = [];
+    n.sources.forEach(function (s, i) {
+      if (i) src.push('; ');
+      src.push(el('a', { href: s.url, rel: 'noopener', text: s.publisher + ', "' + s.title + '"' }));
+      if (s.date) src.push(' (' + day(s.date) + ')');
+    });
+    return el('div', { 'class': 'news' }, [
+      el('p', { 'class': 'nh' }, [el('b', { text: 'Latest info' }), day(n.date),
+        el('span', { 'class': 'tagp ' + (settled ? 'ok' : 'warn'), text: n.status })]),
+      el('h3', { text: n.headline }),
+      el('p', { text: n.summary }),
+      el('p', { 'class': 'src' }, ['Sources: '].concat(src).concat(['. Last checked ' + day(n.checked) + '.']))]);
+  }
 
   function card(x) {
     var badgeClass = x.kind === 'check' ? (/^Confirmed|^Reproduced|^Reviewed|^Accepted/.test(x.badge || '') ? ' ok' : ' warn') : '';
@@ -316,6 +347,7 @@
       x.badge ? el('span', { 'class': 'tagp' + badgeClass, text: x.badge }) : null]));
     body.appendChild(el('h2', { text: x.title }));
     if (short) body.appendChild(short);
+    (x.news || []).slice(0, 2).forEach(function (n) { body.appendChild(newsBox(n)); });
     var w = workLine(x);
     if (w) body.appendChild(w);
     body.appendChild(actions);
@@ -328,6 +360,7 @@
     if (skip !== 'field' && state.field && x.field !== state.field && x.field !== 'Any field') return false;
     if (skip !== 'kind' && state.kind && x.kind !== state.kind) return false;
     if (state.open && !x.target) return false;
+    if (state.news && !x.news) return false;
     if (state.q && x.hay.indexOf(state.q) === -1) return false;
     return true;
   }
@@ -349,13 +382,15 @@
     list.textContent = '';
     shown.forEach(function (x) { list.appendChild(card(x)); });
     var open = shown.filter(function (x) { return x.target; }).length;
-    count.textContent = shown.length ? plural(shown.length, 'question', 'questions') + ', ' + open + ' with work an agent can take now. Data as of ' + D.generated + '.'
+    count.textContent = shown.length ? plural(shown.length, 'question', 'questions') + ', ' + open + ' with work an agent can take now. Data as of ' + D.generated + '.' +
+        (D.news_checked ? ' News on open problems last checked ' + day(D.news_checked) + '.' : '')
       : 'Nothing matches. Clear a filter or the search.';
     try {
       var h = [];
       if (state.field) h.push('field=' + encodeURIComponent(state.field));
       if (state.kind) h.push('kind=' + encodeURIComponent(state.kind));
       if (state.open) h.push('open=1');
+      if (state.news) h.push('news=1');
       history.replaceState(null, '', h.length ? '#' + h.join('&') : location.pathname + location.search);
     } catch (e) {}
   }
@@ -365,9 +400,12 @@
     if (kv[0] === 'field' && D.fields.indexOf(v) !== -1) state.field = v;
     if (kv[0] === 'kind' && KIND[v]) state.kind = v;
     if (kv[0] === 'open') state.open = true;
+    if (kv[0] === 'news') state.news = true;
   });
   document.getElementById('open-only').checked = state.open;
   document.getElementById('open-only').addEventListener('change', function (e) { state.open = e.target.checked; draw(); });
+  document.getElementById('news-only').checked = state.news;
+  document.getElementById('news-only').addEventListener('change', function (e) { state.news = e.target.checked; draw(); });
   var timer;
   document.getElementById('search').addEventListener('input', function (e) {
     clearTimeout(timer);
