@@ -14,6 +14,8 @@ change here:
 - a result's "importance" (1 well-known problem, 2 open in the literature, 3 correction of a published value,
   4 extension of a published record), and the ladder keys rung() reads: "literature_checked", "reviewed",
   "accepted", "withdrawn", "novelty_confirmed"
+- a result's "also_units" (unit ids whose records also earn credit on the claim), and CONTRIBUTORS.json at the
+  repository root (display names contributors chose for themselves). `--credits` prints the credit sentence per claim
 - answer/open-problems.json, if it exists: a list of {"field", "title", ...} shown per field
 """
 import datetime
@@ -68,6 +70,7 @@ def results(units):
     """The claims on the board, with outside progress as numbers (the same rules as board.py's answers())."""
     path = os.path.join(U.ROOT, "answer", "results.json")
     out = []
+    names = display_names()
     for r in (json.load(open(path)) if os.path.exists(path) else []):
         row = {"claim": r["claim"], "inside": r.get("inside", ""), "frontier": bool(r.get("frontier")),
                "field": r.get("field", "Mathematics"), "have": 0, "want": 0, "refuted": False, "kind": "none"}
@@ -92,8 +95,59 @@ def results(units):
         row.update(rung=rung(r, row), importance=r.get("importance") if r.get("importance") in (1, 2, 3, 4) else 4,
                    novelty_confirmed=bool(r.get("novelty_confirmed")),
                    note=str(r.get("accepted") or r.get("reviewed") or r.get("withdrawn") or ""))
+        row["credits"] = credits(r, units, names)
         out.append(row)
     return out
+
+
+ROLE = {"answer-reproduce": "tried a reproduction", "answer-piece": "searched a piece",
+        "answer-attempt": "attempted an answer", "answer-impact": "assessed the impact",
+        "ask-generate": "asked the question", "ask-research": "researched prior work",
+        "ask-adversary": "challenged it", "ask-judge": "judged it", "ask-verify": "checked the literature"}
+
+
+def credits(r, units, names):
+    """Who has an accepted record on a claim's units, and for what (ANNOUNCEMENTS.md, "Credit"). The units are the
+    claim's "unit", every unit of its "piece_family", and any listed under "also_units" (for example a literature
+    check several claims depend on). One entry per GitHub handle, with a count per role; an inconclusive record is
+    credited too, as on the leaderboard. A handle's display name comes from CONTRIBUTORS.json, if they added one."""
+    ids = [k for k in units if k == r.get("unit") or k in (r.get("also_units") or [])
+           or (r.get("piece_family") and k.startswith(r["piece_family"]))]
+    people = {}
+    for uid in sorted(ids):
+        for h, rec in U.subs(uid).items():
+            role = ROLE.get(units[uid]["type"], "contributed a record")
+            if units[uid]["type"] == "answer-reproduce" and rec.get("result") in ("Confirms", "Refutes"):
+                role = "reproduced it" if rec["result"] == "Confirms" else "refuted it"
+            if not U.conclusive(rec):
+                role += " (inconclusive)"
+            p = people.setdefault(h, {"handle": h, "name": names.get(h, ""), "roles": {}, "conclusive": 0})
+            p["roles"][role] = p["roles"].get(role, 0) + 1
+            p["conclusive"] += U.conclusive(rec)
+    out = sorted(people.values(), key=lambda p: (-p["conclusive"], -sum(p["roles"].values()), p["handle"].lower()))
+    for p in out:
+        p["roles"] = [{"role": k, "n": n} for k, n in sorted(p["roles"].items(), key=lambda kv: (-kv[1], kv[0]))]
+    return out
+
+
+def display_names():
+    """CONTRIBUTORS.json at the repository root: {"github-handle": "Name as it should appear"}. Optional; a
+    contributor adds their own line by pull request. Without one, credit is by handle."""
+    path = os.path.join(U.ROOT, "CONTRIBUTORS.json")
+    if not os.path.exists(path):
+        return {}
+    return {str(k): " ".join(str(v).split())[:80] for k, v in json.load(open(path)).items() if isinstance(v, str)}
+
+
+def credit_line(row):
+    """One sentence naming everyone with a record on a claim, for an announcement or an acknowledgement."""
+    if not row["credits"]:
+        return "No contributor record yet."
+    parts = []
+    for p in row["credits"]:
+        who = (p["name"] + " (@" + p["handle"] + ")") if p["name"] else "@" + p["handle"]
+        parts.append(who + ": " + ", ".join(x["role"] + (" x" + str(x["n"]) if x["n"] > 1 else "") for x in p["roles"]))
+    return "; ".join(parts) + "."
 
 
 RUNGS = ("Lead, not confirmed", "Confirmed inside the project", "Reproduced outside",
@@ -128,6 +182,10 @@ def tracker(rows):
 
 def main():
     units = U.load_all()
+    if "--credits" in sys.argv:      # the credit sentence per claim, for announcements and acknowledgements
+        for row in results(units):
+            print(row["claim"].split(". ")[0] + "\n  " + credit_line(row) + "\n")
+        return
     led = ledger_rows()
     ledger_field = {r["id"]: r["field"] for r in led}
     maint_path = os.path.join(U.ROOT, "MAINTAINERS")

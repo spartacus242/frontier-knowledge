@@ -3,7 +3,10 @@
     "claim": "G(3,9) = 49. Brown, Landman and Robertson's 2007 table (arXiv:0706.4420) prints 48.",
     "inside": "Confirmed: 3 of 3 skeptics, three independent exhaustive searches; witness answer/witness/G_s9_48elements.txt",
     "unit": "A-REP-G39-49",
-    "importance": 3
+    "importance": 3,
+    "also_units": [
+      "V-LR-BOOK-2014"
+    ]
   },
   {
     "claim": "21 new terms of OEIS A304884 (the largest subset of Z_n with no three terms in arithmetic progression), for n = 80 to 100. The published terms stop at n = 79.",
@@ -31,7 +34,10 @@
   {
     "claim": "M(3,4) = 19, M(3,5) = 31, M(3,6) = 38 and G(3,6) = 23. The table prints 18, 29, 37 and 22.",
     "inside": "Lead: 2 of 3 skeptics signed off; the third could not rule out an existing correction in the 2014 Landman-Robertson book (see unit V-LR-BOOK-2014)",
-    "importance": 3
+    "importance": 3,
+    "also_units": [
+      "V-LR-BOOK-2014"
+    ]
   },
   {
     "claim": "M(3,8) >= 58 and w*(3;6) >= 83. The table leaves both as '?'.",

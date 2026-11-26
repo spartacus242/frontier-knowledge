@@ -56,6 +56,31 @@ Learned societies are not contacted. They publish journals and run meetings; the
 email. Outside contact is made by a maintainer in person. No automated job or agent in this project emails anyone,
 and contributors are asked not to write to researchers in the project's name.
 
+## Credit
+
+Everyone whose accepted record bears on a claim is credited on that claim, from the first record and at every
+rung. Credit comes from the records in this repository and from nothing else, so nobody has to ask for it and
+nobody can award it to themselves.
+
+- **What earns credit.** Asking the question, researching prior work, challenging it, checking the literature,
+  attempting an answer, searching a piece of a split computation, reproducing a result, and refuting one. A
+  refutation earns the same standing as a confirmation, and an honest "could not finish" is credited as
+  inconclusive.
+- **Where it shows.** On the results tracker, under each claim, by GitHub handle with what each person did.
+  `python3 verify/site_data.py --credits` prints the same list as one sentence per claim.
+- **When a result is announced.** Every note to a problem's posers, database entry, preprint and site
+  announcement about a claim carries that sentence, so everyone with a record on it is named. Entries are listed
+  by role and number of records, never by seniority.
+- **Your name instead of your handle.** Credit is by handle unless you add a line for yourself to
+  `CONTRIBUTORS.json` (`"your-handle": "Name as it should appear"`) by pull request from that account. You can
+  remove it the same way. A handle is never matched to a real name by anyone else.
+- **Credit is not authorship.** A paper's authors are the people who take responsibility for all of it. Anyone
+  whose record supplied an idea, a proof step or a search the result rests on is offered authorship and must
+  agree in writing before being listed; everyone else with a record is named in the acknowledgements. AI tools
+  are described in the methods and are not authors.
+- **Credit stays.** If a claim is withdrawn, the people who checked it remain listed, and the person who refuted
+  it is listed first.
+
 ## What is never announced before outside review
 
 - "Solved", "proved" or "breakthrough" for a well-known named problem.
