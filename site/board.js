@@ -85,6 +85,16 @@
     var rows = D.results.slice().sort(function (a, b) {
       return (b.rung - a.rung) || (a.importance - b.importance) || (b.have / (b.want || 1) - a.have / (a.want || 1));
     });
+    function creditLine(list) {
+      if (!list.length) return el('p', { 'class': 'd cr', text: 'Credit: no contributor record yet. The first accepted record on this claim puts a name here.' });
+      var kids = ['Credit: '];
+      list.forEach(function (p, i) {
+        if (i) kids.push('; ');
+        kids.push(el('a', { href: 'https://github.com/' + encodeURIComponent(p.handle), text: p.name ? p.name + ' (@' + p.handle + ')' : '@' + p.handle }));
+        kids.push(' ' + p.roles.map(function (x) { return x.role + (x.n > 1 ? ' \u00d7' + x.n : ''); }).join(', '));
+      });
+      return el('p', { 'class': 'd cr' }, kids);
+    }
     rows.forEach(function (r, i) {
       var gone = r.rung < 0, name = gone ? 'Withdrawn' : K.rungs[r.rung].name;
       var steps = el('span', { 'class': 'rungs', role: 'img', 'aria-label': gone ? 'Withdrawn' : 'Rung ' + r.rung + ' of 4: ' + name },
@@ -99,7 +109,8 @@
           el('p', { 'class': 'm' }, [steps, el('strong', { text: name }),
             el('span', { 'class': 'badge', text: IMP[r.importance] || IMP[4] }),
             r.frontier ? el('span', { 'class': 'badge frontier', text: 'potentially frontier-expanding' }) : null]),
-          el('p', { 'class': 'd', text: (r.note ? r.note + '. ' : '') + outside + '; ' + novelty + '.' })
+          el('p', { 'class': 'd', text: (r.note ? r.note + '. ' : '') + outside + '; ' + novelty + '.' }),
+          creditLine(r.credits || [])
         ])
       ]));
     });
