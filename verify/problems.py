@@ -78,6 +78,47 @@ def check_links(links, errs, where, root=ROOT, must_include=None):
     return seen
 
 
+# How far a reported claim or result has been checked. A news item must carry exactly one of these, so the page
+# never has to find its own words for a claim's standing.
+NEWS_STATUS = ["Claim, not checked", "Claim, machine-checked, not refereed", "Claim, under expert review",
+               "Published result, peer reviewed", "Accepted by the field", "Withdrawn or refuted", "Progress report"]
+
+
+def load_news(root=ROOT, known=None):
+    """problems/news.json as {problem id: [items, newest first]}, plus the date of the last check. Raises ValueError on
+    an item that breaks a rule in problems/README.md, 'Latest info', so a bad item stops the build instead of reaching
+    the page."""
+    path = os.path.join(root, "problems", "news.json")
+    if not os.path.exists(path):
+        return {}, ""
+    with open(path, encoding="utf-8") as f:
+        d = json.load(f)
+    known = load(root) if known is None else known
+    day = re.compile(r"^20\d\d-\d\d-\d\d$")
+    out = {}
+    for pid, items in d.get("news", {}).items():
+        if pid not in known:
+            raise ValueError(f"news.json: {pid} is not a problem id")
+        for i, it in enumerate(items):
+            w = f"news.json {pid}[{i}]"
+            if it.get("status") not in NEWS_STATUS:
+                raise ValueError(f"{w}: status must be one of {NEWS_STATUS}")
+            for k in ("date", "checked"):
+                if not day.match(str(it.get(k, ""))):
+                    raise ValueError(f"{w}: {k} must be a date, YYYY-MM-DD")
+            if len(str(it.get("headline", "")).strip()) < 10 or len(str(it.get("summary", "")).strip()) < 80:
+                raise ValueError(f"{w}: needs a headline and a summary of at least 80 characters")
+            src = it.get("sources") or []
+            if not src or any(not str(s.get("url", "")).startswith("https://") or not s.get("publisher") or not s.get("title")
+                              for s in src):
+                raise ValueError(f"{w}: needs at least one source with publisher, title and an https url")
+            if it["status"] != "Accepted by the field" and re.search(r"\b(?:is|was|has been|now) (?:solved|proved|proven|settled)\b",
+                                                                      it["headline"] + " " + it["summary"], re.I):
+                raise ValueError(f"{w}: says the problem is solved or proved, but its status is {it['status']!r}")
+        out[pid] = sorted(items, key=lambda it: it["date"], reverse=True)
+    return out, str(d.get("checked", ""))
+
+
 if __name__ == "__main__":
     for p in load().values():
         print(f"{p['id']:22} {p['scale']:9} {p['field'][:28]:28} {p['title']}")

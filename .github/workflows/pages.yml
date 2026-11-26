@@ -7,7 +7,7 @@ name: pages
 on:
   push:
     branches: [main]
-    paths: ["site/**", "verify/site_data.py", ".github/workflows/pages.yml"]
+    paths: ["site/**", "verify/site_data.py", "verify/questions_data.py", "problems/**", "ledger/routed-open-problems.md", ".github/workflows/pages.yml"]
   workflow_run:
     workflows: [advance]
     types: [completed]
@@ -38,9 +38,15 @@ jobs:
             /ask/
             /answer/
             /ledger/INDEX.md
+            /ledger/unasked-ledger.md
+            /ledger/routed-open-problems.md
+            /ledger/tools/
+            /problems/
             /MAINTAINERS
       - name: rebuild the leaderboard data from the records
         run: python3 -I verify/site_data.py > site/data.js
+      - name: rebuild the open-questions list from the same records
+        run: python3 -I verify/questions_data.py > site/questions-data.js
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

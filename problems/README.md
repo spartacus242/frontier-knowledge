@@ -65,3 +65,24 @@ The board ranks flags by the standing of the link, then well-known problems befo
 in the order of the table above, then PROMISING before PARTIAL. Nothing in this repository changes a problem's
 `status` on its own: when a flag is supported and the claim is reproduced, a maintainer records what changed in
 `open.json`, with the records it rests on.
+
+## Latest info
+
+`news.json` holds news about the problems: a claimed proof, a published partial result, a retraction. The Open
+questions page shows it on the problem's row under "Latest info". A scheduled check looks for news on every
+well-known problem once a day and adds what it finds. The rules, which `verify/problems.py` enforces where it can:
+
+1. **Report, do not judge.** An item says what was claimed or published, by whom, on what date, and how far it has
+   been checked. Its `status` is one of: Claim, not checked; Claim, machine-checked, not refereed; Claim, under
+   expert review; Published result, peer reviewed; Accepted by the field; Withdrawn or refuted; Progress report.
+2. **Never "solved" early.** No item says a problem is solved or proved unless its status is "Accepted by the
+   field", which needs acceptance by people outside the claimants: peer-reviewed publication and no standing
+   objection, or a prize body's own statement. A machine-checked proof is reported as machine-checked.
+3. **Sources a reader can open.** At least one, by publisher, title, date and URL. A claim about a named person
+   needs either that person's own publication or two independent reputable outlets. No social-media post is a
+   source on its own.
+4. **Both sides.** If named experts have raised doubts in a cited source, the summary says so.
+5. **News never changes a problem's status.** A problem leaves the open list only when a maintainer edits
+   `open.json`, citing acceptance by the field.
+6. **Corrections stay visible.** A wrong item is corrected in place with a dated sentence, or followed by a newer
+   item; an item about a claim that was withdrawn stays, with the status "Withdrawn or refuted".
