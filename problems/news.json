@@ -9,9 +9,79 @@
     "headline": "A proof is claimed, published only as a formal proof in Lean",
     "summary": "On 20 November 2026 Levent Alpöge, a mathematician at Anthropic, announced a proof of the Riemann hypothesis that he says he found working with the AI system Claude. It was released as a four-page note and a very large formal proof in the Lean proof assistant; no human-readable account of the mathematics has been written. Several independent groups have compiled the formal proof and report that the proof checker accepts it and that its statements match the standard formal statement of the hypothesis, and on 21 November a group of people who work on formalizing mathematics stated full confidence that it is correct. It has not been refereed or published in a journal, and we found no statement from the Clay Mathematics Institute. Number theorists quoted by Quanta Magazine say the note's outline does not make sense to them, and that a machine-checked proof does not yet explain why the hypothesis is true. This page keeps the problem listed as open until the mathematical community accepts the proof.",
     "sources": [
-     {"publisher": "Quanta Magazine", "title": "A claimed proof of the Riemann hypothesis", "date": "2026-11-20", "url": "https://www.quantamagazine.org/update/169564/"},
-     {"publisher": "Quanta Magazine", "title": "What does authorship mean in the age of AI?", "date": "2026-11-24", "url": "https://www.quantamagazine.org/update/169609/"},
-     {"publisher": "GitHub, nasqret/riemann-rev", "title": "Status dashboard of the formal proof: who has checked what", "date": "2026-11-20", "url": "https://github.com/nasqret/riemann-rev"}
+     {
+      "publisher": "Quanta Magazine",
+      "title": "A claimed proof of the Riemann hypothesis",
+      "date": "2026-11-20",
+      "url": "https://www.quantamagazine.org/update/169564/"
+     },
+     {
+      "publisher": "Quanta Magazine",
+      "title": "What does authorship mean in the age of AI?",
+      "date": "2026-11-24",
+      "url": "https://www.quantamagazine.org/update/169609/"
+     },
+     {
+      "publisher": "GitHub, nasqret/riemann-rev",
+      "title": "Status dashboard of the formal proof: who has checked what",
+      "date": "2026-11-20",
+      "url": "https://github.com/nasqret/riemann-rev"
+     }
+    ],
+    "checked": "2026-11-26"
+   }
+  ],
+  "OP-CS-OMEGA": [
+   {
+    "date": "2026-11-09",
+    "status": "Claim, under expert review",
+    "headline": "An upper bound of 9/4 on the exponent is reported, with an independent exposition",
+    "summary": "A preprint by Mahmut Levent Doğan, Vladimir Lysikov, Keiya Sakabe and Michael Walter, posted on 9 November 2026, gives what its abstract calls an exposition of a recent OpenAI result that the exponent of matrix multiplication is at most 9/4 (2.25), valid over every field. That would be a large step down from the bound of about 2.3712 reported in August. We did not open OpenAI's own account of the result, and the preprint's abstract does not say it has been peer reviewed. The open problem is whether the exponent equals 2, which neither result settles.",
+    "sources": [
+     {
+      "publisher": "arXiv",
+      "title": "Tensor value and the 9/4 bound for matrix multiplication (arXiv:2611.09716)",
+      "date": "2026-11-09",
+      "url": "https://arxiv.org/abs/2611.09716"
+     }
+    ],
+    "checked": "2026-11-26"
+   },
+   {
+    "date": "2026-08-17",
+    "status": "Progress report",
+    "headline": "A preprint lowers the upper bound on the exponent to 2.371177",
+    "summary": "A preprint posted on 17 August 2026 by Emilien Dupont and nine co-authors, including Josh Alman and Virginia Vassilevska Williams, reports an upper bound of omega below 2.371177, improving the previous best bound of 2.371339. The authors say they designed a new optimization algorithm with machine learning and refined it with the AI system AlphaEvolve. The abstract does not say the paper has been peer reviewed.",
+    "sources": [
+     {
+      "publisher": "arXiv",
+      "title": "Improving the matrix multiplication exponent with modern optimization and AlphaEvolve (arXiv:2608.16884)",
+      "date": "2026-08-17",
+      "url": "https://arxiv.org/abs/2608.16884"
+     }
+    ],
+    "checked": "2026-11-26"
+   }
+  ],
+  "OP-PHYS-DM": [
+   {
+    "date": "2026-09-05",
+    "status": "Progress report",
+    "headline": "The LZ experiment reports one unexplained event and says it is not claiming a detection",
+    "summary": "In early September 2026 the LUX-ZEPLIN (LZ) dark matter experiment reported a single particle interaction, in 220 days of data taken from March 2023 to April 2024, that is hard to explain with known backgrounds. Stanford's account gives the significance as 2.6 sigma, well short of the 5 sigma that physicists require for a discovery. The collaboration's spokesperson, Rick Gaitskell, said: \"We are not claiming to have seen dark matter.\" The result was presented at a conference; the paper was to be posted on arXiv and submitted to Physical Review Letters, and the sources we read do not say it has been peer reviewed. They quote only members of the collaboration, who say more data will show whether the signal grows or fades.",
+    "sources": [
+     {
+      "publisher": "Stanford Report",
+      "title": "Dark matter detection signal at LZ",
+      "date": "2026-09",
+      "url": "https://news.stanford.edu/stories/2026/09/dark-matter-detection-signal-lz"
+     },
+     {
+      "publisher": "Al Jazeera",
+      "title": "Have scientists discovered a dark matter particle?",
+      "date": "2026-09-05",
+      "url": "https://www.aljazeera.com/features/2026/9/5/have-scientists-discovered-a-dark-matter-particle"
+     }
     ],
     "checked": "2026-11-26"
    }
