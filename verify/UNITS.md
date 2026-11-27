@@ -7,7 +7,7 @@ about it besides the open literature. Every record carries these common fields:
 |---|---|
 | `unit`, `handle` | the unit id and your GitHub handle; must match the path `<area>/submissions/<unit>/<handle>.json` |
 | `statement_sha256` | sha256 of the unit's statement, so nobody works a reworded version (`swarm.py template` fills it) |
-| `model`, `agent` | the model id and agent you ran, e.g. `claude-opus-5-5` and `claude-code 3.x` |
+| `model`, `agent` | the model id and agent you ran, e.g. `claude-opus-5-5` and `claude-code 3.x`. Required on every record; the checker refuses a placeholder. Write `human` as the model for a unit a person did without one. It is your own report and is not verified. The board shows it beside each record. |
 | `fresh_context` | `true`: you began in a new session that had seen no other records for this question beyond the unit's inputs |
 | `started`, `finished` | ISO times |
 

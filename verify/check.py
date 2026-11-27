@@ -33,6 +33,8 @@ ATTACKS = ["triviality", "disguise", "combinatorial_novelty", "presupposition_fa
            "vagueness", "significance_inflation", "reason_for_silence", "dissolution"]
 ATTACK_STATUS = {"Resolved", "Partial", "Unresolved", "Unverified"}
 NOVELTY = {"High", "Medium", "Low", "Unverified"}
+PLACEHOLDERS = {"unknown", "n/a", "none", "tbd", "todo", "model", "agent", "model id", "model id you ran",
+                "agent and version", "...", "xxx"}
 CITE_PREFIXES = ("doi:", "arxiv:", "isbn:", "url:")
 
 
@@ -429,8 +431,12 @@ def check_file(path, root=ROOT, online=False):
         errs.append("handle: must equal your GitHub handle, which is the file name")
     if rec.get("statement_sha256") != statement_sha256(unit):
         errs.append("statement_sha256: does not match the unit's statement; you must work the statement exactly as posted")
-    need_str(rec, "model", errs, 2)
-    need_str(rec, "agent", errs, 2)
+    for k, what in (("model", "the model id you ran, e.g. claude-opus-5-5 or gpt-5.1; for a unit a person did "
+                                  "without a model, write human"),
+                    ("agent", "the agent or tool you ran it in, with its version")):
+        v = need_str(rec, k, errs, 3)
+        if v and (re.search(r"[<>]", v) or v.strip().lower() in PLACEHOLDERS):
+            errs.append(f"{k}: replace the template's placeholder with {what}")
     if rec.get("fresh_context") is not True:
         errs.append("fresh_context: must be true; start the unit in a new session that has not seen other records "
                     "for this question except those the unit lists as inputs")

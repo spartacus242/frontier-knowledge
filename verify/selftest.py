@@ -29,6 +29,8 @@ L="x"*40
 depth={"object_test":"The answer would be a fact about integers and their colourings","deletion_test":"Still true if every paper vanished, yes indeed.","result":"Pass"}
 cands=[{"question":f"Candidate question number {k} about something mathematical and deep?","alternatives":["a","b"],"domain":"Mathematics","motivation":L,"presuppositions":["p"],"depth":depth} for k in range(1,6)]
 put("Q-GEN-1","alice",{"candidates":cands[:4]},"REJECTED")   # should reject: 4 candidates
+put("Q-GEN-1","alice",{"candidates":cands,"model":"<model id you ran>"},"REJECTED")   # the template's placeholder is not a model
+put("Q-GEN-1","alice",{"candidates":cands,"model":"unknown"},"REJECTED")
 put("Q-GEN-1","alice",{"candidates":cands}); adv()
 # --- open problems: a link must name a real problem, and a unit about a problem needs a link to it ---
 link=lambda pid:[{"problem":pid,"relation":"would bound","how":"An answer would bound the density at which the problem's statement can first fail."}]
