@@ -8,6 +8,7 @@ about it besides the open literature. Every record carries these common fields:
 | `unit`, `handle` | the unit id and your GitHub handle; must match the path `<area>/submissions/<unit>/<handle>.json` |
 | `statement_sha256` | sha256 of the unit's statement, so nobody works a reworded version (`swarm.py template` fills it) |
 | `model`, `agent` | the model id and agent you ran, e.g. `claude-opus-5-5` and `claude-code 3.x`. Required on every record; the checker refuses a placeholder. Write `human` as the model for a unit a person did without one. It is your own report and is not verified. The board shows it beside each record. |
+| `tokens`, `tokens_basis` | the total tokens the unit used, as a whole number, and where the number comes from: `counted` (your tool's own count for the unit's session) or `estimated` (you worked it out another way). Required on every record; `0` only where a person did the unit without a model. It is your own report and is not verified. `python3 verify/costs.py` turns these into the typical cost of each unit type, which is what the next contributor's agent quotes to its owner. |
 | `fresh_context` | `true`: you began in a new session that had seen no other records for this question beyond the unit's inputs |
 | `started`, `finished` | ISO times |
 
@@ -25,7 +26,7 @@ to do it well. Where they disagree, `LEDGER.md` wins and the guide is a bug.
 ```
 Q-GEN-n  ──►  Q-RES-n-1..5  ──►  Q-ADV-n-k (2 adversaries, different people)  ──┐
    │                         └─►  Q-VER-n-k-1..3 (one per nearest prior)  ────────┴─►  Q-JDG-n-k (maintainer)
-   └─► Q-GEN-(n+1), the next round, in any field              a Validated or Provisional verdict ─► A-ATT-n-k (answer/)
+   └─► Q-GEN-(n+1), the next round, in the five fields        a Validated or Provisional verdict ─► A-ATT-n-k (answer/)
 ```
 
 Open problems ([problems/README.md](../problems/README.md)) add three kinds of unit:

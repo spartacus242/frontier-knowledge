@@ -12,7 +12,7 @@ split into ninety pieces is one row. Four kinds of question, each read from the 
   new         candidate questions that have survived so far  ledger/INDEX.md (Provisional and Validated rows)
   check       a claimed result waiting for outside checks  answer/results.json and its units
 
-plus one row for the standing unit that asks for new questions in any field. A problem's row also carries its
+plus one row for the standing unit that asks for new questions in the five fields. A problem's row also carries its
 "Latest info" items from problems/news.json (see problems/README.md).
 
 "target" is what the page's per-question agent prompt passes to `python3 verify/swarm.py next --unit <target>`:
@@ -197,7 +197,7 @@ def main():
 
     us = mine.pop("ASK-ANY", [])
     if us:
-        add("ASK-ANY", "ask", "Any field", "Ask something nobody has asked, in any field", us[0]["statement"], us)
+        add("ASK-ANY", "ask", "All five fields", "Ask something nobody has asked, in one of the five fields", us[0]["statement"], us)
 
     ledger_field = {k: S.field_of(v["domain"]) for k, v in led.items()}
     for qid, us in mine.items():             # whatever is left: units that stand alone

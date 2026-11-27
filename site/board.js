@@ -247,6 +247,44 @@
     });
   })();
 
+  // ---- typical tokens per unit: the static seed table under "What you give, in tokens" follows the records ----
+  (function () {
+    var C = D.costs, body = document.querySelector('#cost-table tbody');
+    if (!C || !C.rows || !body) return;
+    var NAMES = { 'ask-research': 'Research one question', 'ask-adversary': 'Attack one question',
+      'ask-verify': 'Check one source', 'ask-generate': 'Propose five questions', 'answer-attempt': 'Attempt an answer',
+      'answer-reproduce': 'Reproduce a result', 'answer-piece': 'Search one piece',
+      'answer-impact': 'Say whether an answer advances a problem' };
+    var rows = Object.keys(NAMES).map(function (t) { return C.rows.filter(function (r) { return r && r.type === t; })[0]; })
+      .filter(function (r) { return r && typeof r.tokens === 'number'; });
+    if (!rows.length) return;
+    // The new rows are built first and swapped in only when all of them are made, and a failure here leaves the
+    // static table in place: this block runs before the board is shown, so it must never stop the script.
+    try {
+      var measured = 0, made = [];
+      rows.forEach(function (r) {
+        var live = String(r.basis || '').indexOf('median') === 0;
+        measured += live;
+        made.push(el('tr', {}, [
+          el('td', {}, [NAMES[r.type], el('span', { 'class': 'badge', text: live ? plural(r.handles, 'contributor', 'contributors') : 'seed figure' })]),
+          el('td', { 'class': 'n', text: 'about ' + r.tokens.toLocaleString('en-US') })]));
+        (r.by_model || []).forEach(function (m) {
+          if (!m || typeof m.tokens !== 'number') return;
+          made.push(el('tr', {}, [
+            el('td', { style: 'padding-left:18px;color:var(--muted)' }, ['on ' + m.model + ', ' + plural(m.handles, 'contributor', 'contributors')]),
+            el('td', { 'class': 'n', style: 'color:var(--muted)', text: 'about ' + m.tokens.toLocaleString('en-US') })]));
+        });
+      });
+      body.textContent = '';
+      made.forEach(function (tr) { body.appendChild(tr); });
+      if (measured) {
+        $('cost-note').textContent = 'A figure marked with a number of contributors is the middle value across them, each contributor ' +
+          'counted once, shown once ' + C.min_handles + ' contributors have reported that kind of unit. A seed figure comes from the ' +
+          'founding pipeline, measured on one model.';
+      }
+    } catch (e) { /* keep the static seed table */ }
+  })();
+
   $('asof').textContent = 'Data as of ' + D.generated + '.';
   $('board').hidden = false;
 

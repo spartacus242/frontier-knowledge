@@ -10,11 +10,11 @@ It tests the GATES, not the generator: the ten headlines are supplied, so the ru
 
 ## The ten questions
 
-`questions.json` holds them, two per area of the five-area rotation of 2026-10-28 (none for the open turn added on 2026-11-24), each with its as-of date (the day before which every agent must pretend nothing later exists), the landmark source that later asked or answered it (for the operator only, never handed to an agent), and the rule each one exercises: rule 4 (contested presupposition: P1, D1), rule 5 (Under-asked: P2, possibly D1), rule 6 (same question on another object: C2, B2), and plain field-opening questions (M1, M2, C1, B1, D2).
+`questions.json` holds them, two per area of the five-area rotation of 2026-10-28 (none for the open turn, which was in the cycle from 2026-11-24 to 2026-11-27), each with its as-of date (the day before which every agent must pretend nothing later exists), the landmark source that later asked or answered it (for the operator only, never handed to an agent), and the rule each one exercises: rule 4 (contested presupposition: P1, D1), rule 5 (Under-asked: P2, possibly D1), rule 6 (same question on another object: C2, B2), and plain field-opening questions (M1, M2, C1, B1, D2).
 
 ## How to run it
 
-One question per run, because the as-of date is a per-run setting, and one run at a time, because LEDGER.md's one-batch-at-a-time rule applies here too: every run draws on the same shared search budget. For question N of `questions.json`, run the Workflow script `ledger/tools/unasked-ledger-batch-sequential-v21.js` with:
+One question per run, because the as-of date is a per-run setting, and one run at a time, because LEDGER.md's one-batch-at-a-time rule applies here too: every run draws on the same shared search budget. For question N of `questions.json`, run the Workflow script `ledger/tools/unasked-ledger-batch-sequential-v24.js` (v21 until 2026-11-26, when the backtest was run; v22 and v23 change only how drafts are generated and developed, which a supplied headline skips or passes through one at a time; v24, of 2026-11-27, also has one judge read both adversaries' logs where v21 judged after each, and adds a recommended solving method to each record, so a re-run under v24 is not step for step the run recorded in `results/`) with:
 
 ```
 {

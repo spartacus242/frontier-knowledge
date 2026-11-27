@@ -1,12 +1,18 @@
 # ask-generate: propose five candidates
 
-**Input:** none; any field of knowledge is open (the maintainer, 2026-11-24). **Replicas:** 1. **Cost:** an hour of agent time and a dozen searches.
+**Input:** none. **Fields:** mathematics, physics, computer science, biology or medicine (the maintainer, 2026-11-27; any field
+was open from 2026-11-24 until then). **Replicas:** 1. **Cost:** an hour of agent time and a dozen searches. In tokens,
+about 550,000 going by the founding pipeline's figure of about 110,000 per candidate; a whole unit has not been
+measured yet (`python3 verify/costs.py` has the current figure).
 
 Read `LEDGER.md` (Mission, Depth requirement and its worked pass/fail pairs, "Where candidates come from") and the whole
-of `ledger/INDEX.md`. Propose five candidates in any field or fields; say which in `domain`. The field is free, the
-bar is not: every candidate must be deep (about the subject itself, not about how it is studied), must have a clear
-test of what would count as an answer, and must matter if answered. Replace any candidate that fails the Depth requirement
-before you submit: the checker refuses a record carrying a depth `Fail`.
+of `ledger/INDEX.md`. Propose five candidates, each in one of the five fields. `domain` starts with the field's name,
+then the subfield, and the checker refuses any other start; a question about AI goes under Computer science. The
+method may come from anywhere. What must be one of the five is the target field: the one whose literature decides
+whether the question is new and whose community would act on the answer. Every candidate must be deep (about the
+subject itself, not about how it is studied), must have a clear test of what would count as an answer, and must
+matter if answered. Replace any candidate that fails the Depth requirement before you submit: the checker refuses a
+record carrying a depth `Fail`.
 
 ```json
 "candidates": [ {

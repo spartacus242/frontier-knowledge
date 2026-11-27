@@ -2,10 +2,10 @@
   "id": "Q-GEN-1",
   "type": "ask-generate",
   "replicas": 1,
-  "title": "Ask: five un-asked questions, in any field",
-  "statement": "Propose five candidate un-asked questions in any field of knowledge, each passing the Depth requirement of LEDGER.md (deep, with a clear test of what would count as an answer, and important if answered), none a duplicate of ledger/INDEX.md.",
+  "title": "Ask: five un-asked questions, in mathematics, physics, computer science, biology or medicine",
+  "statement": "Propose five candidate un-asked questions in mathematics, physics, computer science, biology or medicine, each passing the Depth requirement of LEDGER.md (deep, with a clear test of what would count as an answer, and important if answered), none a duplicate of ledger/INDEX.md.",
   "inputs": {
-    "area": "any field"
+    "area": "mathematics, physics, computer science, biology or medicine"
   },
-  "statement_sha256": "113b7eb8d817934ab59d9b82c2f3667fa06685c9579d1ec93e2d9b8cb0dcf1b4"
+  "statement_sha256": "42b487165061046edbdc819eababa12127a7093421ec91a5ca8ddb7ea4a654c3"
 }

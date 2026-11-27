@@ -8,6 +8,10 @@
 - The file is named for the pull request's author. You cannot submit for someone else. **(checked)**
 - The record works the unit's statement exactly as posted, proven by its sha256. **(checked)**
 - The record has every field its unit guide in `ask/units/` or `answer/units/` lists. **(checked)**
+- The record names the model and the agent that produced it and the tokens the unit used. **(checked)** that they are
+  there and are not the template's placeholders. Whether they are true is on your honour.
+- A new question is in mathematics, physics, computer science, biology or medicine. **(checked)** by the start of
+  each candidate's `domain`.
 - At most 512 KB. **(checked)**
 
 ## Independence

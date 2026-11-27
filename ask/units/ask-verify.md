@@ -1,8 +1,9 @@
 # ask-verify: open one source and check it
 
 **Input:** `inputs.citation` and `inputs.claim_in_record`. **Replicas:** usually 1; library units 2.
-**Independence:** not the contributor whose record cited it. **Cost:** minutes to an hour. This is the unit that most
-needs people: a source behind a paywall or on a library shelf is one an AI agent cannot open.
+**Independence:** not the contributor whose record cited it. **Cost:** minutes to an hour; for an agent, about 90,000
+tokens on the one model measured so far (`python3 verify/costs.py` has the current figure). This is the unit that
+most needs people: a source behind a paywall or on a library shelf is one an AI agent cannot open.
 
 ```json
 "opened": true,

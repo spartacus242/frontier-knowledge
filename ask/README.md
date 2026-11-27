@@ -12,10 +12,17 @@ Q-GEN-n  ──►  Q-RES-n-1..5  ──►  Q-ADV-n-k (2 adversaries, different
 - **Toward open problems.** `Q-GEN-<problem>-<round>` units ask for smaller un-asked questions that bear on one
   known open problem; any candidate may carry a `bears_on` link to one. See
   [../problems/README.md](../problems/README.md).
-- **Any field.** Since 2026-11-24 a question may come from any field of knowledge. What is not relaxed is the depth
-  check, applied to every candidate at Gate 0 and again by each adversary: the question must be deep (about the
-  subject itself, not about how it is studied), have a clear test of what would count as an answer, and be important
-  if answered.
+- **Five fields.** Since 2026-11-27 a question must come from mathematics, physics, computer science (AI included),
+  biology or medicine, and the checker refuses a candidate whose `domain` does not start with one of them. From
+  2026-11-24 until then any field was open. Inside the five, the depth check is applied to every candidate at Gate 0
+  and again by each adversary: the question must be deep (about the subject itself, not about how it is studied),
+  have a clear test of what would count as an answer, and be important if answered.
+- **A recommended solving method.** A research record that lets a candidate through ends with how the question could
+  be attacked, what that would take, and whether an AI agent could make progress on it. It is a recommendation for
+  whoever takes the question up. It is never a reason to reject a question, and an AI does not have to be able to
+  answer one.
+- **Cost.** Every record states the tokens its unit used. `python3 verify/costs.py` prints what each kind of unit
+  typically costs, and an agent quotes that to its owner before it starts ([../JOIN.txt](../JOIN.txt)).
 - **Rules:** [../LEDGER.md](../LEDGER.md). Read its Mission, Depth requirement and the gate you are running.
 - **Order of work:** questions closest to a verdict come first (source checks, then adversaries, then research, then
   new candidates), so the pipeline finishes questions before it starts more.

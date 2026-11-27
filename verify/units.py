@@ -12,7 +12,7 @@ works a reworded version. A unit is done when it has "replicas" accepted submiss
 each from a different handle.
 
 The Ask loop (questions), following LEDGER.md:
-    Q-GEN-n          five candidates, in any field                    -> Q-RES-n-1 .. Q-RES-n-5, and Q-GEN-(n+1)
+    Q-GEN-n          five candidates, from the five fields            -> Q-RES-n-1 .. Q-RES-n-5, and Q-GEN-(n+1)
     Q-RES-n-k        Gates 0-3 on one candidate                       -> Q-ADV-n-k (2 replicas), Q-VER-n-k-1..3
     Q-ADV-n-k        Gate 4, a fresh-context adversary
     Q-VER-n-k-p      open one cited prior and check what the record says it says
@@ -51,9 +51,12 @@ def subs_dir(unit_id):
     return os.path.join(ROOT, area(unit_id), "submissions", unit_id)
 
 
-# the maintainer, 2026-11-24: asking is open to ANY field; the depth check applies to every field; answering effort goes
-# first to what ranks highest. So there is no rotation of areas here, and every unit carries a priority.
-GEN_STATEMENT = ("Propose five candidate un-asked questions in any field of knowledge, each passing the Depth "
+# the maintainer, 2026-11-27: asking is limited to five fields (LEDGER.md, Parameters, DOMAIN SCOPE). From 2026-11-24 until
+# then it was open to any field. The depth check applies in every one, and answering effort goes first to what ranks
+# highest. There is no rotation of areas here: a round may draw on any of the five, and every unit carries a priority.
+GEN_FIELDS = "mathematics, physics, computer science, biology or medicine"
+GEN_TITLE = "Ask: five un-asked questions, in " + GEN_FIELDS
+GEN_STATEMENT = ("Propose five candidate un-asked questions in " + GEN_FIELDS + ", each passing the Depth "
                  "requirement of LEDGER.md (deep, with a clear test of what would count as an answer, and important "
                  "if answered), none a duplicate of ledger/INDEX.md.")
 # Lower number = do it first. Ask units: finish questions that are closest to a verdict before starting new ones.
@@ -231,9 +234,9 @@ def seed():
     }))
     ids.append(write({
         "id": "Q-GEN-1", "type": "ask-generate", "replicas": 1,
-        "title": "Ask: five un-asked questions, in any field",
+        "title": GEN_TITLE,
         "statement": GEN_STATEMENT,
-        "inputs": {"area": "any field"},
+        "inputs": {"area": GEN_FIELDS},
     }))
     for uq, q in LEDGER_ADV.items():
         ids.append(write({
@@ -312,8 +315,8 @@ def advance():
                     add(gen_problem(p, int(r) + 1))
                 continue
             add({"id": f"Q-GEN-{int(n) + 1}", "type": "ask-generate", "replicas": 1,
-                 "title": "Ask: five un-asked questions, in any field",
-                 "statement": GEN_STATEMENT, "inputs": {"area": "any field"}})
+                 "title": GEN_TITLE,
+                 "statement": GEN_STATEMENT, "inputs": {"area": GEN_FIELDS}})
         elif u["type"] == "ask-research":
             tail = u["id"][len("Q-RES-"):]
             rec = next(iter(s.values()))
@@ -356,8 +359,14 @@ def advance():
                  "title": f"Answer: {u['statement'][:80]}", "statement": u["statement"],
                  "inputs": {"question_records": u["inputs"]["records"] + [u["id"]], "verdict": verdict,
                             "survival_percent": surv,
+                            # The researcher's recommended solving method travels with the question. It is a
+                            # suggestion from someone who read the nearby literature, not an instruction.
+                            **({"recommended_method": res["solving_method"]}
+                               if isinstance(res.get("solving_method"), dict) else {}),
                             "how": "Work it as PROMPT.md describes. State exactly what you established and what you "
-                                   "did not; a claim becomes a result only after others reproduce it."}})
+                                   "did not; a claim becomes a result only after others reproduce it. If "
+                                   "recommended_method is present it is the researcher's suggestion, to take or "
+                                   "leave."}})
     # An answer that could move a linked open problem is flagged on the board, and two people who did not make the
     # claim are asked whether it does.
     for u in list(units.values()):

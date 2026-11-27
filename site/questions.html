@@ -358,7 +358,7 @@
   }
 
   function match(x, skip) {
-    if (skip !== 'field' && state.field && x.field !== state.field && x.field !== 'Any field') return false;
+    if (skip !== 'field' && state.field && x.field !== state.field && !(x.field === 'All five fields' && state.field !== 'Other fields')) return false;   // the row that asks for new questions belongs to each of the five fields
     if (skip !== 'kind' && state.kind && x.kind !== state.kind) return false;
     if (state.open && !x.target) return false;
     if (state.news && !x.news) return false;
@@ -369,7 +369,7 @@
     box.textContent = '';
     items.forEach(function (it) {
       var n = rows.filter(function (x) {
-        return match(x, key) && (!it[0] || x[key] === it[0] || (key === 'field' && x.field === 'Any field'));
+        return match(x, key) && (!it[0] || x[key] === it[0] || (key === 'field' && x.field === 'All five fields' && it[0] !== 'Other fields'));
       }).length;
       var b = el('button', { 'class': 'chip', type: 'button', 'aria-pressed': String(state[key] === it[0]) }, [it[1], el('small', { text: String(n) })]);
       b.addEventListener('click', function () { state[key] = it[0]; draw(); });
