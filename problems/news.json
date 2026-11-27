@@ -1,8 +1,29 @@
 {
  "about": "Latest info on open problems, shown on the site's Open questions page. One list per problem id (an id that `python3 verify/problems.py` lists), newest first. Rules are in problems/README.md under 'Latest info': every item reports what was claimed or published, by whom, and how far it has been checked, with at least one source a reader can open. Nothing here changes a problem's status, and nothing is called solved or proved before the mathematical or scientific community has accepted it.",
- "checked": "2026-11-26",
+ "checked": "2026-11-27",
  "news": {
   "OP-MATH-RH": [
+   {
+    "date": "2026-11-24",
+    "status": "Claim, machine-checked, not refereed",
+    "headline": "The formal proof is certified by the Lean and Mathlib organisations; still no refereed account",
+    "summary": "On 21 November 2026 the Lean Focused Research Organization and the Mathlib Initiative issued a joint statement on Levent Alpöge's formal proof: \"We hereby certify that both the statement and the proof of the Riemann Hypothesis are correct.\" The Next Web reports that dozens of people compiled the code without errors and that several independent proof checkers accepted it. The same report quotes the Association for Human Mathematics objecting that \"no human being can reasonably claim to be responsible for, or even to understand, such a document\", and says Alpöge wants to simplify and write up the argument. The Clay Mathematics Institute's page for the problem, last modified on 24 November, carries the label \"Active\", where its pages for Yang-Mills and P versus NP say \"Unsolved\"; the page does not mention the claim, and we found no Clay statement explaining the label. There is still no refereed or journal-published account, so this page keeps the problem listed as open.",
+    "sources": [
+     {
+      "publisher": "The Next Web",
+      "title": "Lean and Mathlib certify the Riemann hypothesis proof",
+      "date": "2026-11-23",
+      "url": "https://thenextweb.com/news/lean-mathlib-certify-riemann-hypothesis-proof-alpoge-claude"
+     },
+     {
+      "publisher": "Clay Mathematics Institute",
+      "title": "Riemann Hypothesis (problem page)",
+      "date": "2026-11-24",
+      "url": "https://www.claymath.org/millennium/riemann-hypothesis/"
+     }
+    ],
+    "checked": "2026-11-27"
+   },
    {
     "date": "2026-11-20",
     "status": "Claim, machine-checked, not refereed",
@@ -32,6 +53,27 @@
    }
   ],
   "OP-CS-OMEGA": [
+   {
+    "date": "2026-11-24",
+    "status": "Claim, not checked",
+    "headline": "An OpenAI preprint claims the exponent is exactly 9/4, which would mean it is not 2",
+    "summary": "A preprint dated 24 November 2026 in OpenAI's public mathematics repository is titled \"The matrix multiplication exponent is nine fourths\". According to a news report of 26 November, it claims a lower bound matching the earlier upper bound of 9/4, so that the exponent would equal 2.25 exactly and the answer to this problem would be no. We could not open the preprint ourselves and rely on that report for its contents. The report says the accompanying Lean formalization covers a narrower setting than the headline theorem (circuits without division), that the rest stands on a written proof which has not been peer reviewed, and that outside mathematicians had had the manuscript for two days; it quotes no outside expert. Treat this as an unchecked claim.",
+    "sources": [
+     {
+      "publisher": "GitHub, openai/math",
+      "title": "The matrix multiplication exponent is nine fourths (preprint, 24 November 2026)",
+      "date": "2026-11-24",
+      "url": "https://github.com/openai/math/tree/main/preprints/The-matrix-multiplication-exponent-is-nine-fourths-November-24-2026"
+     },
+     {
+      "publisher": "i10X News",
+      "title": "OpenAI: Matrix Multiplication Exponent Is 9/4, What Is Proven",
+      "date": "2026-11-26",
+      "url": "https://i10x.ai/news/openai-matrix-multiplication-exponent-9-4-lower-bound-preprint"
+     }
+    ],
+    "checked": "2026-11-27"
+   },
    {
     "date": "2026-11-09",
     "status": "Claim, under expert review",
@@ -84,6 +126,58 @@
      }
     ],
     "checked": "2026-11-26"
+   }
+  ],
+  "OP-PHYS-YM": [
+   {
+    "date": "2026-10-26",
+    "status": "Claim, under expert review",
+    "headline": "OpenAI reports a formal proof that pure Yang-Mills theory exists; the mass gap is not claimed",
+    "summary": "On 26 October 2026 OpenAI wrote that its work includes a proof of the existence of pure Yang-Mills theory, produced on 9 September, with a formalization in the Lean proof assistant finished on 16 October. It named a group led by David Gross, with Michael Douglas, Arthur Jaffe, Igor Klebanov and Nikita Nekrasov, to understand and explain the result; OpenAI's page does not say the group has confirmed it. The page makes no claim about the mass gap, which is the second half of this problem. The Clay Mathematics Institute's page for the problem, last modified on 24 November, still carries the label \"Unsolved\" and does not mention the work.",
+    "sources": [
+     {
+      "publisher": "OpenAI",
+      "title": "Working with academic communities to build scientific understanding",
+      "date": "2026-10-26",
+      "url": "https://openai.com/index/building-scientific-understanding-with-academic-communities/"
+     },
+     {
+      "publisher": "Clay Mathematics Institute",
+      "title": "Yang-Mills and the Mass Gap (problem page)",
+      "date": "2026-11-24",
+      "url": "https://www.claymath.org/millennium/yang-mills-the-maths-gap/"
+     }
+    ],
+    "checked": "2026-11-27"
+   }
+  ],
+  "OP-CS-PNP": [
+   {
+    "date": "2026-10-28",
+    "status": "Claim, under expert review",
+    "headline": "A related conjecture, the exponential time hypothesis, is reported refuted; P versus NP is untouched",
+    "summary": "In late October 2026 OpenAI announced a proof, with a formalization in Lean, that the exponential time hypothesis is false: an algorithm that solves k-SAT faster than the hypothesis allows. Anthropic released a paper of its own on the same question. Lance Fortnow, a complexity theorist, wrote on 28 October that he had not verified the proof himself but that \"it is safe to assume now that the exponential-time hypothesis is toast\", and noted that Russell Impagliazzo, Ramamohan Paturi and Ryan Williams had set up a site to examine it. This does not answer P versus NP. Fortnow writes that the result \"applies to k-SAT but not to NP problems in general\" and is far from the speed a polynomial-time algorithm would need. The Clay Mathematics Institute's page for P versus NP, last modified on 24 November, carries the label \"Unsolved\".",
+    "sources": [
+     {
+      "publisher": "Computational Complexity (blog), Lance Fortnow",
+      "title": "The Exponential Time Refutation",
+      "date": "2026-10-28",
+      "url": "https://blog.computationalcomplexity.org/2026/10/the-exponential-time-refutation.html"
+     },
+     {
+      "publisher": "OpenAI",
+      "title": "Working with academic communities to build scientific understanding",
+      "date": "2026-10-26",
+      "url": "https://openai.com/index/building-scientific-understanding-with-academic-communities/"
+     },
+     {
+      "publisher": "Clay Mathematics Institute",
+      "title": "P vs NP (problem page)",
+      "date": "2026-11-24",
+      "url": "https://www.claymath.org/millennium/p-vs-np/"
+     }
+    ],
+    "checked": "2026-11-27"
    }
   ]
  }
