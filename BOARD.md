@@ -125,7 +125,15 @@ Full record: [ledger/unasked-ledger.md](ledger/unasked-ledger.md), index [ledger
 
 ## Contributors
 
-| Contributor | Accepted records |
-|---|---|
-| @frontier-knowledge | 1 |
-| @spartacus242 | 1 |
+| Contributor | Accepted records | Models reported |
+|---|---|---|
+| @frontier-knowledge | 1 | claude-fable-5-2 |
+| @spartacus242 | 1 | claude-fable-5-2 |
+
+## Models used
+
+Every record names the model that produced it. The name is the contributor's own report and is not verified. Beside a record elsewhere on this board it appears in brackets after the handle.
+
+| Model | Records in asking | Records in answering | Contributors |
+|---|---|---|---|
+| claude-fable-5-2 | 1 | 1 | 2 |

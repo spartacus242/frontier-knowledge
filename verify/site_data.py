@@ -192,7 +192,7 @@ def main():
     maintainers = [x.strip() for x in open(maint_path) if x.strip() and not x.startswith("#")] \
         if os.path.exists(maint_path) else []
 
-    people, days, by_type, open_by_field = {}, {}, {}, {}
+    people, days, by_type, open_by_field, models = {}, {}, {}, {}, {}
     total_records = 0
     for uid, u in units.items():
         t = by_type.setdefault(u["type"], {"type": u["type"], "area": U.area(uid), "units": 0, "done": 0})
@@ -213,7 +213,17 @@ def main():
             p[U.area(uid)] += 1
             p["units"] += 1
             day = str(rec.get("finished", ""))[:10]
+            # The model tracker. The name is whatever the contributor wrote in the record's "model" field: their
+            # own report, not verified. Names are compared case-insensitively and otherwise left as written.
+            name = " ".join(str(rec.get("model", "")).split())[:60] or "not stated"
+            m = models.setdefault(name.lower(), {"model": name, "records": 0, "conclusive": 0, "ask": 0,
+                                                 "answer": 0, "handles": set(), "last": ""})
+            m["records"] += 1
+            m["conclusive"] += U.conclusive(rec)
+            m[U.area(uid)] += 1
+            m["handles"].add(h)
             if re.match(r"^\d{4}-\d{2}-\d{2}$", day):
+                m["last"] = max(m["last"], day)
                 p["last"] = max(p["last"], day)
                 days[day] = days.get(day, 0) + 1
     board = sorted(people.values(), key=lambda p: (-p["conclusive"], -p["records"], p["handle"].lower()))
@@ -238,6 +248,8 @@ def main():
                   "by_type": sorted(by_type.values(), key=lambda t: (t["area"], t["type"]))},
         "records": {"total": total_records, "by_day": [{"date": d, "n": n} for d, n in sorted(days.items())]},
         "contributors": board,
+        "models": [dict({k: v for k, v in m.items() if k != "handles"}, contributors=len(m["handles"]))
+                   for m in sorted(models.values(), key=lambda m: (-m["records"], m["model"].lower()))],
         "results": res,
         "tracker": tracker(res),
         "open_by_field": sorted(open_by_field.values(), key=lambda o: (-(o["ask"] + o["answer"]), o["field"])),

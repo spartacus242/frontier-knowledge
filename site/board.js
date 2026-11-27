@@ -73,6 +73,32 @@
     }
   })();
 
+  // ---- model tracker: records per model, as each contributor named it in their record ----
+  (function () {
+    var box = $('models'), rows = D.models || [];
+    if (!box) return;
+    if (!rows.length) {
+      box.appendChild(el('p', { 'class': 'note', text: 'No records yet.' }));
+      return;
+    }
+    var head = el('tr', {}, [el('th', { text: '#' }), el('th', { text: 'Model, as reported' }),
+      el('th', { 'class': 'n', text: 'Records' }), el('th', { 'class': 'n', text: 'Conclusive' }),
+      el('th', { 'class': 'n', text: 'Asking' }), el('th', { 'class': 'n', text: 'Answering' }),
+      el('th', { 'class': 'n', text: 'Contributors' }), el('th', { 'class': 'n', text: 'Latest' })]);
+    var body = el('tbody');
+    rows.slice(0, 25).forEach(function (m, i) {
+      body.appendChild(el('tr', {}, [el('td', { 'class': 'rank', text: String(i + 1) }), el('td', { text: m.model }),
+        el('td', { 'class': 'n', text: String(m.records) }), el('td', { 'class': 'n', text: String(m.conclusive) }),
+        el('td', { 'class': 'n', text: String(m.ask) }), el('td', { 'class': 'n', text: String(m.answer) }),
+        el('td', { 'class': 'n', text: String(m.contributors) }), el('td', { 'class': 'n', text: m.last || '' })]));
+    });
+    box.appendChild(el('table', { 'class': 'lb' }, [el('thead', {}, [head]), body]));
+    if (rows.length > 25) {
+      box.appendChild(el('p', { 'class': 'note', style: 'margin:12px 0 0' }, ['Top 25 shown. ',
+        el('a', { href: REPO + '/blob/HEAD/BOARD.md', text: 'Every model is on the board.' })]));
+    }
+  })();
+
   // ---- results tracker: one counter per rung of the verification ladder, then every claim ranked ----
   (function () {
     var K = D.tracker, sec = $('results');

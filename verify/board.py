@@ -49,9 +49,10 @@ def answers(units):
             conf = sum(1 for x in recs.values() if x.get("result") == "Confirms")
             ref = [h for h, x in recs.items() if x.get("result") == "Refutes"]
             if ref:
-                standing, key = f"**Refuted** by @{ref[0]}", 0
+                standing, key = f"**Refuted** by {who(ref[0], recs[ref[0]])}", 0
             elif want and conf >= want:
-                standing, key = f"**Confirmed** by {conf} outside reproductions", 1
+                standing, key = f"**Confirmed** by {conf} outside reproductions: " + \
+                    ", ".join(who(h, x) for h, x in recs.items() if x.get("result") == "Confirms"), 1
             else:
                 standing, key = f"{conf} of {want} outside reproductions", 2 + (1 - conf / want if want else 1)
             where = f"`{r['unit']}`"
@@ -79,7 +80,7 @@ def answers(units):
     for uid, u in units.items():
         if u["type"] == "answer-attempt":
             for h, x in U.subs(uid).items():
-                attempts.append(f"| {cell(x.get('claim', ''))} | {x.get('label', '')} | @{h} | `{uid}` |")
+                attempts.append(f"| {cell(x.get('claim', ''))} | {x.get('label', '')} | {who(h, x)} | `{uid}` |")
     if attempts:
         out += ["", "Attempts on open problems (a claim here is a lead until it has reproductions):", "",
                 "| Claim | Label | By | Unit |", "|---|---|---|---|"] + attempts
@@ -109,12 +110,12 @@ def questions(units):
             stage, key = f"{len(adv)} of 2 adversaries in", 3
         else:
             stage, key = "researched, waiting for adversaries", 4
-        people = sorted(set(res) | set(adv))
+        people = sorted({who(h, x) for h, x in list(res.items()) + list(adv.items())})
         rows.append((key, -(surv or 0),
                      f"| {cell(u['statement'], 220)} | {u['inputs'].get('area', '')} | {stage} | "
                      f"{'' if surv is None else str(surv) + '%'} | "
                      f"{sum(1 for x in ver if x.get('finding') == 'Supports')}/{len(ver)} | "
-                     f"{' '.join('@' + p for p in people)} |"))
+                     f"{' '.join(people)} |"))
     rows.sort(key=lambda x: (x[0], x[1]))
     if not rows:
         return ["No swarm question has been proposed yet. `Q-GEN-1` is open."]
@@ -161,7 +162,7 @@ def frontier(units, problems):
         imp = list(U.subs(f"A-IMP-{uid[2:]}").values())
         recs = U.subs(uid)
         if u["type"] == "answer-attempt":
-            claim = "; ".join(f"{x.get('label')} by @{h}" for h, x in recs.items() if x.get("label") != "NO PROGRESS")
+            claim = "; ".join(f"{x.get('label')} by {who(h, x)}" for h, x in recs.items() if x.get("label") != "NO PROGRESS")
         else:
             claim = f"confirmed by {len(recs)} outside reproductions"
         for l in U.links(u):
@@ -230,15 +231,36 @@ def ledger(n=15):
            [f"| {i} | {s} | {cell(d, 60)} | {cell(q, 220)} |" for i, s, d, q in rows[:n]]
 
 
+def who(h, rec):
+    """A contributor and the model they report having run, as shown beside a record."""
+    return f"@{h} ({cell(rec.get('model', '?'), 40)})"
+
+
 def contributors(units):
-    count = {}
+    count, models = {}, {}
     for uid in units:
-        for h in U.subs(uid):
+        for h, r in U.subs(uid).items():
             count[h] = count.get(h, 0) + 1
+            models.setdefault(h, set()).add(cell(r.get("model", "?"), 40))
     if not count:
         return ["Nobody yet. The first accepted record puts your handle here."]
-    return ["| Contributor | Accepted records |", "|---|---|"] + \
-           [f"| @{h} | {n} |" for h, n in sorted(count.items(), key=lambda x: (-x[1], x[0]))]
+    return ["| Contributor | Accepted records | Models reported |", "|---|---|---|"] + \
+           [f"| @{h} | {n} | {', '.join(sorted(models[h]))} |" for h, n in sorted(count.items(), key=lambda x: (-x[1], x[0]))]
+
+
+def models_used(units):
+    """Which models did the work, by area. Self-reported in each record's model field; not verified."""
+    rows = {}
+    for uid in units:
+        for h, r in U.subs(uid).items():
+            m = rows.setdefault(cell(r.get("model", "?"), 40), {"ask": 0, "answer": 0, "who": set()})
+            m[U.area(uid)] += 1
+            m["who"].add(h)
+    if not rows:
+        return ["No records yet."]
+    return ["| Model | Records in asking | Records in answering | Contributors |", "|---|---|---|---|"] + \
+           [f"| {k} | {v['ask']} | {v['answer']} | {len(v['who'])} |"
+            for k, v in sorted(rows.items(), key=lambda x: (-(x[1]['ask'] + x[1]['answer']), x[0]))]
 
 
 def main():
@@ -267,7 +289,10 @@ def main():
            "## Newest surviving questions in the ledger", ""] + ledger() + \
           ["", "Full record: [ledger/unasked-ledger.md](ledger/unasked-ledger.md), index "
                "[ledger/INDEX.md](ledger/INDEX.md). Rejected questions stay on the record there.",
-           "", "## Open work", "", U.status(), "", "## Contributors", ""] + contributors(units)
+           "", "## Open work", "", U.status(), "", "## Contributors", ""] + contributors(units) + \
+          ["", "## Models used", "",
+           "Every record names the model that produced it. The name is the contributor's own report and is not "
+           "verified. Beside a record elsewhere on this board it appears in brackets after the handle.", ""] + models_used(units)
     print("\n".join(out))
 
 

@@ -89,7 +89,8 @@ def template(uid):
     u = unit(uid)
     rec = {"unit": uid, "handle": me(),
            "statement_sha256": hashlib.sha256(u["statement"].encode("utf-8")).hexdigest(),
-           "model": "<model id you ran>", "agent": "<agent and version>", "fresh_context": True,
+           "model": "<model id you ran, e.g. claude-opus-5-5; the checker refuses this placeholder>",
+           "agent": "<agent and version, e.g. claude-code 3.2>", "fresh_context": True,
            "started": "<ISO time>", "finished": "<ISO time>"}
     path = os.path.join(ROOT, area(uid), "submissions", uid, rec["handle"] + ".json")
     if os.path.exists(path):
