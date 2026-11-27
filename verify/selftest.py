@@ -16,7 +16,7 @@ FAILS = []
 def ar(uid): return "answer" if uid.startswith("A-") else "ask"
 def sha(uid): return json.load(open(f"{R}/{ar(uid)}/queue/{uid}.json"))["statement_sha256"]
 def put(uid, h, rec, expect="ACCEPTED"):
-    base={"unit":uid,"handle":h,"statement_sha256":sha(uid),"model":"test-model","agent":"test-agent","fresh_context":True}
+    base={"unit":uid,"handle":h,"statement_sha256":sha(uid),"model":"test-model","agent":"test-agent","fresh_context":True,"tokens":180000,"tokens_basis":"counted"}
     base.update(rec); os.makedirs(f"{R}/{ar(uid)}/submissions/{uid}",exist_ok=True)
     p=f"{R}/{ar(uid)}/submissions/{uid}/{h}.json"; json.dump(base,open(p,"w"))
     r=subprocess.run([sys.executable,"-I",f"{R}/verify/check.py",p],capture_output=True,text=True)
@@ -31,6 +31,15 @@ cands=[{"question":f"Candidate question number {k} about something mathematical 
 put("Q-GEN-1","alice",{"candidates":cands[:4]},"REJECTED")   # should reject: 4 candidates
 put("Q-GEN-1","alice",{"candidates":cands,"model":"<model id you ran>"},"REJECTED")   # the template's placeholder is not a model
 put("Q-GEN-1","alice",{"candidates":cands,"model":"unknown"},"REJECTED")
+# --- tokens: every record states what the unit used; 0 only for a unit a person did without a model ---
+put("Q-GEN-1","alice",{"candidates":cands,"tokens":"<total tokens this unit used>"},"REJECTED")   # the template's placeholder
+put("Q-GEN-1","alice",{"candidates":cands,"tokens":0},"REJECTED")
+put("Q-GEN-1","alice",{"candidates":cands,"tokens_basis":"guess"},"REJECTED")
+put("Q-GEN-1","alice",{"candidates":cands,"tokens":10**9+1},"REJECTED")                              # more than one unit can state
+put("Q-GEN-1","alice",{"candidates":cands,"tokens":10**400},"REJECTED")
+# --- five fields: a candidate's domain must start with one of them ---
+put("Q-GEN-1","alice",{"candidates":cands[:4]+[dict(cands[4],domain="Economics - auction theory")]},"REJECTED")
+put("Q-GEN-1","alice",{"candidates":cands[:4]+[dict(cands[4],domain="Computer science - learning theory")],"tokens":0,"model":"human"}); os.remove(f"{R}/ask/submissions/Q-GEN-1/alice.json")
 put("Q-GEN-1","alice",{"candidates":cands}); adv()
 # --- open problems: a link must name a real problem, and a unit about a problem needs a link to it ---
 link=lambda pid:[{"problem":pid,"relation":"would bound","how":"An answer would bound the density at which the problem's statement can first fail."}]
@@ -47,6 +56,14 @@ res={"gate0":{"canonical":cands[0]["question"],"presuppositions":["p"],"depth":d
  "gate2":{"queries":[{"query":f"query number {i}","returned":"nothing relevant here"} for i in range(8)],
    "nearest_priors":[{"citation":cite(i),"unit_of_analysis":"sets","endpoint":"size","comparator":"none","estimand":"est","difference":"differs because"} for i in range(3)],"novelty":"Medium"},
  "gate3":{k:L for k in ["consequence","audience","fecundity","anchoring"]},"recommended":"Proceed"}
+put("Q-RES-1-1","bob",res,"REJECTED")      # reject: a record that recommends Proceed needs the recommended solving method
+method={"method":"Extend the density-increment argument of the nearest prior to the two-colour case.","needs":"a proof; a small computer search for the base cases","first_result":"A bound for the first open case, which would rule out the linear conjecture.","ai_progress":"partly","ai_progress_note":"the base-case search"}
+put("Q-RES-1-1","bob",dict(res,solving_method=dict(method,ai_progress="maybe")),"REJECTED")
+put("Q-RES-1-1","bob",dict(res,solving_method=dict(method,ai_progress=["yes"])),"REJECTED")          # refused, and the checker does not crash on it
+put("Q-RES-1-1","bob",dict(res,solving_method=dict(method,needs="")),"REJECTED")
+method=dict(method,needs="a proof")                                                                  # the guide's own shortest example is enough
+put("Q-RES-1-1","bob",dict(res,recommended="Reject",reject_gate="Gate 2: asked before"),"ACCEPTED"); os.remove(f"{R}/ask/submissions/Q-RES-1-1/bob.json")   # a Reject needs no method
+res=dict(res,solving_method=method)
 put("Q-RES-1-1","alice",res,"REJECTED")    # reject: alice made the generate unit
 put("Q-RES-1-1","bob",dict(res,bears_on=link("OP-MATH-ERDOS-AP"))); adv()
 atk={n:{"status":"Partial","argument":L} for n in ["triviality","disguise","combinatorial_novelty","presupposition_failure","vagueness","significance_inflation","reason_for_silence","dissolution"]}
@@ -63,8 +80,10 @@ put("Q-JDG-1-1","carol",{"status":"Provisional","reason":L,"strongest_remaining_
 put("Q-JDG-1-1","selftest-maintainer",{"status":"Provisional","reason":L,"strongest_remaining_objection":L})
 adv()   # a Provisional verdict must open an answer-attempt unit, ranked by survival
 att = json.load(open(f"{R}/answer/queue/A-ATT-1-1.json")) if os.path.exists(f"{R}/answer/queue/A-ATT-1-1.json") else {}
-ok = att.get("priority") == 230 and att.get("bears_on") and json.load(open(f"{R}/ask/queue/Q-GEN-2.json"))["inputs"]["area"] == "any field"
-print("ok   surviving question opened A-ATT-1-1 at priority 230 (250 less 20 for its link to an open problem); next round is any field" if ok else f"FAIL attempt unit {att.get('priority')}")
+gen2 = json.load(open(f"{R}/ask/queue/Q-GEN-2.json"))
+ok = att.get("priority") == 230 and att.get("bears_on") and gen2["inputs"]["area"] == "mathematics, physics, computer science, biology or medicine" \
+    and "any field" not in gen2["statement"] + gen2["title"] and att.get("inputs", {}).get("recommended_method", {}).get("ai_progress") == "partly"
+print("ok   surviving question opened A-ATT-1-1 at priority 230 (250 less 20 for its link to an open problem) carrying the recommended method; next round is in the five fields" if ok else f"FAIL attempt unit {att.get('priority')}")
 if not ok: FAILS.append(("A-ATT", "", str(att)))
 put("A-ATT-1-1","erin",{"label":"NO PROGRESS","summary":"x"*60,"claim":"none"}); adv()
 if os.path.exists(f"{R}/answer/queue/A-IMP-ATT-1-1.json"): FAILS.append(("impact","","opened on NO PROGRESS")); print("FAIL impact unit opened on NO PROGRESS")
@@ -88,6 +107,26 @@ b = subprocess.run([sys.executable, "-I", f"{R}/verify/board.py"], capture_outpu
 good = b.returncode == 0 and "Provisional" in b.stdout and "**Supported**: 2 of 2" in b.stdout
 print("ok   board builds and shows the frontier flag as supported" if good else "FAIL board")
 if not good: FAILS.append(("board", "", b.stderr))
+# Typical cost: a median over contributors, each counted once. carol alone filed the three ask-verify records above,
+# so the seed figure still stands; made-up rows then check the median, the per-model figure and the wording.
+sys.path.insert(0, f"{R}/verify"); import costs as C
+seed = C.typical("ask-verify", units={})
+solo = C.typical("ask-verify", "TEST-model")
+row = lambda h, t, m="m1", e=False: {"handle": h, "model": m, "key": m.lower(), "tokens": t, "estimated": e}
+rep = {"ask-verify": [row("a", 1), row("a", 1), row("a", 1), row("b", 100_000), row("c", 120_000, "m2", True)]}
+all3 = C.typical("ask-verify", "m1", _reported=rep)       # m1 has two contributors, so the figure is taken over every model
+rep["ask-verify"].append(row("d", 300_000))
+m1 = C.typical("ask-verify", "M1", _reported=rep)        # now three on m1: a's own median is 1, then 100,000 and 300,000
+tab = [r for r in C.table({}) if r["type"] == "ask-verify"][0]
+good = (seed["tokens"] == C.SEED["ask-verify"][0] and solo["tokens"] == C.SEED["ask-verify"][0] and solo["n"] == 3 and solo["handles"] == 1
+        and all3["tokens"] == 100_000 and all3["handles"] == 3 and "all models" in all3["basis"] and "5 accepted records, 1 estimated" in all3["basis"]
+        and m1["tokens"] == 100_000 and m1["handles"] == 3 and "on M1" in m1["basis"]
+        and C.cell("x | [free](https://e)") == "x \\| \\[free\\](https://e)" and tab["basis"] == C.SEED_SOURCE
+        and C.typical("ask-research")["tokens"] == C.SEED["ask-research"][0] and "## Typical cost of a unit" in b.stdout)
+try: C.quote("ask_verify"); good = False
+except ValueError: pass
+print("ok   typical cost: one contributor's records do not move the figure; three contributors' median replaces the seed" if good else f"FAIL costs {seed} {solo} {all3} {m1}")
+if not good: FAILS.append(("costs", "", str((solo, all3, m1))))
 # The Open questions page: one row per question, and a row's prompt target selects that question's units only.
 q = subprocess.run([sys.executable, "-I", f"{R}/verify/questions_data.py"], capture_output=True, text=True)
 rows = json.loads(q.stdout.split("window.QUESTIONS_DATA = ", 1)[1].rstrip().rstrip(";"))["questions"] if q.returncode == 0 else []

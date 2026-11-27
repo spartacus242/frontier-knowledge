@@ -36,6 +36,9 @@ NOVELTY = {"High", "Medium", "Low", "Unverified"}
 PLACEHOLDERS = {"unknown", "n/a", "none", "tbd", "todo", "model", "agent", "model id", "model id you ran",
                 "agent and version", "...", "xxx"}
 CITE_PREFIXES = ("doi:", "arxiv:", "isbn:", "url:")
+# LEDGER.md, Parameters, DOMAIN SCOPE: since 2026-11-27 a question comes from one of these five fields.
+FIELDS = ("mathematics", "physics", "computer science", "biology", "medicine")
+MAX_TOKENS = 1_000_000_000      # one unit; verify/costs.py counts nothing above it either
 
 
 class Fault(Exception):
@@ -92,7 +95,7 @@ def need_list(rec, key, errs, min_n=1, where=""):
 
 def need_enum(rec, key, allowed, errs, where=""):
     v = rec.get(key)
-    if v not in allowed:
+    if not isinstance(v, str) or v not in allowed:      # a list or an object here is refused, not looked up
         errs.append(f"{where}{key}: must be one of {sorted(allowed)}")
     return v
 
@@ -146,7 +149,11 @@ def t_ask_generate(rec, unit, errs, root):
             continue
         need_str(c, "question", errs, 30, w)
         alts = need_list(c, "alternatives", errs, 2, w)
-        need_str(c, "domain", errs, 3, w)
+        dom = need_str(c, "domain", errs, 3, w)
+        if dom and not dom.strip().lower().startswith(FIELDS):
+            errs.append(w + "domain: must start with Mathematics, Physics, Computer science, Biology or Medicine, "
+                            "then the subfield (AI goes under Computer science). A question in any other field is "
+                            "out of scope (LEDGER.md, DOMAIN SCOPE)")
         need_str(c, "motivation", errs, 30, w)
         need_list(c, "presuppositions", errs, 1, w)
         if check_depth(c.get("depth"), errs, w + "depth") == "Fail":
@@ -197,6 +204,18 @@ def t_ask_research(rec, unit, errs, root):
     rec_v = need_enum(rec, "recommended", {"Proceed", "Reject"}, errs)
     if depth == "Fail" and rec_v == "Proceed":
         errs.append("recommended: a depth Fail cannot proceed")
+    # LEDGER.md, "Recommended solving method": a recommendation for whoever takes the question up, never a gate.
+    sm = rec.get("solving_method")
+    if rec_v == "Proceed" or sm is not None:
+        if not isinstance(sm, dict):
+            errs.append("solving_method: a record that recommends Proceed needs an object with method, needs, "
+                        "first_result, ai_progress and ai_progress_note (ask/units/ask-research.md)")
+        else:
+            need_str(sm, "method", errs, 40, "solving_method.")
+            need_str(sm, "needs", errs, 3, "solving_method.")          # "a proof" is a full answer
+            need_str(sm, "first_result", errs, 40, "solving_method.")
+            need_enum(sm, "ai_progress", {"yes", "partly", "no"}, errs, "solving_method.")
+            need_str(sm, "ai_progress_note", errs, 3, "solving_method.")   # "none" is one, where ai_progress is no
 
 
 def t_ask_adversary(rec, unit, errs, root):
@@ -437,6 +456,16 @@ def check_file(path, root=ROOT, online=False):
         v = need_str(rec, k, errs, 3)
         if v and (re.search(r"[<>]", v) or v.strip().lower() in PLACEHOLDERS):
             errs.append(f"{k}: replace the template's placeholder with {what}")
+    # The tokens the unit used: the contributor's own report, like the model name (verify/costs.py reads it).
+    tok, person = rec.get("tokens"), str(rec.get("model", "")).strip().lower() == "human"
+    if isinstance(tok, bool) or not isinstance(tok, int) or tok < 0 or (tok == 0 and not person):
+        errs.append("tokens: the total tokens this unit used, as a whole number: your tool's own count if it gives "
+                    "one, otherwise your best estimate. 0 only where a person did the unit without a model")
+    elif tok > MAX_TOKENS:
+        errs.append(f"tokens: {MAX_TOKENS:,} is the most one unit can state; write the tokens this one unit used")
+    if rec.get("tokens_basis") not in ("counted", "estimated"):
+        errs.append('tokens_basis: "counted" if tokens is your tool\'s own count, "estimated" if you worked it out '
+                    "another way")
     if rec.get("fresh_context") is not True:
         errs.append("fresh_context: must be true; start the unit in a new session that has not seen other records "
                     "for this question except those the unit lists as inputs")

@@ -10,7 +10,11 @@ not mirrored in the other has never taken effect, so this compares them:
   - the "Where candidates come from" section must equal the runner's GENERATION
     constant byte for byte, and SOURCE_METHODS must list its methods in order;
   - the Depth requirement section, as the runner embeds it on one line, must
-    appear unchanged in the generator, researcher and adversary prompts.
+    appear unchanged in the generator, researcher and adversary prompts;
+  - the run size in Parameters (BATCH SIZE: how many headline drafts, how many
+    developed) must equal the runner's RUN_DRAFTS and RUN_DEVELOPED;
+  - the entry schema's "Recommended solving method" label must be in the runner
+    as LEDGER.md spells it, so the entries the runner writes carry the field.
 Exits non-zero on any mismatch.
 """
 import glob, json, os, re, sys
@@ -71,6 +75,26 @@ if len(copies) == 3 and good == 3:
     print("ok: Depth requirement embedded verbatim in all 3 prompts")
 else:
     print(f"FAIL: {good} of {len(copies)} embedded Depth copies match LEDGER.md (expected 3 of 3)"); ok = False
+
+size = re.search(r"\*\*BATCH SIZE\*\*[^\n]*?: (\d+) developed candidates, chosen by the ranker from (\d+) headline drafts", ledger)
+drafts = re.search(r"^const RUN_DRAFTS = (\d+)$", runner, re.M)
+developed = re.search(r"^const RUN_DEVELOPED = (\d+)$", runner, re.M)
+if not size:
+    print("FAIL: LEDGER.md's BATCH SIZE does not read 'N developed candidates, chosen by the ranker from M headline drafts'"); ok = False
+elif not drafts or not developed:
+    print("FAIL: runner has no RUN_DRAFTS or RUN_DEVELOPED constant"); ok = False
+elif (size.group(2), size.group(1)) != (drafts.group(1), developed.group(1)):
+    print(f"FAIL: LEDGER.md says {size.group(2)} drafts and {size.group(1)} developed; the runner says {drafts.group(1)} and {developed.group(1)}"); ok = False
+else:
+    print(f"ok: run size matches LEDGER.md ({drafts.group(1)} headline drafts, {developed.group(1)} developed)")
+
+label = re.search(r"^(Recommended solving method \([^)]*\):)", ledger, re.M)
+if not label:
+    print("FAIL: LEDGER.md's entry schema has no 'Recommended solving method (...):' line"); ok = False
+elif label.group(1) not in runner:
+    print(f"FAIL: the runner does not carry the schema label '{label.group(1)}'"); ok = False
+else:
+    print(f"ok: the runner carries the schema label '{label.group(1)}' ({runner.count(label.group(1))} prompts)")
 
 print(f"runner checked: {os.path.relpath(runner_path, REPO)}")
 sys.exit(0 if ok else 1)

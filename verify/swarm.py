@@ -8,6 +8,7 @@
     python3 verify/swarm.py beat <issue>                  renew your lease (every 30 minutes)
     python3 verify/swarm.py release <issue> <reason> [note]
     python3 verify/swarm.py template <unit id>            write a skeleton record for that unit
+    python3 verify/swarm.py cost <unit type> [model id]   what a unit of that type typically costs in tokens
     python3 verify/swarm.py submit <unit id>              check, branch, commit, push and open the PR
 
 Set UPSTREAM if you work against a different upstream than the default below.
@@ -17,6 +18,9 @@ import json
 import os
 import subprocess
 import sys
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import costs  # noqa: E402
 
 UPSTREAM = os.environ.get("UPSTREAM", "spartacus242/frontier-knowledge")
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -48,6 +52,21 @@ def unit(uid):
         return json.load(f)
 
 
+def cost_line(unit_type, model=None):
+    """(True, the typical-cost line) or (False, why there is none). A clone with a half-written submission file in it
+    must still be able to ask for its next unit, so nothing here is allowed to stop `next` or `template`."""
+    try:
+        return True, costs.quote(unit_type, model)
+    except json.JSONDecodeError as e:
+        why = f"a submission file in your clone is not valid JSON ({e})"
+    except ValueError as e:                       # not a unit type: costs.quote names the types
+        return False, str(e)
+    except (OSError, AttributeError, TypeError) as e:
+        why = f"a submission file in your clone could not be read ({e})"
+    return False, (f"{unit_type}: the typical cost is not available, because {why}. Tell your owner the figure is not "
+                   "known, agree a cap before you start, and report what the unit used.")
+
+
 def next_unit(kind=None, want_area=None, want_unit=None):
     handle = me()
     out = json.loads(gh("issue", "list", "--repo", UPSTREAM, "--label", "open", "--state", "open", "--limit", "500",
@@ -76,7 +95,9 @@ def next_unit(kind=None, want_area=None, want_unit=None):
         subs_dir = lambda d: os.path.join(ROOT, area(d), "submissions", d, handle + ".json")
         if any(os.path.exists(subs_dir(d)) for d in u.get("distinct_from_units", []) + [uid]):
             continue
-        print(json.dumps({"issue": i["number"], "unit": u}, indent=2, ensure_ascii=False))
+        # typical_cost is the figure to tell your owner before you claim the unit (JOIN.txt, step 3).
+        print(json.dumps({"issue": i["number"], "unit": u, "typical_cost": cost_line(u["type"])[1]},
+                         indent=2, ensure_ascii=False))
         return
     if want_unit:
         print(f"No open unit matching {want_unit} for you right now: it may be claimed, finished, or one you may not "
@@ -91,6 +112,8 @@ def template(uid):
            "statement_sha256": hashlib.sha256(u["statement"].encode("utf-8")).hexdigest(),
            "model": "<model id you ran, e.g. claude-opus-5-5; the checker refuses this placeholder>",
            "agent": "<agent and version, e.g. claude-code 3.2>", "fresh_context": True,
+           "tokens": "<total tokens this unit used, as a whole number with no quotes; the checker refuses this placeholder>",
+           "tokens_basis": "<counted, if that number is your tool's own count; estimated, if you worked it out>",
            "started": "<ISO time>", "finished": "<ISO time>"}
     path = os.path.join(ROOT, area(uid), "submissions", uid, rec["handle"] + ".json")
     if os.path.exists(path):
@@ -100,6 +123,7 @@ def template(uid):
         json.dump(rec, f, indent=2)
         f.write("\n")
     print(f"Wrote {os.path.relpath(path, ROOT)}. Add the fields {area(uid)}/units/{u['type']}.md lists for this unit type.")
+    print("Typical cost, " + cost_line(u["type"])[1])
 
 
 def submit(uid):
@@ -134,5 +158,10 @@ if __name__ == "__main__":
         template(a[1])
     elif a[0] == "submit" and len(a) == 2:
         submit(a[1])
+    elif a[0] == "cost" and len(a) in (2, 3):
+        ok, text = cost_line(a[1], a[2] if len(a) == 3 else None)
+        if not ok:
+            sys.exit(text)
+        print(text)
     else:
         sys.exit(__doc__)

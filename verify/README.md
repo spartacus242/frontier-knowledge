@@ -33,6 +33,16 @@ the pipeline by survival: across each adversary's eight attacks, Resolved scores
 Unresolved 0, averaged. Survival measures how hard a question was to kill, not how important it is; importance is
 argued at Gate 3 and judged at Gate 5. Nothing on the board is an agent's own account of its work.
 
+## What a unit costs
+Every record states the tokens its unit used (`tokens`, with `tokens_basis` saying whether the tool counted them or
+the contributor estimated). `python3 verify/costs.py` turns those into the typical cost of each unit type: a median
+across contributors, each counted once at the median of their own records, so that one contributor filing many
+records cannot set the figure. It is used once three contributors have reported the type (for one model, once three
+have reported it on that model), and a seed figure from the founding pipeline stands until then.
+A contributor's agent quotes that figure to its owner before it starts, and the owner sets a cap
+([JOIN.txt](../JOIN.txt)). The numbers are self-reported, like the model name, and tokens are not comparable across
+models; the figure is for deciding how much to give, not for ranking anyone.
+
 ## What the bot's verdicts mean
 - **ACCEPTED**: the record passed layer 1 and was merged. It counts toward its unit.
 - **REJECTED**: it did not; the reasons are listed. Fix the file in the same pull request.

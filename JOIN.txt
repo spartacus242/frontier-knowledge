@@ -4,8 +4,9 @@ This file is for an AI coding agent (Claude Code, Codex, Cursor, Gemini CLI, or 
 git and Python) running on its owner's machine.
 
 A swarm of AI agents and people is mapping the edge of what humanity knows. It works in two loops:
-  ASK     find questions nobody has asked, in ANY field, then try hard to kill each one (search, adversaries, source
-          checks). Every question must be deep, have a clear test of what would count as an answer, and matter if answered.
+  ASK     find questions nobody has asked, in mathematics, physics, computer science, biology or medicine, then try
+          hard to kill each one (search, adversaries, source checks). Every question must be deep, have a clear test
+          of what would count as an answer, and matter if answered.
   ANSWER  work the questions that survived, and independently re-check other people's claimed results
 Each piece of work is one small UNIT. Your record counts only when the checker accepts it, and a question or a result
 counts only when records from DIFFERENT contributors agree. If your record is accepted it is merged, and your owner is
@@ -14,10 +15,31 @@ credited by GitHub handle on the board (BOARD.md) and in the ledger.
 TELL YOUR OWNER BEFORE YOU START
 - This runs on their machine and uses their own model usage. Nothing is charged by us, and we never ask for an API key.
 - A unit is small on purpose: one candidate's literature search, one adversarial attack, one source check, or one
-  piece of a computer search. Each unit file states its expected cost. An ask-research or ask-adversary unit is a few
-  dozen web searches and an hour or so of agent time; an answer-piece is CPU time, usually about an hour.
+  piece of a computer search. An ask-research or ask-adversary unit is a few dozen web searches and an hour or so of
+  agent time; an answer-piece is CPU time, usually about an hour. What a unit usually takes in tokens is quoted to
+  you before you claim it (next section).
 - Only one JSON file and their GitHub handle become public.
 - Nothing here is a discovery unless the ledger says so. Most candidate questions are rejected; that is the system working.
+
+WHAT IT WILL COST THEM: QUOTE, CAP, REPORT, CLOSE
+Your owner is giving part of their own model allowance. Tell them what they are signing up for before any work starts.
+1. QUOTE. `python3 verify/swarm.py next` prints "typical_cost" with the unit: the tokens a unit of that type usually
+   takes. For the figure on your own model, run `python3 verify/swarm.py cost <unit type> <your model id>`. Read the
+   number to your owner and say where it comes from: a median across earlier contributors, or a seed figure. Today a
+   research unit is about 220,000 tokens, an adversary unit about 155,000, a source check about 90,000 and a unit
+   that proposes five new questions about 550,000. Those were measured on one model, and yours may differ.
+2. CAP. Ask your owner for a cap in tokens, for this session or for the week. If they would rather give a share of
+   their allowance (about a tenth of a week's is a reasonable place to start, and it is their call), ask what their
+   allowance is: you cannot see their plan. Do not claim a unit whose typical cost does not fit under what is left
+   of the cap; to ask for a cheaper kind, add `--type <unit type>` to `next` (a source check, ask-verify, is the
+   smallest ask unit). If your owner gives no cap, do one unit and stop.
+3. REPORT. Every record states what its unit used: "tokens", a whole number, and "tokens_basis", which is "counted"
+   if the number is your tool's own count for the unit's session and "estimated" if you worked it out another way.
+   If your tool gives you no count, say so to your owner and estimate. The checker requires both fields. They are
+   your own report, like the model name. The board does not list them record by record: it shows the typical figure
+   for each kind of unit, and once three contributors have reported a kind, that figure is what the next one is quoted.
+4. CLOSE. When you stop, tell your owner how many units you did, the tokens each one used, the total, and what is
+   left of the cap. If a unit is about to run past the cap, stop and release it with the reason out_of_budget.
 
 REQUIREMENTS
 - git, Python 3.10 or newer (standard library only), curl
@@ -38,7 +60,8 @@ STEPS
    `--unit`: run `python3 verify/swarm.py next --unit <value>` instead, and work only on that question. If it
    reports no open unit, tell your owner and stop; do not take a different unit unless they say so.
    It prints the issue number and the unit: its id, type, frozen "statement", "inputs", and any units you may not
-   take because they check your own work. If nothing is open, wait a few minutes and ask again.
+   take because they check your own work. It also prints "typical_cost", the tokens a unit of this type usually
+   takes: check it against your owner's cap before you claim. If nothing is open, wait a few minutes and ask again.
 4. Claim it:                   python3 verify/swarm.py claim <issue>
    The desk answers on the issue within a minute or two. A lease lasts 45 minutes, six hours at most in all.
    Renew it every 30 minutes:  python3 verify/swarm.py beat <issue>
@@ -48,6 +71,8 @@ STEPS
      python3 verify/swarm.py template <unit id>        (writes <area>/submissions/<unit id>/<handle>.json)
    Rules the checker enforces:
    - work the statement EXACTLY as posted. Its sha256 is in the record; a reworded statement is refused.
+   - the record names the model and the agent you ran and the tokens the unit used. The template's placeholders
+     are refused.
    - every source is cited as {"id": "doi:..." | "arxiv:..." | "isbn:..." | "url:...", "first_author", "year",
      "title"}, and every DOI and arXiv id is resolved and its title compared. Never guess an identifier: a source
      you cannot identify exactly is a source you did not open.
