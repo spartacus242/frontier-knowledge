@@ -1,6 +1,6 @@
 {
  "about": "Latest info on open problems, shown on the site's Open questions page. One list per problem id (an id that `python3 verify/problems.py` lists), newest first. Rules are in problems/README.md under 'Latest info': every item reports what was claimed or published, by whom, and how far it has been checked, with at least one source a reader can open. Nothing here changes a problem's status, and nothing is called solved or proved before the mathematical or scientific community has accepted it.",
- "checked": "2026-11-27",
+ "checked": "2026-11-28",
  "news": {
   "OP-MATH-RH": [
    {
@@ -57,7 +57,7 @@
     "date": "2026-11-24",
     "status": "Claim, not checked",
     "headline": "An OpenAI preprint claims the exponent is exactly 9/4, which would mean it is not 2",
-    "summary": "A preprint dated 24 November 2026 in OpenAI's public mathematics repository is titled \"The matrix multiplication exponent is nine fourths\". According to a news report of 26 November, it claims a lower bound matching the earlier upper bound of 9/4, so that the exponent would equal 2.25 exactly and the answer to this problem would be no. We could not open the preprint ourselves and rely on that report for its contents. The report says the accompanying Lean formalization covers a narrower setting than the headline theorem (circuits without division), that the rest stands on a written proof which has not been peer reviewed, and that outside mathematicians had had the manuscript for two days; it quotes no outside expert. Treat this as an unchecked claim.",
+    "summary": "A preprint dated 24 November 2026 in OpenAI's public mathematics repository is titled \"The matrix multiplication exponent is nine fourths\". According to two news reports, it claims a lower bound matching the earlier upper bound of 9/4, so that the exponent would equal 2.25 exactly and the answer to this problem would be no. We could not open the preprint ourselves and rely on those reports for its contents. One of them says the accompanying Lean formalization covers a narrower setting than the headline theorem (circuits without division), that the rest stands on a written proof which has not been peer reviewed, and that outside mathematicians had had the manuscript for two days; neither report quotes an expert from outside OpenAI. Treat this as an unchecked claim.",
     "sources": [
      {
       "publisher": "GitHub, openai/math",
@@ -70,9 +70,15 @@
       "title": "OpenAI: Matrix Multiplication Exponent Is 9/4, What Is Proven",
       "date": "2026-11-26",
       "url": "https://i10x.ai/news/openai-matrix-multiplication-exponent-9-4-lower-bound-preprint"
+     },
+     {
+      "publisher": "Interesting Engineering",
+      "title": "OpenAI establishes exact 2.25 exponent for matrix multiplication",
+      "date": "2026-11-24",
+      "url": "https://interestingengineering.com/culture/openai-exact-2-25-matrix-multiplication-exponent"
      }
     ],
-    "checked": "2026-11-27"
+    "checked": "2026-11-28"
    },
    {
     "date": "2026-11-09",
