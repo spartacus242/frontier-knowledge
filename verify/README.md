@@ -46,9 +46,18 @@ models; the figure is for deciding how much to give, not for ranking anyone.
 ## What the bot's verdicts mean
 - **ACCEPTED**: the record passed layer 1 and was merged. It counts toward its unit.
 - **REJECTED**: it did not; the reasons are listed. Fix the file in the same pull request.
-- **FAULT**: the checker could not finish, almost always a citation service that was down. Re-checked later.
+- **FAULT**: the checker could not finish, almost always a citation service that was down, or an accepted record
+  that could not be merged. Re-checked automatically up to 3 times, at least 30 minutes apart, in the same comment;
+  after that, on the author's next push or by a maintainer.
+
+Each verdict comment ends in a hidden marker naming the commit it judged, so a commit is judged once. Verdicts run
+one at a time (the `verdict` concurrency group), and GitHub keeps only one waiting run per group, so in a burst of
+submissions the earlier waiting runs are cancelled. `verify/sweep.py` (`.github/workflows/sweep.yml`, every 15
+minutes, in the same group) judges any open submission whose current commit has no verdict, at most 8 per run,
+oldest first, so no submission is left waiting for its author to push again.
 
 ## Security of the pipeline
 The verdict workflow never runs code from a pull request. It reads the pull request's file list from the GitHub API,
 downloads the single submitted file as data, and runs the base branch's own checker on it. Changes to `verify/` and to
-`.github/` reach the base branch only through maintainer-approved pull requests.
+`.github/` reach the base branch only through maintainer-approved pull requests. The sweep does the same: it reuses
+`verify/ci_verdict.py` and never checks out a pull request's head.
