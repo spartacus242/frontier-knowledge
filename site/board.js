@@ -1,11 +1,11 @@
-// Draws the leaderboard and charts on the landing page from window.SWARM_DATA (site/data.js, which
+// The homepage's behaviour, and the numbers and charts drawn from window.SWARM_DATA (site/data.js, which
 // verify/site_data.py generates from the repository's records). No libraries. If the data is missing, the
-// section stays hidden and the page's static text stands.
+// data-driven parts stay hidden or keep their static text, and everything else still works.
 (function () {
   var D = window.SWARM_DATA;
-  if (!D) return;
   var REPO = 'https://github.com/spartacus242/frontier-knowledge';
   var NS = 'http://www.w3.org/2000/svg';
+  var still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function el(tag, attrs, kids) {
     var n = document.createElement(tag), k;
@@ -25,24 +25,332 @@
   }
   function $(id) { return document.getElementById(id); }
   function plural(n, one, many) { return n + ' ' + (n === 1 ? one : many); }
+  function fmt(n) { return Math.round(n).toLocaleString('en-US'); }
+  function short(claim) { return claim.split('. ')[0].replace(/\.$/, ''); }
+  // Runs fn once when node scrolls into view (at once where IntersectionObserver is missing).
+  function onView(node, fn) {
+    if (!node) return;
+    if (!('IntersectionObserver' in window)) { fn(); return; }
+    var io = new IntersectionObserver(function (es) { if (es[0].isIntersecting) { io.disconnect(); fn(); } }, { threshold: 0.25 });
+    io.observe(node);
+  }
+  // Keyboard for a row of tabs: arrows move, Home and End jump.
+  function tabKeys(list, pick) {
+    list.addEventListener('keydown', function (e) {
+      var tabs = Array.prototype.slice.call(list.querySelectorAll('[role="tab"]')), i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      var j = e.key === 'ArrowRight' ? (i + 1) % tabs.length : e.key === 'ArrowLeft' ? (i + tabs.length - 1) % tabs.length
+        : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+      if (j < 0) return;
+      e.preventDefault(); pick(tabs[j]); tabs[j].focus();
+    });
+  }
 
-  // ---- the static stat tiles in "Where it stands" follow the ledger index ----
+  // ================= page behaviour (no data needed) =================
+
+  // ---- copy the join prompt ----
+  (function () {
+    var btn = $('copy-btn'), node = $('join-prompt');
+    if (!btn || !node) return;
+    btn.addEventListener('click', function () {
+      var text = node.textContent;
+      function done() { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 1800); }
+      function fallback() {
+        var r = document.createRange(); r.selectNodeContents(node);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        try { document.execCommand('copy'); done(); } catch (e) {}
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(done, fallback);
+      else fallback();
+    });
+  })();
+
+  // ---- the header is dark over the hero and light after it ----
+  (function () {
+    var head = $('site-header'), hero = document.querySelector('.hero');
+    if (!head || !hero || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver(function (es) { head.classList.toggle('on-night', es[0].isIntersecting); },
+      { rootMargin: '-60px 0px 0px 0px' }).observe(hero);
+  })();
+
+  // ---- sections fade in as they arrive ----
+  (function () {
+    var items = document.querySelectorAll('.reveal');
+    if (still || !('IntersectionObserver' in window)) { Array.prototype.forEach.call(items, function (n) { n.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    Array.prototype.forEach.call(items, function (n) { io.observe(n); });
+  })();
+
+  // ---- how it works: the ask / answer / verify loop ----
+  (function () {
+    var tabs = $('stage-tabs');
+    if (!tabs) return;
+    var runner = document.querySelector('#loop-svg animateMotion');
+    if (still && runner) runner.parentNode.parentNode.removeChild(runner.parentNode);
+    function pick(name) {
+      Array.prototype.forEach.call(document.querySelectorAll('#stage-tabs [data-stage], #loop-svg .node'), function (b) {
+        var on = b.getAttribute('data-stage') === name;
+        b.setAttribute('aria-selected', String(on));
+        if (b.tagName === 'BUTTON') b.tabIndex = on ? 0 : -1;
+      });
+      Array.prototype.forEach.call(document.querySelectorAll('[data-panel]'), function (p) { p.hidden = p.getAttribute('data-panel') !== name; });
+    }
+    tabs.addEventListener('click', function (e) { var b = e.target.closest('[data-stage]'); if (b) pick(b.getAttribute('data-stage')); });
+    tabKeys(tabs, function (b) { pick(b.getAttribute('data-stage')); });
+    Array.prototype.forEach.call(document.querySelectorAll('#loop-svg .node'), function (n) {
+      n.addEventListener('click', function () { pick(n.getAttribute('data-stage')); });
+    });
+  })();
+
+  // ---- the gauntlet: one gate open at a time ----
+  (function () {
+    var box = $('gates');
+    if (!box) return;
+    box.addEventListener('click', function (e) {
+      var b = e.target.closest('button');
+      if (!b) return;
+      var open = b.getAttribute('aria-expanded') !== 'true';
+      Array.prototype.forEach.call(box.querySelectorAll('button'), function (x) {
+        var on = x === b && open;
+        x.setAttribute('aria-expanded', String(on));
+        x.nextElementSibling.hidden = !on;
+      });
+    });
+    var first = box.querySelector('button');   // the first gate starts open, so the pattern is obvious
+    if (first) first.click();
+  })();
+
+  // ---- leaderboard tabs ----
+  (function () {
+    var list = $('board-tabs');
+    if (!list) return;
+    function pick(b) {
+      Array.prototype.forEach.call(list.querySelectorAll('[role="tab"]'), function (t) {
+        var on = t === b;
+        t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1;
+        var p = $(t.getAttribute('aria-controls'));
+        p.hidden = !on;
+        if (on) setTimeout(function () { Array.prototype.forEach.call(p.querySelectorAll('svg.line'), function (s) { s.classList.add('in'); }); }, 30);
+      });
+    }
+    list.addEventListener('click', function (e) { var b = e.target.closest('[role="tab"]'); if (b) pick(b); });
+    tabKeys(list, pick);
+  })();
+
+  // ---- token calculator ----
+  (function () {
+    var allow = $('allow'), share = $('share'), fit = $('fit');
+    if (!allow || !share || !fit) return;
+    var NAMES = { 'ask-verify': 'Check one source', 'ask-adversary': 'Attack one question', 'ask-research': 'Research one question',
+      'ask-generate': 'Propose five questions', 'answer-attempt': 'Attempt an answer', 'answer-reproduce': 'Reproduce a result',
+      'answer-piece': 'Search one piece', 'answer-impact': 'Say whether an answer advances a problem' };
+    // Seed figures, used only if data.js is missing; data.js carries the live ones.
+    var rows = [['ask-verify', 90000, 0], ['ask-adversary', 155000, 0], ['ask-research', 220000, 0], ['ask-generate', 550000, 0]];
+    var measured = 0;
+    if (D && D.costs && D.costs.rows) {
+      var live = D.costs.rows.filter(function (r) { return r && NAMES[r.type] && typeof r.tokens === 'number'; })
+        .map(function (r) { var m = String(r.basis || '').indexOf('median') === 0; measured += m; return [r.type, r.tokens, m ? r.handles : 0]; });
+      if (live.length) rows = live;
+    }
+    rows.sort(function (a, b) { return a[1] - b[1]; });
+    if (measured && D.costs.min_handles) {
+      $('cost-note').textContent = 'A figure marked with a number of contributors is the middle value across them, shown once ' +
+        D.costs.min_handles + ' have reported that kind of unit. The others are seed figures from the founding pipeline, measured on one model. Read them as a guide.';
+    }
+    var items = rows.map(function (r) {
+      var b = el('b'), dots = el('div', { 'class': 'dots', 'aria-hidden': 'true' });
+      fit.appendChild(el('li', {}, [el('div', { 'class': 'row1' }, [
+        el('span', {}, [NAMES[r[0]] + ' · about ' + fmt(r[1]), r[2] ? el('span', { 'class': 'badge', text: plural(r[2], 'contributor', 'contributors') }) : null]), b]), dots]));
+      return { tokens: r[1], b: b, dots: dots };
+    });
+    function update() {
+      var a = Math.max(0, Number(allow.value) || 0), pct = Number(share.value) || 0, cap = a * pct / 100;
+      $('share-out').textContent = pct + '%';
+      $('cap-out').textContent = fmt(cap);
+      items.forEach(function (it) {
+        var n = Math.floor(cap / it.tokens);
+        it.b.textContent = n === 1 ? '1 unit' : fmt(n) + ' units';
+        it.dots.textContent = '';
+        for (var i = 0; i < Math.min(n, 40); i++) it.dots.appendChild(el('i'));
+        if (n > 40) it.dots.appendChild(el('em', { text: '+' + fmt(n - 40) }));
+        if (!n) it.dots.appendChild(el('em', { text: 'raise the cap to fit one' }));
+      });
+    }
+    allow.addEventListener('input', update);
+    share.addEventListener('input', update);
+    $('presets').addEventListener('click', function (e) { var b = e.target.closest('button'); if (b) { allow.value = b.getAttribute('data-v'); update(); } });
+    update();
+  })();
+
+  // ---- tooltip for every mark that carries data-tip ----
+  var tip = el('div', { id: 'tip', role: 'status' });
+  document.body.appendChild(tip);
+  function show(e) {
+    var t = e.target.closest && e.target.closest('[data-tip]');
+    if (!t) { tip.style.display = 'none'; return; }
+    tip.textContent = t.getAttribute('data-tip');
+    tip.style.display = 'block';
+    var r = t.getBoundingClientRect(), cx = e.clientX != null && e.type !== 'focusin' ? e.clientX : r.left + r.width / 2;
+    var cy = e.clientY != null && e.type !== 'focusin' ? e.clientY : r.top;
+    tip.style.left = Math.max(8, Math.min(cx + 12, window.innerWidth - tip.offsetWidth - 8)) + 'px';
+    tip.style.top = Math.max(8, cy - tip.offsetHeight - 10) + 'px';
+  }
+  document.addEventListener('mousemove', show);
+  document.addEventListener('focusin', show);
+  document.addEventListener('focusout', function () { tip.style.display = 'none'; });
+  document.addEventListener('scroll', function () { tip.style.display = 'none'; }, { passive: true });
+
+  // Count numbers up from zero when they first come into view.
+  function countUp() {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-count]'), function (b) {
+      var to = parseInt(b.textContent.replace(/,/g, ''), 10);
+      if (still || !(to > 0)) return;
+      onView(b, function () {
+        var t0 = performance.now(), dur = 1100;
+        (function step(now) {
+          var k = Math.max(0, Math.min(1, (now - t0) / dur)), e = 1 - Math.pow(1 - k, 3);
+          b.textContent = fmt(to * e);
+          if (k < 1) requestAnimationFrame(step);
+        })(t0);
+      });
+    });
+  }
+
+  if (!D) { countUp(); return; }
+
+  // ================= numbers and charts from the records =================
+
+  // ---- live numbers: the ledger index and open units ----
   var T = D.ledger.totals;
   Array.prototype.forEach.call(document.querySelectorAll('[data-led]'), function (b) {
     var v = T[b.getAttribute('data-led')];
-    if (typeof v === 'number') b.textContent = v;
+    if (typeof v === 'number') b.textContent = fmt(v);
   });
-
-  // ---- tiles ----
   var open = D.units.total - D.units.done;
-  [[D.records.total, plural(D.records.total, 'accepted record', 'accepted records').replace(/^\d+ /, '')],
+  if ($('units-open')) $('units-open').textContent = fmt(open);
+  countUp();
+
+  // ---- the gauntlet funnel and the by-field bars ----
+  (function () {
+    var f = $('funnel');
+    if (!f) return;
+    f.setAttribute('aria-label', T.tried + ' questions tried: ' + T.Rejected + ' rejected, ' + T.Provisional + ' still standing, ' + T.Validated + ' validated');
+    onView(f, function () {
+      Array.prototype.forEach.call(f.querySelectorAll('[data-w]'), function (i) {
+        var v = T[i.getAttribute('data-w')] || 0;
+        i.style.width = (T.tried ? 100 * v / T.tried : 0) + '%';
+      });
+    });
+    if (D.ledger.by_field && D.ledger.by_field.length) {
+      hbars($('ledger-by-field'), D.ledger.by_field,
+        [{ key: 'Validated', name: 'validated', color: 'var(--s2)' }, { key: 'Provisional', name: 'still standing', color: 'var(--s1)' },
+         { key: 'Rejected', name: 'rejected', color: 'var(--neutral)' }],
+        function (r) { return r.Validated + r.Provisional + r.Rejected; });
+      $('by-field-box').hidden = false;
+    }
+  })();
+
+  // ---- results: the ladder, one row per rung, each claim a button ----
+  (function () {
+    var K = D.tracker, box = $('ladder');
+    if (!K || !box) return;
+    var IMP = { 1: 'Well-known problem', 2: 'Open in the literature', 3: 'Correction', 4: 'Extension' };
+    var WHAT = ['A witness or a program, not yet through the skeptic gate.',
+      'Three of three fresh skeptics agree, each with their own program or proof check.',
+      'Reproduced by people who did not produce it, with the literature check finished.',
+      'The problem’s posers, a named specialist or a curated database accepted it in writing.',
+      'Published after peer review, or a formal proof read by a specialist. Only now is it called solved.'];
+    var detail = $('claim-detail'), pressed = null;
+    function credits(list) {
+      if (!list.length) return el('p', { text: 'Credit: no contributor record yet. The first accepted record on this claim puts a name here.' });
+      var kids = ['Credit: '];
+      list.forEach(function (p, i) {
+        if (i) kids.push('; ');
+        kids.push(el('a', { href: 'https://github.com/' + encodeURIComponent(p.handle), text: p.name ? p.name + ' (@' + p.handle + ')' : '@' + p.handle }));
+        kids.push(' ' + p.roles.map(function (x) { return x.role + (x.n > 1 ? ' ×' + x.n : ''); }).join(', '));
+      });
+      return el('p', {}, kids);
+    }
+    function showClaim(r, btn) {
+      if (pressed) pressed.setAttribute('aria-pressed', 'false');
+      if (pressed === btn) { pressed = null; detail.hidden = true; return; }
+      pressed = btn; btn.setAttribute('aria-pressed', 'true');
+      var gone = r.rung < 0, name = gone ? 'Withdrawn' : K.rungs[r.rung].name;
+      var unit = r.kind === 'pieces' ? 'pieces settled' : 'outside reproductions';
+      var pct = r.want ? Math.round(100 * r.have / r.want) : 0;
+      detail.textContent = '';
+      detail.appendChild(el('p', {}, [
+        el('span', { 'class': 'pill ' + (r.rung >= 1 ? 'ok' : 'warn'), text: name }),
+        el('span', { 'class': 'pill line', text: IMP[r.importance] || IMP[4] }),
+        el('span', { 'class': 'pill line', text: r.field }),
+        r.frontier ? el('span', { 'class': 'pill warn', text: 'Potentially frontier-expanding' }) : null]));
+      detail.appendChild(el('h3', { text: short(r.claim) }));
+      detail.appendChild(el('p', { text: r.claim }));
+      if (r.kind !== 'none') {
+        detail.appendChild(el('div', { 'class': 'meter' }, [el('span', { 'class': 'track' }, [el('span', { 'class': 'fill', style: 'width:' + pct + '%' })]),
+          el('span', { text: r.have + ' of ' + r.want + ' ' + unit })]));
+      } else detail.appendChild(el('p', { text: 'No outside check is open on this one yet.' }));
+      detail.appendChild(el('p', { text: (r.note ? r.note + '. ' : '') + (r.novelty_confirmed ? 'Novelty confirmed outside the project.' : 'Not found published; novelty not yet confirmed outside the project.') }));
+      detail.appendChild(credits(r.credits || []));
+      detail.hidden = false;
+    }
+    box.textContent = '';
+    var withdrawn = D.results.filter(function (r) { return r.rung < 0; });
+    K.rungs.slice().reverse().forEach(function (g) {
+      var mine = D.results.filter(function (r) { return r.rung === g.rung; })
+        .sort(function (a, b) { return (a.importance - b.importance) || (b.have / (b.want || 1) - a.have / (a.want || 1)); });
+      var chips = el('div', { 'class': 'chips' });
+      mine.forEach(function (r) {
+        var b = el('button', { 'class': 'claim', type: 'button', 'aria-pressed': 'false', title: short(r.claim), text: short(r.claim) });
+        b.addEventListener('click', function () { showClaim(r, b); });
+        chips.appendChild(b);
+      });
+      if (!mine.length) chips.appendChild(el('span', { 'class': 'empty', text: g.rung >= 2 ? 'Empty. An outside contributor puts the first claim here.' : 'Empty' }));
+      box.appendChild(el('div', { 'class': 'rung' + (mine.length ? ' has' : '') }, [
+        el('div', { 'class': 'lvl', 'aria-label': plural(mine.length, 'claim', 'claims'), text: String(mine.length) }),
+        el('div', { 'class': 'nm' }, [el('b', { text: (g.rung + 1) + '. ' + g.name }), el('span', { text: WHAT[g.rung] || '' })]),
+        chips]));
+    });
+    if (withdrawn.length) {
+      var wc = el('div', { 'class': 'chips' });
+      withdrawn.forEach(function (r) {
+        var b = el('button', { 'class': 'claim', type: 'button', 'aria-pressed': 'false', style: 'text-decoration:line-through', text: short(r.claim) });
+        b.addEventListener('click', function () { showClaim(r, b); });
+        wc.appendChild(b);
+      });
+      box.appendChild(el('div', { 'class': 'rung' }, [el('div', { 'class': 'lvl', text: String(withdrawn.length) }),
+        el('div', { 'class': 'nm' }, [el('b', { text: 'Withdrawn' }), el('span', { text: 'Refuted claims stay listed, with the reason.' })]), wc]));
+    }
+    // open the most-verified claim, so the detail card is never a mystery
+    var first = box.querySelector('.claim');
+    if (first) first.click();
+
+    // the split search, as a grid of one-hour pieces
+    D.results.forEach(function (r) {
+      if (r.kind !== 'pieces' || !r.pieces || !r.pieces.length || $('pieces').childNodes.length) return;
+      $('pieces-panel').hidden = false;
+      $('pieces-title').textContent = 'One proof, ' + r.pieces.length + ' pieces: ' + short(r.claim);
+      $('pieces-note').textContent = 'A lead, not a result. Each square is about an hour of CPU, run twice by different people. ' +
+        r.have + ' of ' + r.want + ' settled. Hover or tab through to see each one.';
+      r.pieces.forEach(function (p) {
+        var k = p.found ? 'x' : String(Math.min(p.records, 2));
+        var say = p.found ? 'a witness was found' : p.records >= p.want ? 'settled' : plural(p.records, 'record', 'records') + ' of ' + p.want;
+        $('pieces').appendChild(el('span', { 'data-k': k, 'data-tip': p.id + ': ' + say, tabindex: '0', 'aria-label': p.id + ': ' + say }));
+      });
+    });
+  })();
+
+  // ---- leaderboard tiles ----
+  [[D.records.total, D.records.total === 1 ? 'accepted record' : 'accepted records'],
    [D.contributors.length, D.contributors.length === 1 ? 'contributor' : 'contributors'],
    [open, 'units open'],
    [D.units.done, 'units finished']].forEach(function (t) {
-    $('tiles').appendChild(el('div', { 'class': 'stat' }, [el('b', { text: String(t[0]) }), el('span', { text: t[1] })]));
+    $('tiles').appendChild(el('div', { 'class': 'tile' }, [el('b', { text: fmt(t[0]) }), el('span', { text: t[1] })]));
   });
 
-  // ---- leaderboard ----
+  // ---- contributors ----
   (function () {
     var box = $('leaderboard');
     if (!D.contributors.length) {
@@ -73,14 +381,10 @@
     }
   })();
 
-  // ---- model tracker: records per model, as each contributor named it in their record ----
+  // ---- models, as each contributor named them ----
   (function () {
     var box = $('models'), rows = D.models || [];
-    if (!box) return;
-    if (!rows.length) {
-      box.appendChild(el('p', { 'class': 'note', text: 'No records yet.' }));
-      return;
-    }
+    if (!rows.length) { box.appendChild(el('p', { 'class': 'note', text: 'No records yet.' })); return; }
     var head = el('tr', {}, [el('th', { text: '#' }), el('th', { text: 'Model, as reported' }),
       el('th', { 'class': 'n', text: 'Records' }), el('th', { 'class': 'n', text: 'Conclusive' }),
       el('th', { 'class': 'n', text: 'Asking' }), el('th', { 'class': 'n', text: 'Answering' }),
@@ -99,85 +403,6 @@
     }
   })();
 
-  // ---- results tracker: one counter per rung of the verification ladder, then every claim ranked ----
-  (function () {
-    var K = D.tracker, sec = $('results');
-    if (!K || !sec) return;
-    var IMP = { 1: 'Well-known problem', 2: 'Open in the literature', 3: 'Correction', 4: 'Extension' };
-    var SHORT = ['Leads, not confirmed', 'Confirmed inside the project', 'Reproduced outside', 'Reviewed by experts', 'Accepted'];
-    K.rungs.slice().reverse().forEach(function (g) {
-      $('rung-tiles').appendChild(el('div', { 'class': 'stat' + (g.n ? '' : ' zero') }, [el('b', { text: String(g.n) }), el('span', { text: SHORT[g.rung] })]));
-    });
-    var rows = D.results.slice().sort(function (a, b) {
-      return (b.rung - a.rung) || (a.importance - b.importance) || (b.have / (b.want || 1) - a.have / (a.want || 1));
-    });
-    function creditLine(list) {
-      if (!list.length) return el('p', { 'class': 'd cr', text: 'Credit: no contributor record yet. The first accepted record on this claim puts a name here.' });
-      var kids = ['Credit: '];
-      list.forEach(function (p, i) {
-        if (i) kids.push('; ');
-        kids.push(el('a', { href: 'https://github.com/' + encodeURIComponent(p.handle), text: p.name ? p.name + ' (@' + p.handle + ')' : '@' + p.handle }));
-        kids.push(' ' + p.roles.map(function (x) { return x.role + (x.n > 1 ? ' \u00d7' + x.n : ''); }).join(', '));
-      });
-      return el('p', { 'class': 'd cr' }, kids);
-    }
-    rows.forEach(function (r, i) {
-      var gone = r.rung < 0, name = gone ? 'Withdrawn' : K.rungs[r.rung].name;
-      var steps = el('span', { 'class': 'rungs', role: 'img', 'aria-label': gone ? 'Withdrawn' : 'Rung ' + r.rung + ' of 4: ' + name },
-        [1, 2, 3, 4].map(function (k) { return el('i', k <= r.rung ? { 'class': 'on' } : {}); }));
-      var outside = r.kind === 'reproductions' ? r.have + ' of ' + r.want + ' outside reproductions'
-        : r.kind === 'pieces' ? r.have + ' of ' + r.want + ' pieces settled' : 'no outside check open yet';
-      var novelty = r.novelty_confirmed ? 'novelty confirmed outside' : 'not found published; novelty not confirmed outside';
-      sec.querySelector('#tracker').appendChild(el('div', { 'class': 'trk' + (gone ? ' gone' : '') }, [
-        el('span', { 'class': 'rank', text: String(i + 1) }),
-        el('div', { 'class': 'body' }, [
-          el('p', { 'class': 't', text: r.claim.split('. ')[0].replace(/\.$/, '') }),
-          el('p', { 'class': 'm' }, [steps, el('strong', { text: name }),
-            el('span', { 'class': 'badge', text: IMP[r.importance] || IMP[4] }),
-            r.frontier ? el('span', { 'class': 'badge frontier', text: 'potentially frontier-expanding' }) : null]),
-          el('p', { 'class': 'd', text: (r.note ? r.note + '. ' : '') + outside + '; ' + novelty + '.' }),
-          creditLine(r.credits || [])
-        ])
-      ]));
-    });
-    sec.hidden = false;
-  })();
-
-  // ---- outside checks ----
-  (function () {
-    var box = $('checks'), shown = 0;
-    D.results.forEach(function (r) {
-      if (r.kind === 'none') return;
-      shown++;
-      var label = r.refuted ? 'Refuted by an outside record'
-        : r.inside_confirmed ? 'Confirmed inside the project' : 'Lead, not confirmed';
-      var unit = r.kind === 'pieces' ? 'pieces settled' : 'outside reproductions';
-      var pct = r.want ? Math.round(100 * r.have / r.want) : 0;
-      box.appendChild(el('div', { 'class': 'check' }, [
-        el('p', { 'class': 't' }, [r.claim.split('. ')[0].replace(/\.$/, ''),
-          el('span', { 'class': 'badge', text: label }),
-          r.frontier ? el('span', { 'class': 'badge frontier', text: 'potentially frontier-expanding' }) : null]),
-        el('div', { 'class': 'meter', 'data-tip': r.have + ' of ' + r.want + ' ' + unit }, [
-          el('span', { 'class': 'track' }, [el('span', { 'class': 'fill', style: 'width:' + pct + '%' })]),
-          el('span', { text: r.have + ' of ' + r.want + ' ' + unit })])
-      ]));
-      if (r.kind === 'pieces' && r.pieces.length) drawPieces(r);
-    });
-    if (!shown) box.appendChild(el('p', { 'class': 'note', text: 'No result has an outside check open yet.' }));
-  })();
-
-  function drawPieces(r) {
-    $('pieces-panel').hidden = false;
-    $('pieces-title').textContent = r.claim.split('. ')[0].replace(/\.$/, '') + ', in ' + r.pieces.length + ' pieces';
-    $('pieces-note').textContent = 'A lead, not a result. Each square is about an hour of CPU, run twice by different people. ' +
-      r.have + ' of ' + r.want + ' settled.';
-    r.pieces.forEach(function (p) {
-      var k = p.found ? 'x' : String(Math.min(p.records, 2));
-      var say = p.found ? 'a witness was found' : p.records >= p.want ? 'settled' : plural(p.records, 'record', 'records') + ' of ' + p.want;
-      $('pieces').appendChild(el('span', { 'data-k': k, 'data-tip': p.id + ': ' + say, tabindex: '0', 'aria-label': p.id + ': ' + say }));
-    });
-  }
-
   // ---- horizontal stacked bars ----
   function hbars(box, rows, series, total) {
     var max = Math.max.apply(null, rows.map(total).concat([1]));
@@ -195,23 +420,20 @@
   hbars($('open-by-field'), D.open_by_field,
     [{ key: 'ask', name: 'asking', color: 'var(--s1)' }, { key: 'answer', name: 'answering', color: 'var(--s2)' }],
     function (r) { return r.ask + r.answer; });
-  hbars($('ledger-by-field'), D.ledger.by_field,
-    [{ key: 'Validated', name: 'validated', color: 'var(--s2)' }, { key: 'Provisional', name: 'provisional', color: 'var(--s1)' },
-     { key: 'Rejected', name: 'rejected', color: 'var(--neutral)' }],
-    function (r) { return r.Validated + r.Provisional + r.Rejected; });
 
-  // ---- questions over time: two running totals on one axis ----
+  // ---- questions over time: two running totals, with the area under them ----
   (function () {
     var days = D.ledger.by_day;
-    if (days.length < 2) { $('timeline').parentNode.hidden = true; return; }
-    var W = 720, H = 240, L = 40, R = 96, Tp = 12, B = 28, tried = 0, surv = 0;
+    if (days.length < 2) { $('tb-time').hidden = true; return; }
+    var W = Math.round(Math.max(340, Math.min(980, (window.innerWidth || 980) - 90))), H = W < 600 ? 240 : 300, L = 40, R = W < 600 ? 104 : 120, Tp = 12, B = 28, tried = 0, surv = 0;
     var pts = days.map(function (d) { tried += d.tried; surv += d.surviving; return { t: Date.parse(d.date + 'T00:00:00Z'), date: d.date, tried: tried, surv: surv }; });
     var t0 = pts[0].t, t1 = pts[pts.length - 1].t, ymax = Math.ceil(tried / 50) * 50 || 50;
     function x(t) { return L + (W - L - R) * (t - t0) / (t1 - t0 || 1); }
     function y(v) { return H - B - (H - B - Tp) * v / ymax; }
     var s = svg('svg', { 'class': 'line', viewBox: '0 0 ' + W + ' ' + H, role: 'img',
       'aria-label': 'Running totals: ' + tried + ' questions tried, ' + surv + ' still standing, from ' + pts[0].date + ' to ' + pts[pts.length - 1].date });
-    for (var g = 0; g <= ymax; g += ymax / 5 >= 50 ? Math.round(ymax / 5 / 50) * 50 : 50) {
+    var step = ymax / 5 >= 50 ? Math.round(ymax / 5 / 50) * 50 : 50;
+    for (var g = 0; g <= ymax; g += step) {
       s.appendChild(svg('line', { 'class': 'grid', x1: L, x2: W - R, y1: y(g), y2: y(g) }));
       s.appendChild(svg('text', { x: L - 8, y: y(g) + 4, 'text-anchor': 'end' }, String(g)));
     }
@@ -219,10 +441,11 @@
     s.appendChild(svg('text', { x: W - R, y: H - 6, 'text-anchor': 'end' }, pts[pts.length - 1].date));
     [['tried', 'var(--neutral)', 'tried'], ['surv', 'var(--s1)', 'still standing']].forEach(function (c) {
       var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(p.t).toFixed(1) + ' ' + y(p[c[0]]).toFixed(1); }).join(' ');
-      s.appendChild(svg('path', { d: d, fill: 'none', stroke: c[1], 'stroke-width': 2, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
+      s.appendChild(svg('path', { d: d + ' L' + x(t1).toFixed(1) + ' ' + y(0) + ' L' + x(t0).toFixed(1) + ' ' + y(0) + 'Z', fill: c[1], opacity: 0.12 }));
+      s.appendChild(svg('path', { 'class': 'draw', d: d, fill: 'none', stroke: c[1], 'stroke-width': 2.5, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }));
       var last = pts[pts.length - 1];
-      s.appendChild(svg('circle', { cx: x(last.t), cy: y(last[c[0]]), r: 4, fill: c[1] }));
-      s.appendChild(svg('text', { x: x(last.t) + 9, y: y(last[c[0]]) + 4 }, last[c[0]] + ' ' + c[2]));
+      s.appendChild(svg('circle', { cx: x(last.t), cy: y(last[c[0]]), r: 4.5, fill: c[1] }));
+      s.appendChild(svg('text', { x: x(last.t) + 10, y: y(last[c[0]]) + 4 }, last[c[0]] + ' ' + c[2]));
     });
     pts.forEach(function (p, i) {
       var left = i ? (x(pts[i - 1].t) + x(p.t)) / 2 : L, right = i < pts.length - 1 ? (x(p.t) + x(pts[i + 1].t)) / 2 : W - R;
@@ -230,79 +453,9 @@
         'data-tip': p.date + ': ' + p.tried + ' tried, ' + p.surv + ' still standing' }));
     });
     $('timeline').appendChild(s);
-  })();
-
-  // ---- open problems by field (shown once answer/open-problems.json exists) ----
-  (function () {
-    var list = D.open_problems || [];
-    if (!list.length) return;
-    $('problems-panel').hidden = false;
-    var by = {};
-    list.forEach(function (p) { (by[p.field || 'Other fields'] = by[p.field || 'Other fields'] || []).push(p); });
-    Object.keys(by).sort().forEach(function (f) {
-      $('problems').appendChild(el('p', { 'class': 't', style: 'font-weight:600;margin:10px 0 4px', text: f }));
-      $('problems').appendChild(el('ul', { 'class': 'plain' }, by[f].map(function (p) {
-        return el('li', {}, [String(p.title || p.statement || ''), p.frontier ? el('span', { 'class': 'badge frontier', text: 'potentially frontier-expanding' }) : null]);
-      })));
-    });
-  })();
-
-  // ---- typical tokens per unit: the static seed table under "What you give, in tokens" follows the records ----
-  (function () {
-    var C = D.costs, body = document.querySelector('#cost-table tbody');
-    if (!C || !C.rows || !body) return;
-    var NAMES = { 'ask-research': 'Research one question', 'ask-adversary': 'Attack one question',
-      'ask-verify': 'Check one source', 'ask-generate': 'Propose five questions', 'answer-attempt': 'Attempt an answer',
-      'answer-reproduce': 'Reproduce a result', 'answer-piece': 'Search one piece',
-      'answer-impact': 'Say whether an answer advances a problem' };
-    var rows = Object.keys(NAMES).map(function (t) { return C.rows.filter(function (r) { return r && r.type === t; })[0]; })
-      .filter(function (r) { return r && typeof r.tokens === 'number'; });
-    if (!rows.length) return;
-    // The new rows are built first and swapped in only when all of them are made, and a failure here leaves the
-    // static table in place: this block runs before the board is shown, so it must never stop the script.
-    try {
-      var measured = 0, made = [];
-      rows.forEach(function (r) {
-        var live = String(r.basis || '').indexOf('median') === 0;
-        measured += live;
-        made.push(el('tr', {}, [
-          el('td', {}, [NAMES[r.type], el('span', { 'class': 'badge', text: live ? plural(r.handles, 'contributor', 'contributors') : 'seed figure' })]),
-          el('td', { 'class': 'n', text: 'about ' + r.tokens.toLocaleString('en-US') })]));
-        (r.by_model || []).forEach(function (m) {
-          if (!m || typeof m.tokens !== 'number') return;
-          made.push(el('tr', {}, [
-            el('td', { style: 'padding-left:18px;color:var(--muted)' }, ['on ' + m.model + ', ' + plural(m.handles, 'contributor', 'contributors')]),
-            el('td', { 'class': 'n', style: 'color:var(--muted)', text: 'about ' + m.tokens.toLocaleString('en-US') })]));
-        });
-      });
-      body.textContent = '';
-      made.forEach(function (tr) { body.appendChild(tr); });
-      if (measured) {
-        $('cost-note').textContent = 'A figure marked with a number of contributors is the middle value across them, each contributor ' +
-          'counted once, shown once ' + C.min_handles + ' contributors have reported that kind of unit. A seed figure comes from the ' +
-          'founding pipeline, measured on one model.';
-      }
-    } catch (e) { /* keep the static seed table */ }
+    if (still) s.classList.add('in');   // otherwise the lines draw in when their tab is first shown
   })();
 
   $('asof').textContent = 'Data as of ' + D.generated + '.';
   $('board').hidden = false;
-
-  // ---- one tooltip for every mark that carries data-tip ----
-  var tip = el('div', { id: 'tip', role: 'status' });
-  document.body.appendChild(tip);
-  function show(e) {
-    var t = e.target.closest && e.target.closest('[data-tip]');
-    if (!t) { tip.style.display = 'none'; return; }
-    tip.textContent = t.getAttribute('data-tip');
-    tip.style.display = 'block';
-    var r = t.getBoundingClientRect(), cx = e.clientX != null && e.type !== 'focusin' ? e.clientX : r.left + r.width / 2;
-    var cy = e.clientY != null && e.type !== 'focusin' ? e.clientY : r.top;
-    tip.style.left = Math.max(8, Math.min(cx + 12, window.innerWidth - tip.offsetWidth - 8)) + 'px';
-    tip.style.top = Math.max(8, cy - tip.offsetHeight - 10) + 'px';
-  }
-  document.addEventListener('mousemove', show);
-  document.addEventListener('focusin', show);
-  document.addEventListener('focusout', function () { tip.style.display = 'none'; });
-  document.addEventListener('scroll', function () { tip.style.display = 'none'; }, { passive: true });
 })();
