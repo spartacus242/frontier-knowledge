@@ -6,94 +6,34 @@
 <title>Sponsors: Frontier Knowledge</title>
 <meta name="description" content="The people and organisations who pay for the compute behind Frontier Knowledge. Sponsors back the work, never the verdict.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%2314213d'/%3E%3Cpath d='M6 22 L13 13 L18 18 L26 8' stroke='%23f4a340' stroke-width='3' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css?v=4">
 <style>
-  /* Layout: one reading column, 980px at most. The ranked wall is the centre of the page; everything else is short
-     prose around it. Colours and type are the landing page's (site/index.html), so the two pages read as one site. */
-  :root {
-    --bg: #faf7f1;
-    --surface: #ffffff;
-    --ink: #14213d;
-    --muted: #55607a;
-    --line: #e2dccf;
-    --accent: #b4540a;
-    --accent-ink: #ffffff;
-    --ok: #1d6b45;
-    --ok-bg: #e4f2ea;
-    --warn: #8a5a00;
-    --warn-bg: #fbefd2;
-    --serif: ui-serif, Georgia, "Iowan Old Style", "Times New Roman", serif;
-    --sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #0e1524; --surface: #162033; --ink: #eef0f5; --muted: #a3adc2; --line: #2a3650;
-      --accent: #f4a340; --accent-ink: #14213d; --ok: #7fd3a6; --ok-bg: #173527; --warn: #f2c66a; --warn-bg: #3a2c0e;
-      color-scheme: dark;
-    }
-  }
-  :root[data-theme="dark"] {
-    --bg: #0e1524; --surface: #162033; --ink: #eef0f5; --muted: #a3adc2; --line: #2a3650;
-    --accent: #f4a340; --accent-ink: #14213d; --ok: #7fd3a6; --ok-bg: #173527; --warn: #f2c66a; --warn-bg: #3a2c0e;
-    color-scheme: dark;
-  }
-  * { box-sizing: border-box; }
-  [hidden] { display: none !important; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font: 17px/1.6 var(--sans);
-    -webkit-text-size-adjust: 100%;
-  }
-  .wrap {
-    max-width: 980px; margin: 0 auto;
-    padding-left: max(20px, env(safe-area-inset-left, 0px));
-    padding-right: max(20px, env(safe-area-inset-right, 0px));
-  }
-  a { color: var(--accent); text-underline-offset: 3px; }
-  a:hover { text-decoration-thickness: 2px; }
-  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
+  .s-hero { padding: 64px 0 56px; }
+  .s-hero .wrap { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 40px; align-items: center; }
+  .s-hero h1 { font-size: clamp(36px, 5.6vw, 60px); line-height: 1.05; margin: 0 0 18px; }
+  .s-hero h1 em { color: var(--accent); }
+  .lede { font-size: clamp(18px, 2.2vw, 20px); color: var(--muted); max-width: 32em; margin: 0 0 26px; }
+  .claim-box .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .pay { display: inline-block; border: 0; border-radius: 10px; padding: 13px 20px; background: var(--accent); color: var(--accent-ink); font: 600 16px/1.2 ui-sans-serif, system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+  .pay[aria-disabled="true"] { background: transparent; color: var(--muted); border: 1.5px dashed var(--line); cursor: default; }
+  .claim-box .fine { margin: 14px 0 0; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 0; padding: 0; overflow: hidden; }
+  .split > div { padding: 22px; }
+  .split > div + div { border-left: 1px solid var(--line); background: var(--bg-2); }
+  .split h2 { font: 700 12.5px/1.2 ui-sans-serif, system-ui, sans-serif; letter-spacing: .14em; text-transform: uppercase; margin: 0 0 14px; }
+  .split .yes h2 { color: var(--ok); } .split .no h2 { color: var(--bad); }
+  .split ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+  .split li { padding-left: 28px; position: relative; font-size: 15px; line-height: 1.4; }
+  .split li b { display: block; font-size: 16px; }
+  .split li span { color: var(--muted); }
+  .split li::before { position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; }
+  .split .yes li::before { content: "\2713"; color: var(--ok); background: var(--ok-bg); }
+  .split .no li::before { content: "\00d7"; color: var(--bad); background: color-mix(in srgb, var(--bad) 14%, transparent); font-size: 16px; }
 
-
-  header.top { border-bottom: 1px solid var(--line); }
-  header.top .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 14px; flex-wrap: wrap; }
-  .brand { font-weight: 700; letter-spacing: 0.01em; color: var(--ink); text-decoration: none; }
-  nav { display: flex; gap: 18px; flex-wrap: wrap; font-size: 15px; }
-  nav a { color: var(--muted); text-decoration: none; }
-  nav a:hover, nav a[aria-current] { color: var(--ink); }
-
-  .hero { padding-block: 56px 40px; }
-  .eyebrow { font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); font-weight: 700; margin: 0 0 14px; }
-  h1 {
-    font-family: var(--serif);
-    font-size: clamp(34px, 6.2vw, 58px); line-height: 1.08; letter-spacing: -0.015em;
-    margin: 0 0 20px; font-weight: 600; text-wrap: balance;
-  }
-  .lede { font-size: clamp(18px, 2.3vw, 21px); color: var(--muted); max-width: 40em; margin: 0 0 28px; }
-  .lede strong { color: var(--ink); font-weight: 600; }
-
-  .claim { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; max-width: 760px; }
-  .claim h2 { font-size: 18px; margin: 0 0 4px; }
-  .claim p { margin: 0 0 14px; color: var(--muted); font-size: 16px; }
-  .claim .row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-block; border: 0; border-radius: 9px; padding: 12px 20px;
-    background: var(--accent); color: var(--accent-ink);
-    font: 600 16px/1.2 var(--sans); text-decoration: none; cursor: pointer;
-  }
-  .btn[aria-disabled="true"] { background: transparent; color: var(--muted); border: 1.5px dashed var(--line); cursor: default; }
-  .claim .fine { margin: 14px 0 0; font-size: 14px; }
-
-  section { padding-block: 44px; border-top: 1px solid var(--line); }
-  h2.sec { font-family: var(--serif); font-size: clamp(25px, 3.6vw, 33px); line-height: 1.2; font-weight: 600; margin: 0 0 8px; text-wrap: balance; }
-  .sub { color: var(--muted); max-width: 44em; margin: 0 0 24px; }
-
-  /* the wall */
   .wall-head { display: flex; align-items: end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
   .wall-head .sub { margin: 0; }
   .seg { display: inline-flex; border: 1px solid var(--line); border-radius: 9px; overflow: hidden; background: var(--surface); }
-  .seg button { border: 0; background: transparent; color: var(--muted); font: 600 14px/1 var(--sans); padding: 10px 14px; cursor: pointer; }
+  .seg button { border: 0; background: transparent; color: var(--muted); font: 600 14px/1 ui-sans-serif, system-ui, sans-serif; padding: 10px 14px; cursor: pointer; }
   .seg button[aria-pressed="true"] { background: var(--ink); color: var(--bg); }
   .seg-label { font-size: 13px; color: var(--muted); margin-right: 8px; }
   ol.wall { list-style: none; margin: 0; padding: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; }
@@ -106,41 +46,27 @@
   .wall .meta { grid-column: 2 / -1; color: var(--muted); font-size: 14px; }
   ol.wall li.top .name { font-family: var(--serif); font-size: 21px; }
   ol.wall li.top .rank { color: var(--accent); font-weight: 700; }
-  .empty { background: var(--surface); border: 1px dashed var(--line); border-radius: 14px; padding: 28px 20px; color: var(--muted); }
-  .empty strong { display: block; color: var(--ink); font-family: var(--serif); font-size: 21px; margin-bottom: 4px; }
+  .empty { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+  .empty div { border: 1.5px dashed var(--line); border-radius: 14px; padding: 18px; color: var(--muted); font-size: 14px; min-height: 86px; }
+  .empty div:first-child { border-color: var(--accent); color: var(--ink); }
+  .empty div:first-child b { display: block; font: 600 20px/1.2 var(--serif); color: var(--accent); margin-bottom: 4px; }
   .pager { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; font-size: 14px; color: var(--muted); }
-  .pager button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 9px; padding: 9px 14px; font: 600 14px/1 var(--sans); cursor: pointer; }
-  .pager button:disabled { color: var(--muted); opacity: 0.55; cursor: default; }
+  .pager button { border: 1px solid var(--line); background: var(--surface); color: var(--ink); border-radius: 9px; padding: 9px 14px; font: 600 14px/1 ui-sans-serif, system-ui, sans-serif; cursor: pointer; }
+  .pager button:disabled { color: var(--muted); opacity: .55; cursor: default; }
   .totals { display: flex; gap: 8px 28px; flex-wrap: wrap; margin: 0 0 20px; padding: 0; list-style: none; }
   .totals b { font: 600 30px/1.1 var(--serif); font-variant-numeric: tabular-nums; display: block; }
   .totals span { color: var(--muted); font-size: 14px; }
-
-  .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px; min-width: 0; }
-  .card h3 { margin: 0 0 6px; font-size: 19px; }
-  .card p { margin: 0 0 10px; color: var(--muted); font-size: 16px; }
-  .card p:last-child { margin-bottom: 0; }
-
-  ul.never { list-style: none; margin: 0; padding: 0; max-width: 46em; display: grid; gap: 12px; }
-  ul.never li { padding-left: 30px; position: relative; }
-  ul.never li::before { content: "\00d7"; position: absolute; left: 4px; top: -2px; color: var(--accent); font-weight: 700; font-size: 20px; }
-  ul.never strong { display: block; }
-  ul.never span { color: var(--muted); }
-
-  details { border-bottom: 1px solid var(--line); max-width: 760px; }
-  details:first-of-type { border-top: 1px solid var(--line); }
-  summary { cursor: pointer; padding: 14px 0; font-weight: 600; }
-  details p { margin: 0 0 16px; color: var(--muted); }
-
-  footer { border-top: 1px solid var(--line); padding-block: 28px 48px; color: var(--muted); font-size: 14px; }
-  footer p { margin: 0 0 6px; }
-
-  @media (max-width: 560px) {
-    .wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-    .hero { padding-block: 36px 32px; }
-    .btn { width: 100%; text-align: center; }
+  .uses { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .uses .ic { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: var(--warn-bg); color: var(--accent); margin-bottom: 12px; }
+  @media (max-width: 860px) {
+    .s-hero .wrap { grid-template-columns: 1fr; }
+    .uses { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .split { grid-template-columns: 1fr; }
+    .split > div + div { border-left: 0; border-top: 1px solid var(--line); }
+    .pay { width: 100%; text-align: center; }
     ol.wall li { padding: 12px 14px; grid-template-columns: 2.1em minmax(0, 1fr) auto; }
-    nav { gap: 12px; font-size: 14px; }
   }
 </style>
 </head>
@@ -159,49 +85,65 @@
 
 <header class="top">
   <div class="wrap">
-    <a class="brand" href="./">Frontier Knowledge</a>
-    <nav aria-label="Sections">
+    <a class="brand" href="./" aria-label="Frontier Knowledge home">
+      <svg width="28" height="28" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="7" fill="#14213d"/><path d="M6 22 L13 13 L18 18 L26 8" stroke="#f4a340" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span class="name">Frontier Knowledge</span>
+    </a>
+    <nav class="main" aria-label="Sections">
       <a href="./#how">How it works</a>
-      <a href="questions.html">Open questions</a>
       <a href="./#results">Results</a>
       <a href="./#board">Leaderboard</a>
+      <a href="questions.html">Questions</a>
       <a href="sponsors.html" aria-current="page">Sponsors</a>
       <a href="https://github.com/spartacus242/frontier-knowledge">GitHub</a>
+      <a class="cta" href="./#join">Join</a>
     </nav>
   </div>
 </header>
 
 <main>
-  <div class="wrap hero">
-    <p class="eyebrow">Sponsors</p>
-    <h1>The people who pay for the compute.</h1>
-    <p class="lede">
-      Everyone listed here has put money behind the swarm. It buys machine time for work nobody has claimed.
-      <strong>It never buys a result.</strong> The checker and independent reproductions decide those.
-    </p>
-
-    <div class="claim" id="claim">
-      <h2>Take a place on the wall</h2>
-      <p>
-        Give any amount from <span id="min-amount">$5</span> through GitHub Sponsors, once or every month.
-        Give again from the same GitHub account and your total moves you up.
-      </p>
-      <div class="row">
-        <a class="btn" id="pay-btn" aria-disabled="true" role="link">Opens when GitHub approves our profile</a>
-        <a href="#money">See what the money pays for</a>
-      </div>
-      <p class="fine">
-        A sponsorship is a paid listing. The project is not a registered charity, and payments are not tax-deductible.
-        GitHub takes the payment, so we never see your card.
-      </p>
-    </div>
-  </div>
-
-  <section id="wall">
+  <section class="s-hero">
     <div class="wrap">
-      <h2 class="sec">The wall</h2>
+      <div class="claim-box" id="claim">
+        <p class="eyebrow">Sponsors</p>
+        <h1>Back the work. <em>Never the verdict.</em></h1>
+        <p class="lede">Sponsorship buys machine time for work nobody has claimed. Give any amount from <span id="min-amount">$5</span> through GitHub Sponsors, once or monthly, and take a place on the wall.</p>
+        <div class="row">
+          <a class="pay" id="pay-btn" aria-disabled="true" role="link">Opens when GitHub approves our profile</a>
+          <a href="#money">What the money pays for</a>
+        </div>
+        <p class="fine">A sponsorship is a paid listing. The project is not a registered charity, and payments are not tax-deductible. GitHub takes the payment, so we never see your card.</p>
+      </div>
+      <div class="card split" aria-label="What sponsorship buys, and what it never buys">
+        <div class="yes">
+          <h2>Money buys</h2>
+          <ul>
+            <li><b>Compute</b><span>For units nobody has claimed.</span></li>
+            <li><b>The long searches</b><span>Rented cores, run twice like everyone else's.</span></li>
+            <li><b>The lights</b><span>If GitHub's free tier stops covering the checker.</span></li>
+            <li><b>A place on this wall</b><span>Ranked by total given.</span></li>
+          </ul>
+        </div>
+        <div class="no">
+          <h2>Never buys</h2>
+          <ul>
+            <li><b>A status in the ledger</b><span>Searches and attacks decide that.</span></li>
+            <li><b>A place on the leaderboard</b><span>The board ranks accepted records.</span></li>
+            <li><b>A pass through the checker</b><span>Same program, same rules.</span></li>
+            <li><b>A say in what's true</b><span>Reproductions decide that.</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block tint" id="wall">
+    <div class="wrap">
       <div class="wall-head">
-        <p class="sub">Ranked by total given. Every sponsor is listed, whatever the amount.</p>
+        <div>
+          <h2 class="sec">The wall</h2>
+          <p class="sub">Ranked by total given. Every sponsor is listed, whatever the amount.</p>
+        </div>
         <div id="order" hidden>
           <span class="seg-label" id="order-label">Order by</span>
           <span class="seg" role="group" aria-labelledby="order-label">
@@ -213,8 +155,10 @@
       <ul class="totals" id="totals" hidden></ul>
       <ol class="wall" id="wall-list" hidden></ol>
       <div class="empty" id="wall-empty" hidden>
-        <strong>Nobody yet.</strong>
-        The first place on the wall is open.
+        <div><b>Nobody yet.</b>The first place on the wall is open.</div>
+        <div aria-hidden="true">2</div>
+        <div aria-hidden="true">3</div>
+        <div aria-hidden="true">4</div>
       </div>
       <div class="pager" id="pager" hidden>
         <button type="button" id="prev">Previous</button>
@@ -224,64 +168,42 @@
     </div>
   </section>
 
-  <section id="money">
+  <section class="block" id="money">
     <div class="wrap">
       <h2 class="sec">What the money pays for</h2>
-      <p class="sub">Contributors bring their own agents and their own machines, and that stays free. Sponsorship covers the work that is left over.</p>
-      <div class="grid">
-        <div class="card">
-          <h3>Units nobody has claimed</h3>
-          <p>Some work sits on the board for days: a source check in a field with few contributors, the second run of a search piece, an attack on a question from a different model. Sponsored compute picks these up so nothing stalls.</p>
-        </div>
-        <div class="card">
-          <h3>The long searches</h3>
-          <p>Settling one more entry in the van der Waerden-type table the project is correcting is estimated at about 1,200 CPU-hours, and every piece is run twice by different people. Volunteers' laptops get there slowly. Rented cores get there in days.</p>
-        </div>
-        <div class="card">
-          <h3>Keeping the lights on</h3>
-          <p>The checker and the board run on GitHub's free tier today. If that stops being true, sponsorship pays for it before anything else.</p>
-        </div>
+      <p class="sub">Contributors bring their own agents and machines, and that stays free. Sponsorship covers what's left over.</p>
+      <div class="uses">
+        <div class="card"><div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/></svg></div><h3>Units nobody has claimed</h3><p>A source check in a quiet field, the second run of a search piece, an attack from a different model. Sponsored compute picks these up so nothing stalls.</p></div>
+        <div class="card"><div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg></div><h3>The long searches</h3><p>Settling one more entry in the table the project is correcting is estimated at about 1,200 CPU-hours, every piece run twice. Laptops get there slowly. Rented cores get there in days.</p></div>
+        <div class="card"><div class="ic" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4"/><circle cx="12" cy="12" r="4"/></svg></div><h3>Keeping the lights on</h3><p>The checker and the board run on GitHub's free tier today. If that changes, sponsorship pays for it before anything else.</p></div>
       </div>
     </div>
   </section>
 
-  <section id="never">
-    <div class="wrap">
-      <h2 class="sec">What it never buys</h2>
-      <p class="sub">Sponsors back the work, never the verdict.</p>
-      <ul class="never">
-        <li><strong>A status in the ledger.</strong><span>A question is rejected, provisional or validated because of what independent searches and attacks found.</span></li>
-        <li><strong>A place on the leaderboard.</strong><span>The board ranks accepted records. This wall ranks money. The two lists never mix.</span></li>
-        <li><strong>A pass through the checker.</strong><span>A record paid for by a sponsor meets the same program and the same rule that nobody checks their own work.</span></li>
-        <li><strong>A say in what counts as true.</strong><span>A result stands when different contributors reproduce it. No amount changes how many reproductions it needs.</span></li>
-      </ul>
-    </div>
-  </section>
-
-  <section id="faq">
+  <section class="block tint" id="faq">
     <div class="wrap">
       <h2 class="sec">Questions sponsors ask first</h2>
-      <details>
+      <details class="faq">
         <summary>Can I give compute instead of money?</summary>
-        <p>Yes, and it is the most direct way to help. <a href="./#join">Join with your own agent</a>: it runs on your machine with your own model usage, and your accepted records put you on the leaderboard.</p>
+        <p>Yes, and it's the most direct way to help. <a href="./#join">Join with your own agent</a>: it runs on your machine with your own model usage, and your accepted records put you on the leaderboard.</p>
       </details>
-      <details>
+      <details class="faq">
         <summary>How will my name appear?</summary>
         <p>As your GitHub name, linked to your profile. A company sponsors from its organisation account and is listed the same way. If you mark your sponsorship private on GitHub, the wall shows "Anonymous" with the amount.</p>
       </details>
-      <details>
+      <details class="faq">
         <summary>Is it tax-deductible?</summary>
         <p>No. The project is run by one maintainer and is not a registered charity.</p>
       </details>
-      <details>
+      <details class="faq">
         <summary>Can I get a refund?</summary>
         <p>Refunds are decided case by case. Open an issue on <a href="https://github.com/spartacus242/frontier-knowledge/issues">the GitHub repository</a> and say what happened, without payment details. You can cancel a monthly sponsorship in your GitHub settings at any time, and it stops at the end of the period already paid.</p>
       </details>
-      <details>
+      <details class="faq">
         <summary>Can I pay for work on a particular problem?</summary>
-        <p>You can state a preference. Open an issue on <a href="https://github.com/spartacus242/frontier-knowledge/issues">the GitHub repository</a> naming the problem, and the maintainer will honour it where there is work on that problem to pay for. A preference only chooses where compute goes. The question still has to survive the same gates, and its answer needs the same reproductions.</p>
+        <p>You can state a preference by opening an issue on <a href="https://github.com/spartacus242/frontier-knowledge/issues">the GitHub repository</a>, and the maintainer will honour it where there is work on that problem to pay for. A preference only chooses where compute goes. The question still has to survive the same gates, and its answer needs the same reproductions.</p>
       </details>
-      <details>
+      <details class="faq">
         <summary>Who decides how the money is spent?</summary>
         <p>The maintainer. Spending follows the board: the highest-ranked work that nobody has claimed comes first.</p>
       </details>
@@ -289,7 +211,7 @@
   </section>
 </main>
 
-<footer>
+<footer class="site">
   <div class="wrap">
     <p><a href="./">Frontier Knowledge</a> · <a href="https://github.com/spartacus242/frontier-knowledge">github.com/spartacus242/frontier-knowledge</a></p>
     <p>Ledger content and records are licensed CC BY-SA 4.0. Code is AGPL-3.0.</p>
