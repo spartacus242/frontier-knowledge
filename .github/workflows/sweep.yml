@@ -1,0 +1,30 @@
+# Catches up submissions that verdict.yml never judged. GitHub keeps only ONE pending run per concurrency group,
+# so in a burst of submissions the earlier pending verdict runs are cancelled and those pull requests get no verdict.
+# Every 15 minutes this judges any open submission whose head commit has no verdict (and retries a FAULT a few times).
+# It shares the "verdict" group so it never races a verdict run, and like verdict.yml it never checks out or runs
+# anything from a pull request: verify/sweep.py reuses verify/ci_verdict.py, which reads the one submitted file as data.
+name: sweep
+on:
+  schedule:
+    - cron: "4,19,34,49 * * * *"
+  workflow_dispatch:
+permissions:
+  contents: write         # to squash-merge an ACCEPTED record
+  pull-requests: write    # to comment the verdict
+  actions: write          # to start advance.yml after a merge (a GITHUB_TOKEN merge triggers no push workflow)
+concurrency:
+  group: verdict          # the same queue as verdict.yml: one check at a time, so replica counts cannot race
+  cancel-in-progress: false
+jobs:
+  sweep:
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4          # the base branch, never a PR head
+        with:
+          persist-credentials: false
+      - run: python3 -I verify/sweep.py
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}

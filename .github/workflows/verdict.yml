@@ -1,6 +1,7 @@
 # Checks every swarm submission (a pull request that touches a submissions folder; other pull requests are ignored). Uses pull_request_target so it can comment and merge, and is safe because it never
 # checks out or runs anything from the pull request: verify/ci_verdict.py fetches the one submitted file as data
 # and runs the BASE branch's checker on it.
+# In a burst GitHub cancels the waiting runs of this group; sweep.yml judges those pull requests within 15 minutes.
 name: verdict
 on:
   pull_request_target:

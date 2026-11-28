@@ -152,6 +152,51 @@ if keep is None: os.remove(np_)
 else: open(np_, "w").write(keep)
 print("ok   latest info: a claim worded as solved, an unknown status or a missing source is refused" if good else "FAIL news rules")
 if not good: FAILS.append(("news", "", ""))
+# Verdict markers and the sweep (verify/ci_verdict.py, verify/sweep.py), with GitHub faked: a commit is judged once,
+# a FAULT is retried a few times without new comments, and a submitted file never outlives its own check.
+import base64, datetime as dt, ci_verdict as CV, sweep as SW
+CV.ROOT = R
+posted, edited = [], []
+def fake_gh(*a, check=True):
+    if a[:2] == ("pr", "comment"): posted.append(a[4]); return ""
+    if a[:3] == ("api", "-X", "PATCH"): edited.append(a[-1]); return ""
+    if a[0] == "api" and "/contents/" in a[1]: return json.dumps({"content": base64.b64encode(FILE[0]).decode()})
+    raise AssertionError(a)
+CV.gh = fake_gh
+def as_comment(body, i, when="2026-01-01T00:00:00Z", who=CV.BOT): return {"id": i, "user": {"login": who}, "body": body, "updated_at": when}
+gpath = f"ask/submissions/Q-GEN-2/zed.json"
+gen = {"unit": "Q-GEN-2", "handle": "zed", "statement_sha256": sha("Q-GEN-2"), "model": "test-model", "agent": "test-agent",
+       "fresh_context": True, "tokens": 1000, "tokens_basis": "counted", "candidates": cands}
+files = [{"filename": gpath, "status": "added"}]
+FILE = [json.dumps(dict(gen, tokens=0)).encode()]
+v1 = CV.judge("o/r", 7, "a" * 40, "o/r", "zed", files=files)
+gone = not os.path.exists(f"{R}/{gpath}")
+mark = CV.latest_verdict([as_comment(posted[-1], 1)], "a" * 40)
+forged = CV.latest_verdict([as_comment(posted[-1], 1, who="zed")], "a" * 40)
+other_sha = CV.latest_verdict([as_comment(posted[-1], 1)], "b" * 40)
+FILE[0] = json.dumps(gen).encode()
+CV.merge = lambda pr, s: subprocess.CompletedProcess([], 1, "", "Head branch was modified")
+v2 = CV.judge("o/r", 8, "c" * 40, "o/r", "zed", files=files)
+fault = CV.latest_verdict([as_comment(posted[-1], 2)], "c" * 40)
+gone2 = not os.path.exists(f"{R}/{gpath}")
+v3 = CV.judge("o/r", 8, "c" * 40, "o/r", "zed", files=files, fault=fault)
+retried = CV.latest_verdict([as_comment(edited[-1], 2)], "c" * 40)
+CV.merge = lambda pr, s: subprocess.CompletedProcess([], 0, "", "")
+v4 = CV.judge("o/r", 9, "d" * 40, "o/r", "zed", files=files)
+kept = os.path.exists(f"{R}/{gpath}")        # merged: the base now holds it, so later checks in the same run count it
+v5 = CV.judge("o/r", 10, "e" * 40, "o/r", "zed", [{"filename": gpath, "status": "added"}, {"filename": "README.md", "status": "modified"}])
+now = dt.datetime(2026, 1, 1, 1, 0, tzinfo=dt.timezone.utc)
+f = lambda tries, mins: {"result": "FAULT", "tries": tries, "at": now - dt.timedelta(minutes=mins)}
+dues = [SW.due(None, now)[0], SW.due({"result": "REJECTED", "tries": 1, "at": now}, now)[0], SW.due(f(1, 45), now)[0],
+        SW.due(f(1, 5), now)[0], SW.due(f(SW.MAX_TRIES, 300), now)[0]]
+pages = CV.items('[{"a": 1}, {"a": 2}]\n[{"a": 3}]') == [{"a": 1}, {"a": 2}, {"a": 3}]
+good = (v1, v2, v3, v4, v5) == ("REJECTED", "FAULT", "FAULT", "ACCEPTED", "REJECTED") and gone and gone2 and kept \
+    and mark and mark["result"] == "REJECTED" and forged is None and other_sha is None and fault["tries"] == 1 \
+    and retried["tries"] == 2 and len(posted) == 4 and len(edited) == 1 and dues == [True, False, True, False, False] \
+    and pages and SW.touches_submissions(files) and not SW.touches_submissions([{"filename": "site/index.html"}])
+print("ok   verdicts: marked with the commit they judged, a FAULT retried in one comment, files cleaned up, the sweep's rules" if good
+      else f"FAIL verdict markers {(v1, v2, v3, v4, v5)} {dues} posted={len(posted)} edited={len(edited)} gone={gone, gone2, kept}")
+if not good: FAILS.append(("sweep", "", ""))
 print()
 print("SELFTEST PASSED" if not FAILS else f"SELFTEST FAILED: {len(FAILS)} unexpected verdicts")
 sys.exit(1 if FAILS else 0)
