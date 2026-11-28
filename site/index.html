@@ -245,7 +245,8 @@
     .unit-steps, .promises, .help-grid { grid-template-columns: 1fr; }
     .rung { grid-template-columns: 48px 1fr; }
     .rung .chips { grid-column: 1 / -1; }
-    .tabs { display: flex; overflow-x: auto; max-width: 100%; }
+    .tabs { display: flex; overflow-x: auto; max-width: 100%; scrollbar-width: none; }
+    .tabs::-webkit-scrollbar { display: none; }
     .tabs button { padding: 9px 12px; white-space: nowrap; }
     .join .lab span { display: none; }
   }

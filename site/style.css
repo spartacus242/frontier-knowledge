@@ -149,7 +149,9 @@ footer.site p { margin: 0 0 6px; max-width: 60em; }
   .sub { font-size: 17px; }
   header.top .wrap { gap: 10px; }
   .brand .name { display: none; }
-  nav.main { margin-left: 0; -webkit-mask-image: linear-gradient(90deg, #000 88%, transparent); mask-image: linear-gradient(90deg, #000 88%, transparent); padding-right: 24px; }
+  nav.main { margin-left: 0; }
+  nav.main a.cta { position: sticky; right: 0; box-shadow: -18px 0 12px -4px var(--hdr, var(--bg)); }
+  header.top.on-night { --hdr: var(--night); }
   .prompt { flex-direction: column; }
   .prompt .btn { width: 100%; }
 }
