@@ -129,7 +129,7 @@
     answered++;
     var start = performance.now(), dur = still ? 0 : 1100;
     (function step(now) {
-      var k = dur ? Math.min(1, (now - start) / dur) : 1, e = 1 - Math.pow(1 - k, 3);
+      var k = dur ? Math.max(0, Math.min(1, (now - start) / dur)) : 1, e = 1 - Math.pow(1 - k, 3);
       b.a = A * e;
       var target = Math.min(1, FIT / maxRadius());
       scale += (target - scale) * (dur ? 0.08 : 1);

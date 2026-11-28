@@ -210,7 +210,7 @@
       onView(b, function () {
         var t0 = performance.now(), dur = 1100;
         (function step(now) {
-          var k = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+          var k = Math.max(0, Math.min(1, (now - t0) / dur)), e = 1 - Math.pow(1 - k, 3);
           b.textContent = fmt(to * e);
           if (k < 1) requestAnimationFrame(step);
         })(t0);
@@ -425,7 +425,7 @@
   (function () {
     var days = D.ledger.by_day;
     if (days.length < 2) { $('tb-time').hidden = true; return; }
-    var W = 720, H = 260, L = 40, R = 110, Tp = 12, B = 28, tried = 0, surv = 0;
+    var W = Math.round(Math.max(340, Math.min(980, (window.innerWidth || 980) - 90))), H = W < 600 ? 240 : 300, L = 40, R = W < 600 ? 104 : 120, Tp = 12, B = 28, tried = 0, surv = 0;
     var pts = days.map(function (d) { tried += d.tried; surv += d.surviving; return { t: Date.parse(d.date + 'T00:00:00Z'), date: d.date, tried: tried, surv: surv }; });
     var t0 = pts[0].t, t1 = pts[pts.length - 1].t, ymax = Math.ceil(tried / 50) * 50 || 50;
     function x(t) { return L + (W - L - R) * (t - t0) / (t1 - t0 || 1); }
