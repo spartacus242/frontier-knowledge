@@ -10,7 +10,8 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 W, H, FPS = 1920, 1080, 30
-T_END = 98.0
+D = 13.0       # the claimed proof segment, added after the first cut
+T_END = 98.0 + D
 HW, HH = W // 2, H // 2
 
 SERIF = "/usr/share/fonts/truetype/crosextra/Caladea-Regular.ttf"
@@ -106,6 +107,10 @@ G["label"] = "How do the primes thin out?"
 BUMPS.append((TH_R + 0.05, 40.6, 2.2, 80, 0.20))            # 1859, Riemann's step
 RH = add_q(TH_R + 0.05, 42.2, label="Do all its zeros lie on one line?", key="R", off=36)
 answer(G, 47.4, 92, 0.24, dur=1.8)                             # 1896
+answer(RH, 60.6, 78, 0.22, dur=1.8)                            # Nov 2026: a claimed proof
+AST = dict(theta=TH_R + 0.05, ts=60.75, off=30)                # the asterisk that stays
+for i, (dth, ts) in enumerate([(-0.17, 66.9), (0.2, 67.3), (-0.34, 67.7), (-0.52, 68.1), (-0.7, 68.5)]):
+    add_q(TH_R + 0.05 + dth, ts, key="N", off=34 if dth else 74)
 
 # far shapes: questions nobody can ask yet
 far = []
@@ -114,23 +119,23 @@ for k, xy in enumerate([None, (1390, 700), (1520, 250), (1720, 560), (1250, 110)
     th = TH_F if xy is None else math.atan2(xy[1] - C[1], xy[0] - C[0])
     xy = (0, 0) if xy is None else xy
     far.append(add_q(th, 60.8 + 0.3 * k, key="far%d" % k, fixed=np.array(xy, float),
-                     fade=(60.8 + 0.3 * k, 74.0 if k else None)))
+                     fade=(60.8 + D + 0.3 * k, 74.0 + D if k else None)))
 FAR_F = far[0]
-BUMPS.append((TH_F, 67.6, 2.6, 140, 0.24))  # the edge reaches the nearest one
+BUMPS.append((TH_F, 67.6 + D, 2.6, 140, 0.24))  # the edge reaches the nearest one
 
 # the swarm: 78 s on, the known grows fast and questions pop everywhere
-SW0, SW1 = 79.5, 91.0
+SW0, SW1 = 79.5 + D, 91.0 + D
 for q in QUESTIONS:
     if q["ta"] is None and q is not RH and (q["fade"] is None or q is FAR_F):
-        if q["ts"] < 70:
-            q["ta"] = rng.uniform(81, 88.5)
+        if q["ts"] < 70 + D:
+            q["ta"] = rng.uniform(81 + D, 88.5 + D)
 
 for i in range(80):
-    ts = rng.uniform(80.5, 88.8)
+    ts = rng.uniform(80.5 + D, 88.8 + D)
     add_q(rng.uniform(-math.pi, math.pi), ts, ta=ts + rng.uniform(0.6, 1.5))
 for i in range(26):  # the questions left waiting at the end
     th = -math.pi + (i + rng.uniform(0.2, 0.8)) * 2 * math.pi / 26
-    add_q(th, 89.6 + rng.uniform(0, 1.8), off=30)
+    add_q(th, 89.6 + D + rng.uniform(0, 1.8), off=30)
 
 # ambient probes
 def add_probe(t0, dur, th, out, wig, seed):
@@ -144,18 +149,18 @@ t = 26
 while t < 31:
     add_probe(t, rng.uniform(2.6, 3.4), rng.uniform(-math.pi, math.pi), rng.uniform(60, 140), 0.15, rng.random() * 6)
     t += 1.3
-t = 69.5
-while t < 77:
+t = 69.5 + D
+while t < 77 + D:
     add_probe(t, rng.uniform(2.6, 3.6), rng.uniform(-math.pi, math.pi), rng.uniform(60, 150), 0.18, rng.random() * 6)
     t += rng.uniform(0.8, 1.2)
 # the curious one that goes far out and finds nothing it can hold
-add_probe(62.0, 4.4, 0.42, 300, 0.05, 1.0)
+add_probe(62.0 + D, 4.4, 0.42, 300, 0.05, 1.0)
 
 # directed probes that answer questions in the early scenes
 DIRECTED = [(QA[-1.95], 18.6), (QA[1.15], 23.6)]
 
 for i in range(230):
-    ts = rng.uniform(79.2, 88.0)
+    ts = rng.uniform(79.2 + D, 88.0 + D)
     STREAMERS.append(dict(ts=ts, dur=rng.uniform(1.1, 1.8), x0=rng.uniform(-200, W + 200),
                           th=rng.uniform(-math.pi, math.pi), drift=rng.uniform(-0.05, 0.05),
                           r=rng.uniform(3, 16), ph=rng.random() * 6.28, b=rng.uniform(0.55, 1.0)))
@@ -184,15 +189,15 @@ def radius(th, t):
     return r
 
 
-FAR_F["fixed"] = C + np.array([math.cos(TH_F), math.sin(TH_F)]) * (float(radius(TH_F, 60.8)) + 150)
+FAR_F["fixed"] = C + np.array([math.cos(TH_F), math.sin(TH_F)]) * (float(radius(TH_F, 60.8 + D)) + 150)
 
 
 # ---------------------------------------------------------------- camera
 def camera(t):
     cx, cy, z = 960.0, 540.0, 1.0
-    a = smoother(ramp(t, 31.5, 34.0)) * (1 - smoother(ramp(t, 59.0, 61.5)))
+    a = smoother(ramp(t, 31.5, 34.0)) * (1 - smoother(ramp(t, 59.0 + D, 61.5 + D)))
     cx += (1120 - 960) * a; cy += (470 - 540) * a; z += 0.4 * a
-    b = smoother(ramp(t, 79.0, 92.0))
+    b = smoother(ramp(t, 79.0 + D, 92.0 + D))
     cx += (C[0] - 960) * b; cy += (C[1] + 10 - 540) * b; z += (0.6 - 1.0) * b
     # gentle drift so nothing is ever quite still
     cx += 6 * math.sin(t * 0.21); cy += 4 * math.sin(t * 0.17 + 1)
@@ -304,6 +309,28 @@ def make_q_sprites():
     return out
 
 Q_SPRITES = make_q_sprites()
+
+
+def make_ast_sprite():
+    f = ImageFont.truetype(SERIF_B, 150)
+    pad = 70
+    im = Image.new("RGBA", (90 + 2 * pad, 100 + 2 * pad), (0, 0, 0, 0))
+    ImageDraw.Draw(im).text((pad + 45, pad + 70), "*", font=f, fill=(255, 205, 130, 255), anchor="mm")
+    glow = np.asarray(im.filter(ImageFilter.GaussianBlur(16)), np.float32)
+    sa = np.asarray(im, np.float32)
+    a = np.clip(sa[..., 3:4] / 255 + glow[..., 3:4] / 255 * 1.6 * (1 - sa[..., 3:4] / 255), 0, 1)
+    col = np.where(sa[..., 3:4] > 0, sa[..., :3], glow[..., :3])
+    arr = np.concatenate([col / 255, a], -1)
+    return Image.fromarray((arr * 255).astype(np.uint8), "RGBA")
+
+AST_SPRITE = make_ast_sprite()
+_acache = {}
+
+def ast_img(size):
+    if size not in _acache:
+        im = AST_SPRITE
+        _acache[size] = rgba(im.resize((max(4, int(im.width * size / 100)), max(4, int(im.height * size / 100))), Image.LANCZOS))
+    return _acache[size]
 _qcache = {}
 
 def q_img(level, size):
@@ -368,12 +395,14 @@ CAPTIONS = [
     (33.6, 39.8, ["Gauss and Legendre guess", "how the primes thin out."], "1790s"),
     (40.2, 46.4, ["Riemann links the primes to the", "zeros of one function. A new question appears."], "1859"),
     (46.8, 52.8, ["Gauss's guess is proved:", "the prime number theorem."], "1896"),
-    (53.2, 59.6, ["The Riemann hypothesis is still open.", "Before 1859, nobody could even ask it."], "TODAY"),
-    (61.6, 66.8, ["Far past the edge are questions", "we can't even ask yet."], None),
-    (67.2, 72.6, ["We'd have no way to understand them.", "Each answer brings a few within reach."], None),
-    (73.0, 78.6, ["So every question we can work on today", "sits on the edge. The big ones too."], None),
-    (79.0, 84.8, ["And now anyone with an AI agent", "can work on it."], None),
-    (85.2, 90.6, ["Ask questions. Answer them.", "Check each other's work."], None),
+    (53.2, 59.6, ["The Riemann hypothesis stays open for 167 years.", "Before 1859, nobody could even ask it."], "1859 TO 2026"),
+    (60.0, 66.2, ["A proof is claimed, found with the help", "of AI and checked by computer.*"], "NOVEMBER 2026"),
+    (66.6, 72.6, ["If it holds, the door doesn't close.", "Questions nobody could ask before come into reach."], None),
+    (61.6 + D, 66.8 + D, ["Far past the edge are questions", "we can't even ask yet."], None),
+    (67.2 + D, 72.6 + D, ["We'd have no way to understand them.", "Each answer brings a few within reach."], None),
+    (73.0 + D, 78.6 + D, ["So every question we can work on today", "sits on the edge. The big ones too."], None),
+    (79.0 + D, 84.8 + D, ["And now anyone with an AI agent", "can work on it."], None),
+    (85.2 + D, 90.6 + D, ["Ask questions. Answer them.", "Check each other's work."], None),
 ]
 CAP_IMG = [text_block(l, F_CAP, TEXT, tag=tg, tagfont=F_TAG) for (_, _, l, tg) in CAPTIONS]
 LABEL_IMG = {}
@@ -381,6 +410,8 @@ for q in QUESTIONS:
     if q["label"]:
         LABEL_IMG[q["key"]] = text_block([q["label"]], F_LABEL, (226, 232, 246))
 LABEL_RH, _ = text_block(["The Riemann hypothesis"], F_TAG, AMBER8)
+FOOTNOTE = text_block(["* Not yet refereed or accepted by mathematicians."], ImageFont.truetype(SANS, 27), MUTED)
+LABEL_AST, _ = text_block(["The Riemann hypothesis*"], F_TAG, AMBER8)
 END_BIG = text_block(["The edge is open."], F_BIG, TEXT)
 END_SUB = text_block(["Come move it with us."], F_SUB, (226, 232, 246))
 END_URL = text_block(["frontierknowledge.org"], F_URL, AMBER8)
@@ -483,7 +514,7 @@ def lights(t):
         start = np.array([(st["x0"] - W / 2) / cam[2] + cam[0], (H + 60 - H / 2) / cam[2] + cam[1]])
         p = start * (1 - s) + edge * s
         p = p + np.array([math.sin(t * 5 + st["ph"]), math.cos(t * 4 + st["ph"])]) * 18 * (1 - s) * s * 4
-        dim = 1 - 0.55 * smooth(ramp(t, 91, 93))
+        dim = 1 - 0.55 * smooth(ramp(t, 91 + D, 93 + D))
         yield p, 2.6, st["b"] * dim * (0.9 if s >= 1 else 1.1), GOLD
 
 
@@ -537,7 +568,7 @@ def render(t):
         v = int(70 + 110 * tw[i])
         dr.ellipse([x - 1.6, y - 1.6, x + 1.6, y + 1.6], fill=v)
     netf = np.asarray(net, np.float32) / 255 * insf
-    endfade = 1 - 0.45 * smooth(ramp(t, 91, 93.5))
+    endfade = 1 - 0.45 * smooth(ramp(t, 91 + D, 93.5 + D))
     full += netf[..., None] * np.array([0.55, 0.68, 1.0], np.float32) * endfade
 
     # moving lights
@@ -547,20 +578,20 @@ def render(t):
         add_glow(full, x, y, max(1.0, rad * (0.5 + 0.5 * z)) * 0.8, colr, inten)
 
     # question marks
-    prime_focus = window(t, 32.5, 60.0, 1.2)
-    rh_pulse = window(t, 42.2, 60.0, 0.8)
+    prime_focus = window(t, 32.5, 73.0, 1.2)
+    rh_pulse = window(t, 42.2, 60.6, 0.8)
     for q in QUESTIONS:
         stt = q_state(q, t)
         if stt is None:
             continue
         p, scale, alpha, ed = stt
-        if q["key"] not in ("G", "R"):
+        if q["key"] not in ("G", "R", "N"):
             alpha *= 1 - 0.65 * prime_focus
         if q["fade"] is not None:
             # blurrier and dimmer the further from the edge
             alpha *= clamp(1.05 - (ed - 40) / 900, 0.75, 1)
             if q["key"] == "far1":   # the probe reaches it and it slips away
-                alpha *= 1 - smooth(ramp(t, 63.6, 64.6))
+                alpha *= 1 - smooth(ramp(t, 63.6 + D, 64.6 + D))
         if q["fixed"] is not None:
             lvl = clamp((ed - 40) / 110, 0, 4)
             alpha *= 0.75 + 0.25 * math.sin(t * 3.1 + q["ts"] * 7)
@@ -597,12 +628,25 @@ def render(t):
         if q["key"] == "G":
             la = window(t, 34.2, 47.6, 0.6)
         else:
-            la = window(t, 43.0, 59.6, 0.6)
+            la = window(t, 43.0, 60.7, 0.6)
         img, pad = LABEL_IMG[q["key"]]
         x, y = to_screen(p, cam)
         blend(full, img, x + 34 - pad, y - 24 - pad, la)
         if q["key"] == "R":
-            blend(full, LABEL_RH, x + 34 - 40, y + 14 - 40, window(t, 53.6, 59.6, 0.6))
+            blend(full, LABEL_RH, x + 34 - 40, y + 14 - 40, window(t, 53.6, 60.7, 0.6))
+
+    # the asterisk: a claimed answer that stays on the edge, waiting to be checked
+    if t >= AST["ts"]:
+        th_a = AST["theta"] + 0.012 * math.sin(t * 1.3)
+        bob = 4 * math.sin(t * 2.0)
+        pa = C + np.array([math.cos(th_a), math.sin(th_a)]) * (float(radius(th_a, t)) + AST["off"] + bob)
+        sc_a = back(ramp(t, AST["ts"], AST["ts"] + 0.6), 2.6) * (1 + 0.06 * math.sin(t * 3.0))
+        size = int(round(74 * z * sc_a))
+        if size >= 3:
+            img = ast_img(size)
+            x, y = to_screen(pa, cam)
+            blend(full, img, x - img.shape[1] / 2, y - img.shape[0] / 2 + 8 * z, 1.0)
+            blend(full, LABEL_AST, x + 30 - 40, y - 20 - 40, window(t, 61.2, 72.6, 0.6))
 
     # captions, over a soft dark scrim
     sc = max(window(t, a, b, 0.55) for (a, b, _, _) in CAPTIONS)
@@ -613,10 +657,14 @@ def render(t):
         if al > 0:
             rise = 10 * (1 - smooth(ramp(t, a, a + 0.8)))
             blend(full, img, 110 - pad, H - 110 - img.shape[0] + pad + rise, al)
+    fa = window(t, 60.6, 66.2, 0.55)
+    if fa > 0:
+        img, pad = FOOTNOTE
+        blend(full, img, 110 - pad, H - 98 - pad, fa)
 
     # the end card, inside the known
-    if t > 91:
-        for (img, pad), (dy, t0) in zip((END_BIG, END_SUB, END_URL), ((-95, 91.6), (40, 92.6), (120, 93.4))):
+    if t > 91 + D:
+        for (img, pad), (dy, t0) in zip((END_BIG, END_SUB, END_URL), ((-95, 91.6 + D), (40, 92.6 + D), (120, 93.4 + D))):
             al = smooth(ramp(t, t0, t0 + 0.9))
             rise = 14 * (1 - smooth(ramp(t, t0, t0 + 1.2)))
             sx, sy = to_screen(C, cam)
